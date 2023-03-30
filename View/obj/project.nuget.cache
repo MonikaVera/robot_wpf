@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Y8RbJ9sX6dFkvKQm3ceMuPTO5tXlEyYPzq8j9vN1M2HfKFQyxjITPj+hdWjmcw+GjsTe/U+AH3Fb0SA117AP3A==",
+  "dgSpecHash": "JCiQPMu7TOfPANRoq3oZe6HIp3oikzsudFktHoxhm8PEcNvDO6skNrbH2g3Fp+CZF/eexoHvI8YQ8j74Ke6s9Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Acer\\Desktop\\szofttech\\Robots\\View\\View.csproj",
+  "projectFilePath": "C:\\Softtech\\clone_gitlab\\csharks\\View\\View.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

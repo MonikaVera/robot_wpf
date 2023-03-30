@@ -24,5 +24,29 @@ namespace View
         {
             InitializeComponent();
         }
+        //navigate to PlayerMode page
+        public void PlayerMode_Click(object sender, RoutedEventArgs e)
+        {
+            // frame.NavigationService.Navigate(new PlayerLobby());
+            frame.NavigationService.Navigate(new PlayerMode2());
+        }
+
+        //navigate to ViewerMode page
+        public void ViewerMode_Click(object sender, RoutedEventArgs e)
+        {
+            frame.NavigationService.Navigate(new ViewerMode2());
+        }
+
+        //navigate to AdminLobby page
+        private void AdmMode_Click(object sender, RoutedEventArgs e)
+        {
+            //  frame.NavigationService.Navigate(new AdminLobby());
+        }
+
+        //navigate to diary
+        private void Diary_Click(object sender, RoutedEventArgs e)
+        {
+            //  frame.NavigationService.Navigate(new Diary1());
+        }
     }
 }

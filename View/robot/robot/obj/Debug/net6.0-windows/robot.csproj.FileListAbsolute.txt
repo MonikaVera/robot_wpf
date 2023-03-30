@@ -1,9 +1,0 @@
-C:\Softtech\robot\robot\obj\Debug\net6.0-windows\robot.csproj.AssemblyReference.cache
-C:\Softtech\robot\robot\obj\Debug\net6.0-windows\MainWindow.g.cs
-C:\Softtech\robot\robot\obj\Debug\net6.0-windows\PlayerLobby.g.cs
-C:\Softtech\robot\robot\obj\Debug\net6.0-windows\PlayerMode.g.cs
-C:\Softtech\robot\robot\obj\Debug\net6.0-windows\ViewerMode.g.cs
-C:\Softtech\robot\robot\obj\Debug\net6.0-windows\App.g.cs
-C:\Softtech\robot\robot\obj\Debug\net6.0-windows\robot_MarkupCompile.cache
-C:\Softtech\robot\robot\obj\Debug\net6.0-windows\robot_MarkupCompile.lref
-C:\Softtech\robot\robot\obj\Debug\net6.0-windows\AdminLobby.g.cs

@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\Softtech\clone_gitlab\csharks\View\App.xaml
-51260456112
+6-104360964
 
-131266375933
+14-144555190
 195-705186937
-AdminLobby2.xaml;MainWindow.xaml;PlayerLobby2.xaml;PlayerMode2.xaml;ViewerMode2.xaml;
+AdminLobby2.xaml;MainWindow.xaml;PlayerLobby2.xaml;PlayerMode.xaml;PlayerMode2.xaml;ViewerMode2.xaml;
 
 True
 

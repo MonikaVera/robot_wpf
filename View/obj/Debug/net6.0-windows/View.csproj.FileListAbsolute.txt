@@ -78,3 +78,5 @@ C:\Softtech\clone_gitlab\csharks\View\obj\Debug\net6.0-windows\ViewerMode2.g.cs
 C:\Softtech\clone_gitlab\csharks\View\obj\Debug\net6.0-windows\AdminLobby2.baml
 C:\Softtech\clone_gitlab\csharks\View\obj\Debug\net6.0-windows\PlayerMode2.baml
 C:\Softtech\clone_gitlab\csharks\View\obj\Debug\net6.0-windows\ViewerMode2.baml
+C:\Softtech\clone_gitlab\csharks\View\obj\Debug\net6.0-windows\PlayerMode.g.cs
+C:\Softtech\clone_gitlab\csharks\View\obj\Debug\net6.0-windows\PlayerMode.baml

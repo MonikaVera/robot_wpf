@@ -24,29 +24,40 @@ namespace View
         {
             InitializeComponent();
         }
+
+        private void ButtonVisib()
+        {
+            btnPlay.Visibility = Visibility.Collapsed;
+            btnView.Visibility = Visibility.Collapsed;
+            btnAdm.Visibility = Visibility.Collapsed;
+            btnDiary.Visibility = Visibility.Collapsed;
+            btnExit.Visibility = Visibility.Collapsed;
+        }
+
         //navigate to PlayerMode page
         public void PlayerMode_Click(object sender, RoutedEventArgs e)
         {
-            // frame.NavigationService.Navigate(new PlayerLobby());
-            frame.NavigationService.Navigate(new PlayerMode2());
+           // frame.NavigationService.Navigate(new PlayerMode2());
+            this.Content = new PlayerMode2();
         }
 
         //navigate to ViewerMode page
         public void ViewerMode_Click(object sender, RoutedEventArgs e)
         {
-            frame.NavigationService.Navigate(new ViewerMode2());
+            this.Content = new ViewerMode2();
+
         }
 
         //navigate to AdminLobby page
         private void AdmMode_Click(object sender, RoutedEventArgs e)
         {
-            //  frame.NavigationService.Navigate(new AdminLobby());
+            //  this.Content = new AdminLobby();
         }
 
         //navigate to diary
         private void Diary_Click(object sender, RoutedEventArgs e)
         {
-            //  frame.NavigationService.Navigate(new Diary1());
+            //  this.Content = (new Diary1());
         }
     }
 }

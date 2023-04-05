@@ -12,19 +12,35 @@
     <Page.InputBindings>
         <KeyBinding 
                                 Key="W" 
-                                Command="{Binding KeyDownCommand}" 
+                                Command="{Binding PressUp}" 
+                                CommandParameter="UP" />
+        <KeyBinding 
+                                Key="Up" 
+                                Command="{Binding PressUp}" 
                                 CommandParameter="UP" />
         <KeyBinding 
                                 Key="S" 
-                                Command="{Binding KeyDownCommand}" 
+                                Command="{Binding PressDown}" 
+                                CommandParameter="DOWN" />
+        <KeyBinding 
+                                Key="Down" 
+                                Command="{Binding PressDown}" 
                                 CommandParameter="DOWN" />
         <KeyBinding 
                                 Key="A" 
-                                Command="{Binding KeyDownCommand}" 
+                                Command="{Binding PressLeft}" 
+                                CommandParameter="LEFT" />
+        <KeyBinding 
+                                Key="Left" 
+                                Command="{Binding PressLeft}" 
                                 CommandParameter="LEFT" />
         <KeyBinding 
                                 Key="D" 
-                                Command="{Binding KeyDownCommand}" 
+                                Command="{Binding PressRight}" 
+                                CommandParameter="RIGHT" />
+        <KeyBinding 
+                                Key="Right" 
+                                Command="{Binding PressRight}" 
                                 CommandParameter="RIGHT" />
     </Page.InputBindings>
 
@@ -150,6 +166,10 @@
 
                                         <DataTrigger Binding="{Binding Block}"  Value="Purple">
                                             <Setter Property="Background" Value="Yellow" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding Block}"  Value="Pink">
+                                            <Setter Property="Background" Value="Pink" />
                                         </DataTrigger>
 
                                     </Style.Triggers>

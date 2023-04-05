@@ -17,5 +17,9 @@ namespace View.ViewModel
         public int IndY { get { return indY; } set { indY = value; } }
         public int IndX { get { return indX; } set { indX = value; } }
         public string Picture { get { return picture; } set { picture = value; } }
+        /// <summary>
+        /// Mezőváltoztató parancs lekérdezése, vagy beállítása.
+        /// </summary>
+        public DelegateCommand? FieldChangeCommand { get; set; }
     }
 }

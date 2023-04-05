@@ -5,15 +5,48 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
 
 namespace View.ViewModel
 {
     public class ViewModelGame : ViewModelBase
     {
-        public ViewModelGame(Game game) { _model = game; }
+
+        public ViewModelGame(Game game) 
+        { 
+            _model = game;
+            _model.GameAdvanced += new EventHandler<GameEventArgs>(Model_GameAdvanced);
+           // _model.FieldChanged += new EventHandler<Field>(Model_FieldChanged);
+
+        }
+
+        private void Model_GameAdvanced(object? sender, GameEventArgs e)
+        {
+            OnPropertyChanged(nameof(GameTime));
+            OnPropertyChanged(nameof(Round));
+          //  OnPropertyChanged(nameof(LocX));
+          //  OnPropertyChanged(nameof(LocY));
+        }
+
+        /// <summary>
+        /// Modell mezőváltozásának eseménykezelése.
+        /// </summary>
+        private void Model_FieldChanged(object? sender, Field e)
+        {
+           // Fields.First(field => field.X == e.X && field.Y == e.Y).Player = PlayerToField(_model[e.X, e.Y]);
+            // lineáris keresés a megadott sorra, oszlopra, majd a játékos átírása
+        }
+
         #region Properties
         public ObservableCollection<ViewModelField> Fields;
         public Game _model;
+
+        public String GameTime { get { return TimeSpan.FromSeconds(_model.GameTime).ToString("g"); } }
+        public Int32 Round { get { return _model.Turns; } }
+
+      //  public int LocX { get { return _model.LocX; } }
+       // public int LocY { get { return _model.LocY; } }
+
         #endregion
         #region Commands
         public DelegateCommand NewGameCommand { get; private set; }
@@ -31,6 +64,11 @@ namespace View.ViewModel
         public DelegateCommand DisConnectCubes { get; private set; }
         public DelegateCommand RotateRobot { get; private set; }
         #endregion
+
+        /// <summary>
+        /// Játékmező gyűjtemény lekérdezése.
+        /// </summary>
+
         #region Events
         public event EventHandler ExitGame;
         public event EventHandler LoadGame;

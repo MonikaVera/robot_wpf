@@ -19,6 +19,7 @@ namespace Model.Model
         private int turns;
         public int Turns { get { return turns; } set { turns = value; } }
         private int gameTime;
+        public int GameTime { get { return gameTime; } }
         private IDataAccess _dataAccess;
         private string _filepath;
         public void AdvanceTime() {/*code*/ ; }

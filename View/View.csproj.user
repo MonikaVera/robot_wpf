@@ -7,7 +7,39 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="AdminLobby2.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="PlayerLobby2.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="PlayerMode.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="PlayerMode2.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="ViewerMode2.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="AdminLobby2.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="PlayerLobby2.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="PlayerMode.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="PlayerMode2.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ViewerMode2.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

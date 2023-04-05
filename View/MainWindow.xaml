@@ -8,5 +8,12 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
 
+        <Button x:Name ="btnPlay" Content="Player mode" HorizontalAlignment="Center" Height="26" Margin="0,50,0,0" VerticalAlignment="Top" Width="188" Click="PlayerMode_Click"/>
+        <Button x:Name ="btnView" Content="Viewer mode" HorizontalAlignment="Center" Height="26" Margin="0,125,0,0" VerticalAlignment="Top" Width="188" Click="ViewerMode_Click"/>
+        <Button x:Name ="btnAdm" Content="Administrator mode" HorizontalAlignment="Center" Height="26" Margin="0,200,0,0" VerticalAlignment="Top" Width="188" Click="AdmMode_Click"/>
+        <Button x:Name ="btnDiary" Content="Diary" HorizontalAlignment="Center" Height="26" Margin="0,275,0,0" VerticalAlignment="Top" Width="188" Click="Diary_Click"/>
+        <Button x:Name ="btnExit" Content="Exit" HorizontalAlignment="Center" Height="26" Margin="0,350,0,0" VerticalAlignment="Top" Width="188"  Command="{Binding SaveGameCommand}"/>
+
+
     </Grid>
 </Window>

@@ -8,6 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace View
 {
@@ -29,6 +30,7 @@ namespace View
         private async void ViewModel_LoadGame(object sender, EventArgs  e) {/*code*/;} 
         private async void ViewModel_SaveGame(object sender, EventArgs  e) {/*code*/;} 
         private void ViewModel_NewGame(object sender, EventArgs  e) {/*code*/;} 
-        private void View_Closing(object sender, CancelEventArgs  e) {/*code*/;} 
+        private void View_Closing(object sender, CancelEventArgs  e) {/*code*/;}
+
     }
 }

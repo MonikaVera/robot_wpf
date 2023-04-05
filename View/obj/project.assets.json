@@ -36,11 +36,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Acer\\Desktop\\szofttech\\Robots\\View\\View.csproj",
+      "projectUniqueName": "C:\\Softtech\\clone_gitlab\\csharks\\View\\View.csproj",
       "projectName": "View",
-      "projectPath": "C:\\Users\\Acer\\Desktop\\szofttech\\Robots\\View\\View.csproj",
+      "projectPath": "C:\\Softtech\\clone_gitlab\\csharks\\View\\View.csproj",
       "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Acer\\Desktop\\szofttech\\Robots\\View\\obj\\",
+      "outputPath": "C:\\Softtech\\clone_gitlab\\csharks\\View\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -62,8 +62,8 @@
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
           "projectReferences": {
-            "C:\\Users\\Acer\\Desktop\\szofttech\\Robots\\Model\\Model.csproj": {
-              "projectPath": "C:\\Users\\Acer\\Desktop\\szofttech\\Robots\\Model\\Model.csproj"
+            "C:\\Softtech\\clone_gitlab\\csharks\\Model\\Model.csproj": {
+              "projectPath": "C:\\Softtech\\clone_gitlab\\csharks\\Model\\Model.csproj"
             }
           }
         }
@@ -96,7 +96,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

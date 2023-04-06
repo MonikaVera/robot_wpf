@@ -81,7 +81,7 @@
             </ItemsControl.ItemContainerStyle>
 
             <!--exit button-->
-            <Button Content="exit" Height="76" Width="189" Margin="606,-350,10,10"/>
+            <Button Content="exit" Height="70" Width="169" Margin="606,-350,10,10"/>
 
         </ItemsControl>
 
@@ -159,19 +159,21 @@
         <StatusBar Height="NaN" Margin="0,414,0,0">
             <!-- státuszsor a currentPlayer és az időhöz -->
             <StatusBarItem>
-                <TextBlock Text="GameTime: " />
-            </StatusBarItem>
-            <StatusBarItem>
-                <TextBlock Text="{Binding GameTime}" />
-            </StatusBarItem>
-            <Separator />
-            <StatusBarItem>
                 <TextBlock Text="Round: " />
             </StatusBarItem>
             <StatusBarItem>
                 <TextBlock Text="{Binding Round}" />
             </StatusBarItem>
             <Separator />
+
+            <StatusBarItem>
+                <TextBlock Text="GameTime: " />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding GameTime}" />
+            </StatusBarItem>
+            <Separator />
+
             <StatusBarItem>
                 <TextBlock Text="Team1 points: " />
             </StatusBarItem>

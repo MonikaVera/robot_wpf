@@ -190,6 +190,7 @@
                 </ItemsControl.ItemContainerStyle>
             </ItemsControl>
         </Grid>
+        
         <!--map-->
         <Grid HorizontalAlignment="Left" Height="113" Margin="604,0,0,0" VerticalAlignment="Center" Width="186" Grid.Row="1" Background="White">
             <ItemsControl Grid.Row="1" ItemsSource="{Binding Map}">
@@ -248,19 +249,20 @@
         <StatusBar Grid.Row="2" Height="NaN" Margin="0,57,0,0">
             <!-- státuszsor a pontok és az időhöz -->
             <StatusBarItem>
-                <TextBlock Text="GameTime: " />
-            </StatusBarItem>
-            <StatusBarItem>
-                <TextBlock Text="{Binding GameTime}" />
-            </StatusBarItem>
-            <Separator />
-            <StatusBarItem>
                 <TextBlock Text="Round: " />
             </StatusBarItem>
             <StatusBarItem>
                 <TextBlock Text="{Binding Round}" />
             </StatusBarItem>
             <Separator />
+            <StatusBarItem>
+                <TextBlock Text="GameTime: " />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding GameTime}" />
+            </StatusBarItem>
+            <Separator />
+
             <StatusBarItem>
                 <TextBlock Text="Team1 points: " />
             </StatusBarItem>

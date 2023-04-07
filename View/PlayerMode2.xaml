@@ -52,7 +52,7 @@
         </Grid.RowDefinitions>
 
         <!--player area-->
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding Fields}" Margin="0,0,210,0" Width="NaN">
+        <ItemsControl Grid.Row="0" ItemsSource="{Binding Fields}" Margin="0,0,210,0" Width="NaN">
             <!--az mezőket tároló vezérlő-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -63,7 +63,7 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding FieldChangeCommand}" CommandParameter="{Binding}">
+                    <Button Command="{Binding FieldChangeCommand}" CommandParameter="{Binding Number}" Content="Text">
 
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
@@ -72,18 +72,18 @@
                             <Style TargetType="Button">
                                 <Style.Triggers>
 
-                                    <DataTrigger Binding="{Binding View}"  Value="No">
-                                        <Setter Property="Background" Value="Black" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding MovePlayer}"  Value="Up"/>
-
-                                    <DataTrigger Binding="{Binding MovePlayer}"  Value="Left"/>
-
-                                    <DataTrigger Binding="{Binding MovePlayer}"  Value="Right"/>
-
-                                    <DataTrigger Binding="{Binding MovePlayer}"  Value="Down"/>
-
+                                    <!-- <DataTrigger Binding="{Binding View}"  Value="No"> 
+                                        <Setter Property="Background" Value="Black" /> -->
+                                    <!--  </DataTrigger>
+-->
+                                    <!-- <DataTrigger Binding="{Binding MovePlayer}"  Value="Up"/>
+-->
+                                    <!-- <DataTrigger Binding="{Binding MovePlayer}"  Value="Left"/>
+-->
+                                    <!--  <DataTrigger Binding="{Binding MovePlayer}"  Value="Right"/>
+-->
+                                    <!-- <DataTrigger Binding="{Binding MovePlayer}"  Value="Down"/>
+-->
                                 </Style.Triggers>
 
 
@@ -94,10 +94,10 @@
             </ItemsControl.ItemTemplate>
 
             <ItemsControl.ItemContainerStyle>
-                <!--a függőségi tulajdonságokat kjülön kell kötnünk-->
+                <!--a függőségi tulajdonságokat külön kell kötnünk-->
                 <Style>
-                    <Setter Property="Grid.Row" Value="{Binding X}" />
-                    <Setter Property="Grid.Column" Value="{Binding Y}" />
+                    <Setter Property="Grid.Row" Value="{Binding IndY}" />
+                    <Setter Property="Grid.Column" Value="{Binding IndX}" />
                 </Style>
             </ItemsControl.ItemContainerStyle>
 
@@ -106,7 +106,7 @@
 
         <!--tasks-->
         <Grid HorizontalAlignment="Left" Height="113" Margin="604,8,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="186" Background="White">
-        <!--  
+            <!--  
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
@@ -127,7 +127,7 @@
                         <UniformGrid Name="_unifGrid" Rows="6" Columns="6"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
-                
+
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Command="{Binding TaskFieldChangeCommand}" CommandParameter="{Binding}">
@@ -190,7 +190,6 @@
                 </ItemsControl.ItemContainerStyle>
             </ItemsControl>
         </Grid>
-        
         <!--map-->
         <Grid HorizontalAlignment="Left" Height="113" Margin="604,0,0,0" VerticalAlignment="Center" Width="186" Grid.Row="1" Background="White">
             <ItemsControl Grid.Row="1" ItemsSource="{Binding Map}">
@@ -249,20 +248,19 @@
         <StatusBar Grid.Row="2" Height="NaN" Margin="0,57,0,0">
             <!-- státuszsor a pontok és az időhöz -->
             <StatusBarItem>
-                <TextBlock Text="Round: " />
-            </StatusBarItem>
-            <StatusBarItem>
-                <TextBlock Text="{Binding Round}" />
-            </StatusBarItem>
-            <Separator />
-            <StatusBarItem>
                 <TextBlock Text="GameTime: " />
             </StatusBarItem>
             <StatusBarItem>
                 <TextBlock Text="{Binding GameTime}" />
             </StatusBarItem>
             <Separator />
-
+            <StatusBarItem>
+                <TextBlock Text="Round: " />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding Round}" />
+            </StatusBarItem>
+            <Separator />
             <StatusBarItem>
                 <TextBlock Text="Team1 points: " />
             </StatusBarItem>
@@ -281,4 +279,5 @@
 
     </Grid>
 </Page>
+
 

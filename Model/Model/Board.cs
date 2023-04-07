@@ -13,6 +13,11 @@ namespace Model.Model
         private int width;
         private Field[][] fields;
         private Team[] teams;
+
+        public Field GetFieldValue(int i, int j) {  return fields[i][j];  }
+        public int Height { get { return height; } }
+        public int Width { get { return width; } }
+
         public Board(int _height, int _width, Field[][] _fields)
         {
             height = _height;

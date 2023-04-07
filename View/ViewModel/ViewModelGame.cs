@@ -12,17 +12,79 @@ namespace View.ViewModel
     public class ViewModelGame : ViewModelBase
     {
         public ObservableCollection<ViewModelField> Fields { get; set; }
+        private Game _model;
+
+        #region Commands
+        public DelegateCommand PlayerModeCommand { get; private set; }
+        public DelegateCommand ViewerModeCommand { get; private set; }
+        public DelegateCommand ExitCommand { get; private set; }
+
+        public DelegateCommand NewGameCommand { get; private set; }
+        public DelegateCommand SaveGameCommand { get; private set; }
+        public DelegateCommand LoadGameCommand { get; private set; }
+        public DelegateCommand ExitGameCommand { get; private set; }
+        public DelegateCommand NewExtraTask { get; private set; }
+        public DelegateCommand PressUp { get; private set; }
+        public DelegateCommand PressDown { get; private set; }
+        public DelegateCommand PressRight { get; private set; }
+        public DelegateCommand PressLeft { get; private set; }
+        public DelegateCommand ConnectRobot { get; private set; }
+        public DelegateCommand DisConnectRobot { get; private set; }
+        public DelegateCommand ConnectCubes { get; private set; }
+        public DelegateCommand DisConnectCubes { get; private set; }
+        public DelegateCommand RotateRobot { get; private set; }
+        #endregion
+
+        #region Events
+        public event EventHandler? PlayerModeClick;
+        public event EventHandler? ViewerModeClick;
+        public event EventHandler? ExitClick;
+
+        public event EventHandler ExitGame;
+        public event EventHandler LoadGame;
+        public event EventHandler SaveGame;
+        #endregion
+
+        #region Properties
+        public int Height { get { return _model.Board.Height; }
+            set
+            {
+                OnPropertyChanged(nameof(Height));
+            }
+        }
+
+        public int Width
+        {
+            get { return _model.Board.Width; }
+            set
+            {
+                OnPropertyChanged(nameof(Width));
+            }
+        }
+
+        public Game Game { get; set; }
+
+        public String GameTime { get { return TimeSpan.FromSeconds(_model.GameTime).ToString("g"); } }
+        public Int32 Round { get { return 1; } }//_model.Turns; } }
+
+        //  public int LocX { get { return _model.LocX; } }
+        // public int LocY { get { return _model.LocY; } }
+        #endregion
 
         public ViewModelGame(Game game)
         {
             _model = game;
             _model.GameAdvanced += new EventHandler<GameEventArgs>(Model_GameAdvanced);
             // _model.FieldChanged += new EventHandler<Field>(Model_FieldChanged);
+            PlayerModeCommand = new DelegateCommand(param => OnPlayerModeClick());
+            ViewerModeCommand = new DelegateCommand(param => OnViewerModeClick());
+            ExitCommand = new DelegateCommand(param => OnExitClick());
+
 
             //jatektabla letrehozasa
             Fields = new ObservableCollection<ViewModelField>();
-            for (int i = 0; i < _model.Board.Width; i++)
-                for (int j = 0; j < _model.Board.Height; j++)
+            for (int j = 0; j < _model.Board.Height; j++)
+                for (int i = 0; i < _model.Board.Width; i++)
                 {
                     ViewModelField field = new ViewModelField();
                     field.SetText(_model.Board.GetFieldValue(i, j));
@@ -31,6 +93,22 @@ namespace View.ViewModel
                     Fields.Add(field);
                 }
 
+        }
+
+        #region Private Methods
+        private void OnPlayerModeClick()
+        {
+            PlayerModeClick?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnViewerModeClick()
+        {
+            ViewerModeClick?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnExitClick()
+        {
+            ExitClick?.Invoke(this, EventArgs.Empty);
         }
 
         private void Model_GameAdvanced(object? sender, GameEventArgs e)
@@ -50,43 +128,6 @@ namespace View.ViewModel
             // lineáris keresés a megadott sorra, oszlopra, majd a játékos átírása
         }
 
-        #region Properties
-        public Game _model;
-
-        public String GameTime { get { return TimeSpan.FromSeconds(_model.GameTime).ToString("g"); } }
-        public Int32 Round { get { return _model.Turns; } }
-
-        //  public int LocX { get { return _model.LocX; } }
-        // public int LocY { get { return _model.LocY; } }
-
-        #endregion
-        #region Commands
-        public DelegateCommand NewGameCommand { get; private set; }
-        public DelegateCommand SaveGameCommand { get; private set; }
-        public DelegateCommand LoadGameCommand { get; private set; }
-        public DelegateCommand ExitGameCommand { get; private set; }
-        public DelegateCommand NewExtraTask { get; private set; }
-        public DelegateCommand PressUp { get; private set; }
-        public DelegateCommand PressDown { get; private set; }
-        public DelegateCommand PressRight { get; private set; }
-        public DelegateCommand PressLeft { get; private set; }
-        public DelegateCommand ConnectRobot { get; private set; }
-        public DelegateCommand DisConnectRobot { get; private set; }
-        public DelegateCommand ConnectCubes { get; private set; }
-        public DelegateCommand DisConnectCubes { get; private set; }
-        public DelegateCommand RotateRobot { get; private set; }
-        #endregion
-
-        /// <summary>
-        /// Játékmező gyűjtemény lekérdezése.
-        /// </summary>
-
-        #region Events
-        public event EventHandler ExitGame;
-        public event EventHandler LoadGame;
-        public event EventHandler SaveGame;
-        #endregion
-        #region Methods
         private void Model_MoveRobot(object obj, RobotEventArgs e) {/*code*/; }
         private void Model_RotateRobot(object obj, RobotEventArgs e) {/*code*/; }
         private void Model_ConnectRobot(object obj, RobotEventArgs e) {/*code*/; }
@@ -109,7 +150,10 @@ namespace View.ViewModel
         private void OnSaveGame() {/*code*/; }
         private void OnExitGame() {/*code*/; }
         private void OnExtraTask() {/*code*/; }
+
         #endregion
+
+
     }
 }
 

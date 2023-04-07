@@ -11,7 +11,7 @@ namespace Model.Model
     public class Board
     {
 
-        public Board(int height, int width)
+        public Board(int width, int height)
         {
             if (height < 0 || width < 0)
                 throw new ArgumentOutOfRangeException("One of the table sizes is less than 0.");
@@ -24,7 +24,7 @@ namespace Model.Model
 
             _fields = new Field[width, height];
             GenerateTable(width, height);
-            PrintTable(width, height);
+            //PrintTable(width, height);
 
         }
 
@@ -76,10 +76,10 @@ namespace Model.Model
             using (StreamWriter writer = new StreamWriter("C:\\Users\\Mathe Arnold\\Desktop\\proba1.txt"))
             {
 
-                for (int i = 0; i < width; i++)
+                for (int j = 0; j < height; j++)
                 {
-                    writer.WriteLine();
-                    for (int j = 0; j < height; j++)
+                    writer.WriteLine(" ");
+                    for (int i = 0; i < width; i++)
                     {
                         if (_fields[i, j] is Empty)
                         {
@@ -210,8 +210,6 @@ namespace Model.Model
         }
 
         #endregion
-
-
 
 
 

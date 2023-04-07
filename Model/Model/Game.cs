@@ -10,6 +10,8 @@ namespace Model.Model
         public Game(MyDataAccess _dataAccess)
         {
             _board = new Board(10, 12);
+            _robot = new Robot(1,1,Direction.EAST);
+            _board.SetValue(1, 1, _robot);
             _noticeBoard = new NoticeBoard();
             this._dataAccess = _dataAccess;
 
@@ -70,8 +72,6 @@ namespace Model.Model
 
 
         #endregion
-
-
 
         #region  Public Methods
 
@@ -202,11 +202,6 @@ namespace Model.Model
 
 
         #endregion
-
-
-
-
-
 
 
 

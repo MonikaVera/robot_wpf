@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using View.ViewModel;
 
 namespace View
 {
@@ -20,8 +21,10 @@ namespace View
     /// </summary>
     public partial class MainWindow : Window
     {
+       
         public MainWindow()
         {
+            
             InitializeComponent();
         }
 
@@ -35,11 +38,7 @@ namespace View
         }
 
         //navigate to PlayerMode page
-        public void PlayerMode_Click(object sender, RoutedEventArgs e)
-        {
-           // frame.NavigationService.Navigate(new PlayerMode2());
-            this.Content = new PlayerMode2();
-        }
+        
 
         //navigate to ViewerMode page
         public void ViewerMode_Click(object sender, RoutedEventArgs e)
@@ -59,5 +58,7 @@ namespace View
         {
             //  this.Content = (new Diary1());
         }
+
+        
     }
 }

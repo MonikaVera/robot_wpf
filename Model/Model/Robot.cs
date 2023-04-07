@@ -8,17 +8,20 @@ namespace Model.Model
 {
     public class Robot : Field
     {
-        private Direction direction;
-        private List<Direction> connected;
-        private Team? team;
+        #region Fields
+        private Direction _direction;
+        private List<Direction> _connected;
+        private Team? _team;
         private int _x;
         private int _y;
-        public Robot(int x, int y, Direction _direction) { _x = x; _y = y; direction = _direction; }
-        Direction Direction { set { direction = value; } get { return direction; } }
+        #endregion
+
+        #region Properties
+        public Robot(int x, int y, Direction direction) { _x = x; _y = y; _direction = direction; }
+        public Direction Direction { set { _direction = value; } get { return _direction; } }
         public int X { set { _x = value; } get { return _x; } }
         public int Y { set { _y = value; } get { return _y; } }
-        public Team Team { set { team = value; } get { return team; } }
-
+        public Team Team { set { _team = value; } get { return _team; } }
         public void SetXY(int x, int y)
         {
             if (x < 0 || y < 0)
@@ -28,6 +31,9 @@ namespace Model.Model
             _x = x;
             _y = y;
         }
+
+        #endregion
+
     }
 
     public class RobotEventArgs : EventArgs

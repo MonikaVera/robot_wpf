@@ -11,7 +11,7 @@
     <!--key binding-->
     <Page.InputBindings>
         <KeyBinding 
-                                Key="W" 
+                                Key="W"
                                 Command="{Binding PressUp}" 
                                 CommandParameter="UP" />
         <KeyBinding 
@@ -56,14 +56,14 @@
             <!--az mezőket tároló vezérlő-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <!--a gombokat egy rácsba fűzzük fel-->
-                    <UniformGrid Name="_unifGrid" Rows="7" Columns="7"/>
+                    <!--a gombokat egy rácsba fűzzük fel--> 
+                    <UniformGrid Name="_unifGrid" Rows="{Binding Height}" Columns="{Binding Width}"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding FieldChangeCommand}" CommandParameter="{Binding Number}" Content="Text">
+                    <Button Command="{Binding FieldChangeCommand}" CommandParameter="{Binding Number}" Content="{Binding Text}">
 
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />

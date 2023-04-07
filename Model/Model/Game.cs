@@ -31,11 +31,6 @@ namespace Model.Model
         public async Task NewGame(Stream _filepath) {/*code*/ ; }
         public async Task LoadGameAsync(string _filepath) {/*code*/ ; }
         public async Task SaveGameAsync(string _filepath) {/*code*/ ; }
-
-        public void Step(int x, int v)
-        {
-            throw new NotImplementedException();
-        }
     }
     
     public class GameEventArgs : EventArgs

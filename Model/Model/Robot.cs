@@ -6,18 +6,28 @@ using System.Threading.Tasks;
 
 namespace Model.Model
 {
-    public class Robot
+    public class Robot : Field
     {
         private Direction direction;
         private List<Direction> connected;
         private Team? team;
-        private int _X;
-        private int _Y;
-        public Robot(int x, int y, Direction _direction) { _X = x; _Y = y; direction = _direction; }
+        private int _x;
+        private int _y;
+        public Robot(int x, int y, Direction _direction) { _x = x; _y = y; direction = _direction; }
         Direction Direction { set { direction = value; } get { return direction; } }
-        public int X { set { _X = value; } get { return _X; } }
-        public int Y { set { _Y = value; } get { return _Y; } }
+        public int X { set { _x = value; } get { return _x; } }
+        public int Y { set { _y = value; } get { return _y; } }
         public Team Team { set { team = value; } get { return team; } }
+
+        public void SetXY(int x, int y)
+        {
+            if (x < 0 || y < 0)
+            {
+                throw new ArgumentException();
+            }
+            _x = x;
+            _y = y;
+        }
     }
 
     public class RobotEventArgs : EventArgs
@@ -35,3 +45,5 @@ namespace Model.Model
         public Direction direction { get { return _direction; } }
     }
 }
+
+

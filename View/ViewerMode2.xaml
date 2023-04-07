@@ -11,78 +11,59 @@
     <Grid>
 
         <!--map-->
-        <ItemsControl Grid.Row="1">
-            <!--az mezőket tároló vezérlő-->
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <!--a gombokat egy rácsba fűzzük fel-->
-                    <UniformGrid Name="_unifGrid" Rows="{Binding TableSize}" Columns="{Binding TableSize}"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+            <ItemsControl Grid.Column="0" Grid.Row="0" ItemsSource="{Binding Fields}" Margin="0,0,210,0" Width="NaN">
+                <!--az mezőket tároló vezérlő-->
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <!--a gombokat egy rácsba fűzzük fel-->
+                        <UniformGrid Name="_unifGrid" Rows="{Binding Height}" Columns="{Binding Width}"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Button Command="{Binding FieldChangeCommand}" CommandParameter="{Binding}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Command="{Binding FieldChangeCommand}" CommandParameter="{Binding Number}" Content="{Binding Text}">
 
-                        <Button.RenderTransform>
-                            <ScaleTransform ScaleX="1" ScaleY="1" />
-                        </Button.RenderTransform>
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Style.Triggers>
+                            <Button.RenderTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                            </Button.RenderTransform>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
 
-                                    <DataTrigger Binding="{Binding Block}"  Value="Robot">
-                                        <Setter Property="Background" Value="White" />
-                                        <Setter Property="Content" Value="R" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Free">
-                                        <Setter Property="Background" Value="White" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Black">
-                                        <Setter Property="Background" Value="Black" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Red">
-                                        <Setter Property="Background" Value="Red" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Blue">
-                                        <Setter Property="Background" Value="Blue" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Green">
-                                        <Setter Property="Background" Value="Green" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Purple">
-                                        <Setter Property="Background" Value="Purple" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Purple">
-                                        <Setter Property="Background" Value="Yellow" />
-                                    </DataTrigger>
+                                    <!-- <DataTrigger Binding="{Binding View}"  Value="No"> 
+                                        <Setter Property="Background" Value="Black" /> -->
+                                    <!--  </DataTrigger>
+-->
+                                    <!-- <DataTrigger Binding="{Binding MovePlayer}"  Value="Up"/>
+-->
+                                    <!-- <DataTrigger Binding="{Binding MovePlayer}"  Value="Left"/>
+-->
+                                    <!--  <DataTrigger Binding="{Binding MovePlayer}"  Value="Right"/>
+-->
+                                    <!-- <DataTrigger Binding="{Binding MovePlayer}"  Value="Down"/>
+-->
                                 </Style.Triggers>
 
 
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
 
-            <ItemsControl.ItemContainerStyle>
-                <!--a függőségi tulajdonságokat kjülön kell kötnünk-->
-                <Style>
-                    <Setter Property="Grid.Row" Value="{Binding XMap}" />
-                    <Setter Property="Grid.Column" Value="{Binding YMap}" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemContainerStyle>
+                    <!--a függőségi tulajdonságokat külön kell kötnünk-->
+                    <Style>
+                        <Setter Property="Grid.Row" Value="{Binding IndY}" />
+                        <Setter Property="Grid.Column" Value="{Binding IndX}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
+           
 
             <!--exit button-->
-            <Button Content="exit" Height="70" Width="169" Margin="606,-350,10,10"/>
-
+           
         </ItemsControl>
 
         <!--tasks-->
@@ -152,6 +133,8 @@
                 </ItemsControl.ItemContainerStyle>
             </ItemsControl>
         </Grid>
+
+        <Button Content="exit" Height="70" Width="169" Margin="606,0,0,0" Command="{Binding ExitCommand}"/>
 
         <TextBox HorizontalAlignment="Left" Height="143" Margin="606,253,0,0" TextWrapping="Wrap" Text="Chat" VerticalAlignment="Top" Width="184"/>
         <!--TextChanged="TextBox_TextChanged"-->

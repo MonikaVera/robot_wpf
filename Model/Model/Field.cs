@@ -14,6 +14,7 @@ namespace Model.Model
         public int X { set { _X = value; } get { return _X; } }
         public int Y { set { _Y = value; } get { return _Y; } }
 
+
     }
 
     public class Empty : Field
@@ -44,10 +45,6 @@ namespace Model.Model
             _Y = y;
             health = _health;
             color = _color;
-        }
-        public void addDirection(Direction direcion)
-        {
-            connected.Add(direcion);
         }
     }
 

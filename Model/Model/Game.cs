@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using Model.Persistence;
 
 namespace Model.Model
@@ -109,54 +111,213 @@ namespace Model.Model
         public async Task LoadGameAsync(string _filepath) {/*code*/ ; }
         public async Task SaveGameAsync(string _filepath) {/*code*/ ; }
 
+        #region Move
         public void MoveRobot(Robot robot, Direction dir)
         {
             if (dir == Direction.EAST)
             {
-                MoveRobot(robot.X + 1, robot.Y, dir, robot);
+                if(CanMoveToEast(robot))
+                {
+                    MoveToEast(robot);
+                }
             }
             else if (dir == Direction.WEST)
             {
-                MoveRobot(robot.X - 1, robot.Y, dir, robot);
+                if (CanMoveToWest(robot))
+                {
+                    MoveToWest(robot);
+                }
             }
             else if (dir == Direction.NORTH)
             {
-                MoveRobot(robot.X, robot.Y - 1, dir, robot);
+                if (CanMoveToNorth(robot))
+                {
+                    MoveToNorth(robot);
+                }
             }
             else if (dir == Direction.SOUTH)
             {
-                MoveRobot(robot.X, robot.Y + 1, dir, robot);
+                if (CanMoveToSouth(robot))
+                {
+                    MoveToSouth(robot);
+                }
             }
 
         }
-        public bool rotateRobot(Robot robot, Angle angle) { /*code*/ return true; }
-        public bool connectRobot(Robot robot, Direction dir) {
-            if (dir == Direction.EAST)
-            {
-                if(!robot.isConnected(dir))
-                {
-                    ConnectRobot(robot.X + 1, robot.Y, robot, dir);
-                } else
-                {
 
+        public bool CanMoveToEast(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for(int i=0; i<connections.Count; i++) {
+                if(connections[i].X+1>=_board.Width 
+                    && !(_board.GetFieldValue(connections[i].X+1, connections[i].Y) is Empty))
+                {
+                    return false;
                 }
-                
+            }
+            return true;
+        }
+        public bool CanMoveToWest(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                if (connections[i].X - 1 < 0
+                    && !(_board.GetFieldValue(connections[i].X - 1, connections[i].Y) is Empty))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool CanMoveToNorth(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                if (connections[i].Y - 1 < 0
+                    && !(_board.GetFieldValue(connections[i].X, connections[i].Y - 1) is Empty))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool CanMoveToSouth(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                if (connections[i].Y + 1 >= _board.Height
+                    && !(_board.GetFieldValue(connections[i].X, connections[i].Y + 1) is Empty))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public void MoveToEast(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for(int i=0; i<connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
+            }
+            robot.ToEast();
+            List<MyTuple> connectionsNew = robot.AllConnections();
+            _board.SetValue(robot.X + 1, robot.Y, new Robot(robot.X + 1, robot.Y, robot.Direction, connectionsNew));
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
+            }
+        }
+
+        public void MoveToWest(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
+            }
+            robot.ToWest();
+            List<MyTuple> connectionsNew = robot.AllConnections();
+            _board.SetValue(robot.X - 1, robot.Y, new Robot(robot.X - 1, robot.Y, robot.Direction, connectionsNew));
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
+            }
+        }
+
+        public void MoveToNorth(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
+            }
+            robot.ToNorth();
+            List<MyTuple> connectionsNew = robot.AllConnections();
+            _board.SetValue(robot.X, robot.Y - 1, new Robot(robot.X, robot.Y -1, robot.Direction, connectionsNew));
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
+            }
+        }
+
+        public void MoveToSouth(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
+            }
+            robot.ToSouth();
+            List<MyTuple> connectionsNew = robot.AllConnections();
+            _board.SetValue(robot.X, robot.Y + 1, new Robot(robot.X, robot.Y + 1, robot.Direction, connectionsNew));
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
+            }
+        }
+        #endregion
+
+        public bool rotateRobot(Robot robot, Angle angle) { /*code*/ return true; }
+        public void ConnectRobot(Robot robot, Direction dir) {
+            if (dir == Direction.EAST)
+            {  
+                int x = robot.X+1;
+                while(robot.IsConnected(new MyTuple(x, robot.Y)))
+                {
+                    x=x+1;
+                }
+                if(x<_board.Width && _board.GetFieldValue(x, robot.Y) is Cube) 
+                { 
+                    robot.AddConnection(new MyTuple(x,robot.Y));
+                    OnGameAdvanced();
+                } 
             }
             else if (dir == Direction.WEST)
             {
-                ConnectRobot(robot.X - 1, robot.Y, robot, dir);
+                int x = robot.X - 1;
+                while (robot.IsConnected(new MyTuple(x, robot.Y)))
+                {
+                    x = x - 1;
+                }
+                if (x >=0 && _board.GetFieldValue(x, robot.Y) is Cube)
+                {
+                    robot.AddConnection(new MyTuple(x, robot.Y));
+                    OnGameAdvanced();
+                }
             }
             else if (dir == Direction.NORTH)
             {
-                ConnectRobot(robot.X, robot.Y - 1, robot, dir);
+                int y = robot.Y - 1;
+                while (robot.IsConnected(new MyTuple(robot.X, y)))
+                {
+                    y = y - 1;
+                }
+                if (y >= 0 && _board.GetFieldValue(robot.X, y) is Cube)
+                {
+                    robot.AddConnection(new MyTuple(robot.X, y));
+                    OnGameAdvanced();
+                }
             }
             else if (dir == Direction.SOUTH)
             {
-                ConnectRobot(robot.X, robot.Y + 1, robot, dir);
+                int y = robot.Y + 1;
+                while (robot.IsConnected(new MyTuple(robot.X, y)))
+                {
+                    y = y + 1;
+                }
+                if (y < _board.Height && _board.GetFieldValue(robot.X, y) is Cube)
+                {
+                    robot.AddConnection(new MyTuple(robot.X, y));
+                    OnGameAdvanced();
+                }
             }
-
-
-            return true; }
+        }
         public bool disConnectRobot(Robot robot, Direction dir) { /*code*/ return true; }
         public bool connectCubes(Robot robot, RelDistance distance) { /*code*/ return true; }
         public bool disConnectCubes(Robot robot, RelDistance distance) { /*code*/ return true; }
@@ -191,7 +352,7 @@ namespace Model.Model
             }
         }
 
-        private void MoveRobot(int x, int y, Direction dir, Robot robot)
+        /*private void MoveRobot_(int x, int y, Direction dir, Robot robot)
         {
             if (x < 0 || x >= _board.Width)
                 return;
@@ -219,21 +380,8 @@ namespace Model.Model
             OnGameAdvanced();
 
 
-        }
+        }*/
         private void RotateRobot(Direction dir) { /*code*/ ; }
-        private void ConnectRobot(int x, int y, Robot robot, Direction dir) {
-            try
-            {
-                if (_board.GetFieldValue(x, y) is Cube)
-                {
-                    robot.addConnection(dir);
-                }
-            } 
-            catch(ArgumentOutOfRangeException)
-            {
-                return;
-            }   
-        }
         private void DisConnectRobot(Direction dir) { /*code*/ ; }
         private void ConnectCubes(int x, int y) { /*code*/ ; }
         private void DisConnectCubes(int x, int y) { /*code*/ ; }

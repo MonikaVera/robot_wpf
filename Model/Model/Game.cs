@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Model.Persistence;
 
@@ -129,7 +130,33 @@ namespace Model.Model
 
         }
         public bool rotateRobot(Robot robot, Angle angle) { /*code*/ return true; }
-        public bool connectRobot(Robot robot, Direction dir) { /*code*/ return true; }
+        public bool connectRobot(Robot robot, Direction dir) {
+            if (dir == Direction.EAST)
+            {
+                if(!robot.isConnected(dir))
+                {
+                    ConnectRobot(robot.X + 1, robot.Y, robot, dir);
+                } else
+                {
+
+                }
+                
+            }
+            else if (dir == Direction.WEST)
+            {
+                ConnectRobot(robot.X - 1, robot.Y, robot, dir);
+            }
+            else if (dir == Direction.NORTH)
+            {
+                ConnectRobot(robot.X, robot.Y - 1, robot, dir);
+            }
+            else if (dir == Direction.SOUTH)
+            {
+                ConnectRobot(robot.X, robot.Y + 1, robot, dir);
+            }
+
+
+            return true; }
         public bool disConnectRobot(Robot robot, Direction dir) { /*code*/ return true; }
         public bool connectCubes(Robot robot, RelDistance distance) { /*code*/ return true; }
         public bool disConnectCubes(Robot robot, RelDistance distance) { /*code*/ return true; }
@@ -194,7 +221,19 @@ namespace Model.Model
 
         }
         private void RotateRobot(Direction dir) { /*code*/ ; }
-        private void ConnectRobot(Direction dir) { /*code*/ ; }
+        private void ConnectRobot(int x, int y, Robot robot, Direction dir) {
+            try
+            {
+                if (_board.GetFieldValue(x, y) is Cube)
+                {
+                    robot.addConnection(dir);
+                }
+            } 
+            catch(ArgumentOutOfRangeException)
+            {
+                return;
+            }   
+        }
         private void DisConnectRobot(Direction dir) { /*code*/ ; }
         private void ConnectCubes(int x, int y) { /*code*/ ; }
         private void DisConnectCubes(int x, int y) { /*code*/ ; }

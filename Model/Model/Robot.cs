@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,33 @@ namespace Model.Model
         #region Properties
         public Robot(int x, int y, Direction direction) { _x = x; _y = y; _direction = direction; }
         public Direction Direction { set { _direction = value; } get { return _direction; } }
+        public void addConnection(Direction dir)
+        {
+            _connected.Add(dir);
+        }
+
+        public void deleteConnection(Direction dir)
+        {
+            for(int i=0; i<_connected.Count; i++)
+            {
+                if (_connected[i] == dir)
+                {
+                    _connected.RemoveAt(i);
+                }
+            }
+        }
+
+        public bool isConnected(Direction dir)
+        {
+            for(int i=0; i< _connected.Count; i++)
+            {
+                if (_connected[i]==dir)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         public int X { set { _x = value; } get { return _x; } }
         public int Y { set { _y = value; } get { return _y; } }
         public Team Team { set { _team = value; } get { return _team; } }

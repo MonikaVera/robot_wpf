@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="CyberChallenge" Height="450" Width="800">
     <Grid>
 
         <Button x:Name ="btnPlay" Content="Player mode" HorizontalAlignment="Center" Height="26" Margin="0,50,0,0" VerticalAlignment="Top" Width="188" Command="{Binding PlayerModeCommand}"/>

@@ -280,7 +280,7 @@
         <StatusBar Grid.Row="2" Height="NaN" Margin="0,57,0,0">
             <!-- státuszsor a pontok és az időhöz -->
             <StatusBarItem>
-                <TextBlock Text="GameTime: " />
+                <TextBlock Text="Remaining time: " />
             </StatusBarItem>
             <StatusBarItem>
                 <TextBlock Text="{Binding GameTime}" />
@@ -294,18 +294,18 @@
             </StatusBarItem>
             <Separator />
             <StatusBarItem>
-                <TextBlock Text="Team1 points: " />
+                <TextBlock Text="First Team's points: " />
             </StatusBarItem>
             <StatusBarItem>
-                <TextBlock Text="{Binding Team1}" />
+                <TextBlock Text="{Binding Team1Points}" />
             </StatusBarItem>
             <Separator />
             <StatusBarItem />
             <StatusBarItem>
-                <TextBlock Text="Team2 points: " />
+                <TextBlock Text="Second Team's points: " />
             </StatusBarItem>
             <StatusBarItem>
-                <TextBlock Text="{Binding Team2}" />
+                <TextBlock Text="{Binding Team2Points}" />
             </StatusBarItem>
         </StatusBar>
 

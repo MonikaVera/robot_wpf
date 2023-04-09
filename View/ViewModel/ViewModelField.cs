@@ -62,6 +62,7 @@ namespace View.ViewModel
 
         public void SetText(Field field)
         {
+            //_text = _number.ToString();
             if (field is Empty)
             {
                 _text = " ";
@@ -82,6 +83,7 @@ namespace View.ViewModel
             {
                 _text = ("R");
             }
+            OnPropertyChanged(nameof(Text));
         }
         /// <summary>
         /// Mezőváltoztató parancs lekérdezése, vagy beállítása.

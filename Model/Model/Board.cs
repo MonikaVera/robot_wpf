@@ -24,7 +24,7 @@ namespace Model.Model
 
             _fields = new Field[width, height];
             GenerateTable(width, height);
-            //PrintTable(width, height);
+            PrintTable(width, height);
 
         }
 

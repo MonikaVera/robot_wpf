@@ -12,12 +12,15 @@ namespace Model.Model
     {
         public Game(MyDataAccess _dataAccess)
         {
-            _board = new Board(10, 12);
-            _robot = new Robot(1,1,Direction.EAST);
+            _width = 10;
+            _height = 12;
+            _board = new Board(_width, _height);
+            _robot = new Robot(1, 1, Direction.EAST);
             _board.SetValue(1, 1, _robot);
             _noticeBoard = new NoticeBoard();
             this._dataAccess = _dataAccess;
-
+            _round = 1;
+            _gameOverTurn = 50;
         }
 
         #region Fields
@@ -25,15 +28,18 @@ namespace Model.Model
         private Robot _robot;
         private Board _board;
         private NoticeBoard _noticeBoard;
-        private int _turns;
+        private int _gameOverTurn;
         private int _gameTime;
         private IDataAccess _dataAccess;
         private string _filepath;
         private Team _team1;
         private Team _team2;
         private int _round;
-        private int _width = 12;
-        private int _height = 15;
+        private int _width;
+        private int _height;
+        private int? _actionFieldX;
+        private int? _actionFieldY;
+        private Direction? _actionDirection;
 
         #endregion
 
@@ -44,7 +50,7 @@ namespace Model.Model
 
         public NoticeBoard NoticeBoard { get { return _noticeBoard; } }
 
-        public int Turns { get { return _turns; } set { _turns = value; } }
+        public int Round { get { return _round; } set { _round = value; } }
 
         public int GameTime { get { return _gameTime; } }
 
@@ -76,28 +82,25 @@ namespace Model.Model
 
         #endregion
 
-        #region  Public Methods
+        #region  Public  Methods
 
         public void AdvanceTime()
         {
             if (IsGameOver) // ha mr vge, nem folytathatjuk
             {
-                OnGameOver(false, _team1, _round);
+                OnGameOver(false, _team1);
                 return;
             }
             else if (IsRoundOver)
             {
                 _round++;
-                OnNewRound(false, _team1, _round);
+                OnNewRound(false, _team1);
                 return;
             }
 
             _gameTime--;
 
-            OnGameAdvanced();
         }
-
-        public void OnGameAdvanced() {/*code*/ ; }
 
         public void NewGame()
         {
@@ -111,244 +114,76 @@ namespace Model.Model
         public async Task LoadGameAsync(string _filepath) {/*code*/ ; }
         public async Task SaveGameAsync(string _filepath) {/*code*/ ; }
 
-        #region Move
-        public void MoveRobot(Robot robot, Direction dir)
+        public void ChooseActionField (int x, int y)
         {
-            if (dir == Direction.EAST)
-            {
-                if(CanMoveToEast(robot))
-                {
-                    MoveToEast(robot);
-                }
-            }
-            else if (dir == Direction.WEST)
-            {
-                if (CanMoveToWest(robot))
-                {
-                    MoveToWest(robot);
-                }
-            }
-            else if (dir == Direction.NORTH)
-            {
-                if (CanMoveToNorth(robot))
-                {
-                    MoveToNorth(robot);
-                }
-            }
-            else if (dir == Direction.SOUTH)
-            {
-                if (CanMoveToSouth(robot))
-                {
-                    MoveToSouth(robot);
-                }
-            }
-
+            _actionFieldX = x;
+            _actionFieldY = y;
+            CalculateDirection();
         }
 
-        public bool CanMoveToEast(Robot robot)
-        {
-            List<MyTuple> connections = robot.AllConnections();
-            for(int i=0; i<connections.Count; i++) {
-                if(connections[i].X+1>=_board.Width 
-                    && !(_board.GetFieldValue(connections[i].X+1, connections[i].Y) is Empty))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-        public bool CanMoveToWest(Robot robot)
-        {
-            List<MyTuple> connections = robot.AllConnections();
-            for (int i = 0; i < connections.Count; i++)
-            {
-                if (connections[i].X - 1 < 0
-                    && !(_board.GetFieldValue(connections[i].X - 1, connections[i].Y) is Empty))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public bool CanMoveToNorth(Robot robot)
-        {
-            List<MyTuple> connections = robot.AllConnections();
-            for (int i = 0; i < connections.Count; i++)
-            {
-                if (connections[i].Y - 1 < 0
-                    && !(_board.GetFieldValue(connections[i].X, connections[i].Y - 1) is Empty))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public bool CanMoveToSouth(Robot robot)
-        {
-            List<MyTuple> connections = robot.AllConnections();
-            for (int i = 0; i < connections.Count; i++)
-            {
-                if (connections[i].Y + 1 >= _board.Height
-                    && !(_board.GetFieldValue(connections[i].X, connections[i].Y + 1) is Empty))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-        public void MoveToEast(Robot robot)
-        {
-            List<MyTuple> connections = robot.AllConnections();
-            for(int i=0; i<connections.Count; i++)
-            {
-                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
-            }
-            robot.ToEast();
-            List<MyTuple> connectionsNew = robot.AllConnections();
-            _board.SetValue(robot.X + 1, robot.Y, new Robot(robot.X + 1, robot.Y, robot.Direction, connectionsNew));
-            for (int i = 0; i < connections.Count; i++)
-            {
-                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
-            }
-        }
-
-        public void MoveToWest(Robot robot)
-        {
-            List<MyTuple> connections = robot.AllConnections();
-            for (int i = 0; i < connections.Count; i++)
-            {
-                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
-            }
-            robot.ToWest();
-            List<MyTuple> connectionsNew = robot.AllConnections();
-            _board.SetValue(robot.X - 1, robot.Y, new Robot(robot.X - 1, robot.Y, robot.Direction, connectionsNew));
-            for (int i = 0; i < connections.Count; i++)
-            {
-                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
-            }
-        }
-
-        public void MoveToNorth(Robot robot)
-        {
-            List<MyTuple> connections = robot.AllConnections();
-            for (int i = 0; i < connections.Count; i++)
-            {
-                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
-            }
-            robot.ToNorth();
-            List<MyTuple> connectionsNew = robot.AllConnections();
-            _board.SetValue(robot.X, robot.Y - 1, new Robot(robot.X, robot.Y -1, robot.Direction, connectionsNew));
-            for (int i = 0; i < connections.Count; i++)
-            {
-                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
-            }
-        }
-
-        public void MoveToSouth(Robot robot)
-        {
-            List<MyTuple> connections = robot.AllConnections();
-            for (int i = 0; i < connections.Count; i++)
-            {
-                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
-            }
-            robot.ToSouth();
-            List<MyTuple> connectionsNew = robot.AllConnections();
-            _board.SetValue(robot.X, robot.Y + 1, new Robot(robot.X, robot.Y + 1, robot.Direction, connectionsNew));
-            for (int i = 0; i < connections.Count; i++)
-            {
-                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
-            }
-        }
-        #endregion
-
-        public bool rotateRobot(Robot robot, Angle angle) { /*code*/ return true; }
-        public void ConnectRobot(Robot robot, Direction dir) {
-            if (dir == Direction.EAST)
-            {  
-                int x = robot.X+1;
-                while(robot.IsConnected(new MyTuple(x, robot.Y)))
-                {
-                    x=x+1;
-                }
-                if(x<_board.Width && _board.GetFieldValue(x, robot.Y) is Cube) 
-                { 
-                    robot.AddConnection(new MyTuple(x,robot.Y));
-                    OnGameAdvanced();
-                } 
-            }
-            else if (dir == Direction.WEST)
-            {
-                int x = robot.X - 1;
-                while (robot.IsConnected(new MyTuple(x, robot.Y)))
-                {
-                    x = x - 1;
-                }
-                if (x >=0 && _board.GetFieldValue(x, robot.Y) is Cube)
-                {
-                    robot.AddConnection(new MyTuple(x, robot.Y));
-                    OnGameAdvanced();
-                }
-            }
-            else if (dir == Direction.NORTH)
-            {
-                int y = robot.Y - 1;
-                while (robot.IsConnected(new MyTuple(robot.X, y)))
-                {
-                    y = y - 1;
-                }
-                if (y >= 0 && _board.GetFieldValue(robot.X, y) is Cube)
-                {
-                    robot.AddConnection(new MyTuple(robot.X, y));
-                    OnGameAdvanced();
-                }
-            }
-            else if (dir == Direction.SOUTH)
-            {
-                int y = robot.Y + 1;
-                while (robot.IsConnected(new MyTuple(robot.X, y)))
-                {
-                    y = y + 1;
-                }
-                if (y < _board.Height && _board.GetFieldValue(robot.X, y) is Cube)
-                {
-                    robot.AddConnection(new MyTuple(robot.X, y));
-                    OnGameAdvanced();
-                }
-            }
-        }
-        public bool disConnectRobot(Robot robot, Direction dir) { /*code*/ return true; }
-        public bool connectCubes(Robot robot, RelDistance distance) { /*code*/ return true; }
-        public bool disConnectCubes(Robot robot, RelDistance distance) { /*code*/ return true; }
-        public bool clean(Robot robot, Direction dir) { /*code*/ return true; }
 
         #endregion
 
         #region Private Methods
 
-        private void OnGameOver(bool end, Team team, int round)
+        private Direction? CalculateDirection() 
         {
-            if (team == _team1)
+            if (_actionFieldX == null || _actionFieldY == null)
+                return null;
+
+            if (_robot.X == _actionFieldX)
             {
-                GameOver?.Invoke(this, new GameEventArgs(end, 1, round));
+                if (_robot.Y == _actionFieldY - 1)
+                {
+                    return Direction.NORTH;
+                }
+                else if (_robot.Y == _actionFieldY + 1)
+                {
+                    return Direction.SOUTH;
+                }
+                else { return null; }
+            }
+            else if (_robot.Y == _actionFieldY)
+            {
+                if (_robot.X == _actionFieldX - 1)
+                {
+                    return Direction.WEST;
+                }
+                else if (_robot.X == _actionFieldX + 1)
+                {
+                    return Direction.EAST;
+                }
+                else { return null; }
             }
             else
             {
-                GameOver?.Invoke(this, new GameEventArgs(end, 2, round));
+                return null;
+            }
+        }
+
+        private void OnGameOver(bool end, Team team)
+        {
+            if (team == _team1)
+            {
+                GameOver?.Invoke(this, new GameEventArgs(end, 1, _round));
+            }
+            else
+            {
+                GameOver?.Invoke(this, new GameEventArgs(end, 2, _round));
             }
 
         }
 
-        private void OnNewRound(bool end, Team team, int round)
+        private void OnNewRound(bool end, Team team)
         {
+            _round++;
             if (team == _team1)
             {
-                NewRound?.Invoke(this, new GameEventArgs(end, 1, round));
+                NewRound?.Invoke(this, new GameEventArgs(end, 1, _round));
             }
             else
             {
-                NewRound?.Invoke(this, new GameEventArgs(end, 2, round));
+                NewRound?.Invoke(this, new GameEventArgs(end, 2, _round));
             }
         }
 
@@ -390,25 +225,284 @@ namespace Model.Model
 
         #endregion
 
-
-
-    }
-
-    public class GameEventArgs : EventArgs
-    {
-        public GameEventArgs(bool isGameOver, int winnerTeam, int currentRound)
+        #region Move
+        public void MoveRobot(Robot robot, Direction dir)
         {
-            _isGameOver = isGameOver;
-            _winnerTeam = winnerTeam;
-            _currentRound = currentRound;
+            if (dir == Direction.EAST)
+            {
+                if (CanMoveToEast(robot))
+                {
+                    MoveToEast(robot);
+                }
+            }
+            else if (dir == Direction.WEST)
+            {
+                if (CanMoveToWest(robot))
+                {
+                    MoveToWest(robot);
+                }
+            }
+            else if (dir == Direction.NORTH)
+            {
+                if (CanMoveToNorth(robot))
+                {
+                    MoveToNorth(robot);
+                }
+            }
+            else if (dir == Direction.SOUTH)
+            {
+                if (CanMoveToSouth(robot))
+                {
+                    MoveToSouth(robot);
+                }
+            }
+            if (_round == _gameOverTurn)
+                OnGameOver(true, _team1);
+
+            OnNewRound(false, _team1);
         }
-        private bool _isGameOver;
-        private int _winnerTeam;
-        private int _currentRound;
-        public bool IsGameOver { get { return _isGameOver; } set { _isGameOver = value; } }
-        public int WinnerTeam { get { return _winnerTeam; } set { _winnerTeam = value; } }
-        public int CurrentRound { get { return _currentRound; } set { _currentRound = value; } }
+
+        private bool CanMoveToEast(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                if (connections[i].X + 1 >= _board.Width
+                    && !(_board.GetFieldValue(connections[i].X + 1, connections[i].Y) is Empty))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        private bool CanMoveToWest(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                if (connections[i].X - 1 < 0
+                    && !(_board.GetFieldValue(connections[i].X - 1, connections[i].Y) is Empty))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool CanMoveToNorth(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                if (connections[i].Y - 1 < 0
+                    && !(_board.GetFieldValue(connections[i].X, connections[i].Y - 1) is Empty))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool CanMoveToSouth(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                if (connections[i].Y + 1 >= _board.Height
+                    && !(_board.GetFieldValue(connections[i].X, connections[i].Y + 1) is Empty))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        private void MoveToEast(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
+            }
+            robot.ToEast();
+            List<MyTuple> connectionsNew = robot.AllConnections();
+            _board.SetValue(robot.X + 1, robot.Y, new Robot(robot.X + 1, robot.Y, robot.Direction, connectionsNew));
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
+            }
+        }
+
+        private void MoveToWest(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
+            }
+            robot.ToWest();
+            List<MyTuple> connectionsNew = robot.AllConnections();
+            _board.SetValue(robot.X - 1, robot.Y, new Robot(robot.X - 1, robot.Y, robot.Direction, connectionsNew));
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
+            }
+        }
+
+        private void MoveToNorth(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
+            }
+            robot.ToNorth();
+            List<MyTuple> connectionsNew = robot.AllConnections();
+            _board.SetValue(robot.X, robot.Y - 1, new Robot(robot.X, robot.Y - 1, robot.Direction, connectionsNew));
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
+            }
+        }
+
+        private void MoveToSouth(Robot robot)
+        {
+            List<MyTuple> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
+            }
+            robot.ToSouth();
+            List<MyTuple> connectionsNew = robot.AllConnections();
+            _board.SetValue(robot.X, robot.Y + 1, new Robot(robot.X, robot.Y + 1, robot.Direction, connectionsNew));
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
+            }
+        }
+
+
+        #endregion
+
+        #region Rotate
+
+        public void RotateRobot(Robot robot, Angle angle) { /*code*/ }
+
+        #endregion
+
+        #region ConnectRobot
+        public void ConnectRobot(Robot robot)
+        {
+            if (_actionDirection == null)
+            {
+                return;
+            }
+
+            if (_actionDirection == Direction.EAST)
+            {
+                int x = robot.X + 1;
+                while (robot.IsConnected(new MyTuple(x, robot.Y)))
+                {
+                    x = x + 1;
+                }
+                if (x < _board.Width && _board.GetFieldValue(x, robot.Y) is Cube)
+                {
+                    robot.AddConnection(new MyTuple(x, robot.Y));
+                }
+            }
+            else if (_actionDirection == Direction.WEST)
+            {
+                int x = robot.X - 1;
+                while (robot.IsConnected(new MyTuple(x, robot.Y)))
+                {
+                    x = x - 1;
+                }
+                if (x >= 0 && _board.GetFieldValue(x, robot.Y) is Cube)
+                {
+                    robot.AddConnection(new MyTuple(x, robot.Y));
+                }
+            }
+            else if (_actionDirection == Direction.NORTH)
+            {
+                int y = robot.Y - 1;
+                while (robot.IsConnected(new MyTuple(robot.X, y)))
+                {
+                    y = y - 1;
+                }
+                if (y >= 0 && _board.GetFieldValue(robot.X, y) is Cube)
+                {
+                    robot.AddConnection(new MyTuple(robot.X, y));
+                }
+            }
+            else if (_actionDirection == Direction.SOUTH)
+            {
+                int y = robot.Y + 1;
+                while (robot.IsConnected(new MyTuple(robot.X, y)))
+                {
+                    y = y + 1;
+                }
+                if (y < _board.Height && _board.GetFieldValue(robot.X, y) is Cube)
+                {
+                    robot.AddConnection(new MyTuple(robot.X, y));
+                }
+            }
+
+            if (_round == _gameOverTurn)
+                OnGameOver(true, _team1);
+
+            OnNewRound(false, _team1);
+
+        }
+        #endregion
+
+        #region DisconnectRobot
+
+        public void DisconnectRobot(Robot robot) { /*code*/ }
+
+        #endregion
+
+        #region ConnectCubes
+
+        public void ConnectCubes(Robot robot) { /*code*/ }
+
+        #endregion
+
+        #region DisconnectCubes
+
+        public void DisconnectCubes(Robot robot) { /*code*/ }
+
+        #endregion
+
+        #region Clean
+
+        public void Clean(Robot robot) { /*code*/ }
+
+        #endregion
+
+        #region Wait
+
+        public void Wait(Robot robot) { /*code*/}
+
+        #endregion
     }
 
 
+
+        public class GameEventArgs : EventArgs
+        {
+            public GameEventArgs(bool isGameOver, int winnerTeam, int currentRound)
+            {
+                _isGameOver = isGameOver;
+                _winnerTeam = winnerTeam;
+                _currentRound = currentRound;
+            }
+            private bool _isGameOver;
+            private int _winnerTeam;
+            private int _currentRound;
+            public bool IsGameOver { get { return _isGameOver; } set { _isGameOver = value; } }
+            public int WinnerTeam { get { return _winnerTeam; } set { _winnerTeam = value; } }
+            public int CurrentRound { get { return _currentRound; } set { _currentRound = value; } }
+        }
+
+
+    
 }

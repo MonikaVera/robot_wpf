@@ -86,7 +86,7 @@ namespace View.ViewModel
         /// <summary>
         /// Mezőváltoztató parancs lekérdezése, vagy beállítása.
         /// </summary>
-        public DelegateCommand? FieldChangeCommand { get; set; }
+        public DelegateCommand? ChooseActionFieldCommand { get; set; }
 
         #endregion
     }

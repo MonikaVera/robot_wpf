@@ -12,36 +12,68 @@
     <Page.InputBindings>
         <KeyBinding 
                                 Key="W"
-                                Command="{Binding PressUp}" 
+                                Command="{Binding KeyDownCommand}" 
                                 CommandParameter="UP" />
         <KeyBinding 
                                 Key="Up" 
-                                Command="{Binding PressUp}" 
+                                Command="{Binding KeyDownCommand}" 
                                 CommandParameter="UP" />
         <KeyBinding 
                                 Key="S" 
-                                Command="{Binding PressDown}" 
+                                Command="{Binding KeyDownCommand}" 
                                 CommandParameter="DOWN" />
         <KeyBinding 
                                 Key="Down" 
-                                Command="{Binding PressDown}" 
+                                Command="{Binding KeyDownCommand}" 
                                 CommandParameter="DOWN" />
         <KeyBinding 
                                 Key="A" 
-                                Command="{Binding PressLeft}" 
+                                Command="{Binding KeyDownCommand}" 
                                 CommandParameter="LEFT" />
         <KeyBinding 
                                 Key="Left" 
-                                Command="{Binding PressLeft}" 
+                                Command="{Binding KeyDownCommand}" 
                                 CommandParameter="LEFT" />
         <KeyBinding 
                                 Key="D" 
-                                Command="{Binding PressRight}" 
+                                Command="{Binding KeyDownCommand}" 
                                 CommandParameter="RIGHT" />
         <KeyBinding 
                                 Key="Right" 
-                                Command="{Binding PressRight}" 
+                                Command="{Binding KeyDownCommand}" 
                                 CommandParameter="RIGHT" />
+        <KeyBinding 
+                                Key="C" 
+                                Command="{Binding KeyDownCommand}" 
+                                CommandParameter="CLEAN" />
+        <KeyBinding 
+                                Key="V" 
+                                Command="{Binding KeyDownCommand}" 
+                                CommandParameter="WAIT" />
+        <KeyBinding 
+                                Key="M" 
+                                Command="{Binding KeyDownCommand}" 
+                                CommandParameter="MERGE" />
+        <KeyBinding 
+                                Key="N" 
+                                Command="{Binding KeyDownCommand}" 
+                                CommandParameter="GET" />
+        <KeyBinding 
+                                Key="B" 
+                                Command="{Binding KeyDownCommand}" 
+                                CommandParameter="SPLIT" />
+        <KeyBinding 
+                                Key="X" 
+                                Command="{Binding KeyDownCommand}" 
+                                CommandParameter="PUTDOWN" />
+        <KeyBinding 
+                                Key="E" 
+                                Command="{Binding KeyDownCommand}" 
+                                CommandParameter="TURNEAST" />
+        <KeyBinding 
+                                Key="Q" 
+                                Command="{Binding KeyDownCommand}" 
+                                CommandParameter="TURNWEST" />
     </Page.InputBindings>
 
     <Grid>
@@ -63,7 +95,7 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding FieldChangeCommand}" CommandParameter="{Binding Number}" Content="{Binding Text}">
+                    <Button Command="{Binding ChooseActionFieldCommand}" CommandParameter="{Binding Number}" Content="{Binding Text}">
 
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />

@@ -223,7 +223,8 @@ namespace Model.Model
 
     public enum Angle
     {
-        _90, _180, _270, _360
+        Clockwise, CounterClockwise
+        //_90, _180, _270, _360
     }
 }
 

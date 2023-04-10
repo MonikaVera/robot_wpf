@@ -60,6 +60,11 @@ namespace Model.Model
             return false;
         }
 
+        public void clearConnections()
+        {
+            _connected.Clear();
+        }
+
 
 
         public List<XYcoordinates> AllConnections()

@@ -455,12 +455,42 @@ namespace Model.Model
 
         #region Rotate
 
-        public void RotateRobot(Robot robot, Angle angle) { /*code*/ }
+        public void RotateRobot(Robot robot, Angle angle) { 
+            if(angle==Angle.Clockwise)
+            {
 
-        #endregion
+            } 
+            else
+            {
+
+            }
+        }
+
+        public bool CanRotateClockwise(Robot robot)
+        {
+            for (int i = 0; i < (robot.AllConnections()).Count(); i++)
+            {
+                int newX = robot.X + robot.Y - (robot.AllConnections())[i].Y;
+                int newY = -robot.X + robot.Y + (robot.AllConnections())[i].X;
+                if(newX<0 || newY<0 || newX>=_board.Width || newY>=_board.Height || 
+                    !(_board.GetFieldValue(newX,newY) is Empty))
+                {
+                    return false;
+                }
+
+            }
+            return true;
+        }
+
+        public bool CanRotateCounterClockwise(Robot robot)
+        {
+            return true;
+        }
+
+    #endregion
 
         #region ConnectRobot
-        public void ConnectRobot(Robot robot)
+    public void ConnectRobot(Robot robot)
         {
             if (_actionDirection == null)
             {
@@ -550,7 +580,9 @@ namespace Model.Model
 
         #region DisconnectRobot
 
-        public void DisconnectRobot(Robot robot) { /*code*/ }
+        public void DisconnectRobot(Robot robot) {
+            Robot.clearConnections();
+        }
 
         #endregion
 

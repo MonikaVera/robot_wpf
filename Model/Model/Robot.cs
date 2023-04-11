@@ -104,6 +104,24 @@ namespace Model.Model
             }
         }
 
+        public void RotateClockwise()
+        {
+            for (int i = 0; i < _connected.Count(); i++)
+            {
+                _connected[i].X = _X + _Y - _connected[i].Y;
+                _connected[i].Y = -_X + _Y + _connected[i].X;
+            }
+        }
+
+        public void RotateCounterClockwise()
+        {
+            for (int i = 0; i < _connected.Count(); i++)
+            {
+                _connected[i].X = _X - _Y + _connected[i].Y;
+                _connected[i].Y = _X + _Y - _connected[i].X;
+            }
+        }
+
         //public int X { set { _x = value; } get { return _x; } }
         //public int Y { set { _y = value; } get { return _y; } }
         public Team Team { set { _team = value; } get { return _team; } }

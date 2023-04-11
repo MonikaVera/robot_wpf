@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using Model.Persistence;
+using System.Linq;
 
 namespace Model.Model
 {
@@ -247,6 +248,7 @@ namespace Model.Model
                     MoveToEast(robot);
                     OnUpdateFields(robot, Direction.EAST, Action.Move, true);
                     robot.X++;
+                    robot.Direction = Direction.EAST;
 
                 }
                 else
@@ -261,6 +263,7 @@ namespace Model.Model
                     MoveToWest(robot);
                     OnUpdateFields(robot, Direction.WEST, Action.Move, true);
                     robot.X--;
+                    robot.Direction = Direction.WEST;
                 }
                 else
                 {
@@ -274,6 +277,7 @@ namespace Model.Model
                     MoveToNorth(robot);
                     OnUpdateFields(robot, Direction.NORTH, Action.Move, true);
                     robot.Y--;
+                    robot.Direction = Direction.NORTH;
                 }
                 else
                 {
@@ -287,6 +291,7 @@ namespace Model.Model
                     MoveToSouth(robot);
                     OnUpdateFields(robot, Direction.SOUTH, Action.Move, true);
                     robot.Y++;
+                    robot.Direction = Direction.SOUTH;
                 }
                 else
                 {
@@ -393,9 +398,9 @@ namespace Model.Model
             robot.ToEast();
             List<XYcoordinates> connectionsNew = robot.AllConnections();
             _board.SetValue(robot.X + 1, robot.Y, robot);
-            for (int i = 0; i < connections.Count; i++)
+            for (int i = 0; i < connectionsNew.Count; i++)
             {
-                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
+                _board.SetValue(connectionsNew[i].X, connectionsNew[i].Y, new Cube(connectionsNew[i].X, connectionsNew[i].Y, 1, Color.RED));
             }
         }
 
@@ -410,9 +415,9 @@ namespace Model.Model
             robot.ToWest();
             List<XYcoordinates> connectionsNew = robot.AllConnections();
             _board.SetValue(robot.X - 1, robot.Y, robot);
-            for (int i = 0; i < connections.Count; i++)
+            for (int i = 0; i < connectionsNew.Count; i++)
             {
-                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
+                _board.SetValue(connectionsNew[i].X, connectionsNew[i].Y, new Cube(connectionsNew[i].X, connectionsNew[i].Y, 1, Color.RED));
             }
         }
 
@@ -427,9 +432,9 @@ namespace Model.Model
             robot.ToNorth();
             List<XYcoordinates> connectionsNew = robot.AllConnections();
             _board.SetValue(robot.X, robot.Y - 1, robot);
-            for (int i = 0; i < connections.Count; i++)
+            for (int i = 0; i < connectionsNew.Count; i++)
             {
-                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
+                _board.SetValue(connectionsNew[i].X, connectionsNew[i].Y, new Cube(connectionsNew[i].X, connectionsNew[i].Y, 1, Color.RED));
             }
         }
 
@@ -444,9 +449,9 @@ namespace Model.Model
             robot.ToSouth();
             List<XYcoordinates> connectionsNew = robot.AllConnections();
             _board.SetValue(robot.X, robot.Y + 1, robot);
-            for (int i = 0; i < connections.Count; i++)
+            for (int i = 0; i < connectionsNew.Count; i++)
             {
-                _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
+                _board.SetValue(connectionsNew[i].X, connectionsNew[i].Y, new Cube(connectionsNew[i].X, connectionsNew[i].Y, 1, Color.RED));
             }
         }
 
@@ -455,18 +460,66 @@ namespace Model.Model
 
         #region Rotate
 
-        public void RotateRobot(Robot robot, Angle angle) { 
-            if(angle==Angle.Clockwise)
+        public void RotateRobot(Robot robot, Angle angle) {
+            if ((angle == Angle.Clockwise && CanRotateClockwise(robot))
+                || (angle == Angle.CounterClockwise && CanRotateCounterClockwise(robot)))
             {
-
-            } 
-            else
-            {
-
+                RotateAll(robot, angle);
             }
         }
 
-        public bool CanRotateClockwise(Robot robot)
+        private void RotateAll(Robot robot, Angle angle)
+        {
+            List<XYcoordinates> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
+            }
+
+            if(angle==Angle.Clockwise)
+            {   
+                robot.RotateClockwise();
+                switch(robot.Direction)
+                {
+                    case Direction.EAST: robot.Direction = Direction.SOUTH;
+                            break;
+                    case Direction.SOUTH: robot.Direction = Direction.WEST;
+                        break;
+                    case Direction.WEST: robot.Direction = Direction.NORTH;
+                        break;
+                    case Direction.NORTH: robot.Direction = Direction.EAST;
+                        break;
+                }
+            } 
+            else
+            {
+                robot.RotateCounterClockwise();
+                switch (robot.Direction)
+                {
+                    case Direction.EAST:
+                        robot.Direction = Direction.NORTH;
+                        break;
+                    case Direction.SOUTH:
+                        robot.Direction = Direction.EAST;
+                        break;
+                    case Direction.WEST:
+                        robot.Direction = Direction.SOUTH;
+                        break;
+                    case Direction.NORTH:
+                        robot.Direction = Direction.WEST;
+                        break;
+                }
+            }
+            
+            List<XYcoordinates> connectionsNew = robot.AllConnections();
+
+            for (int i = 0; i < connectionsNew.Count; i++)
+            {
+                _board.SetValue(connectionsNew[i].X, connectionsNew[i].Y, new Cube(connectionsNew[i].X, connectionsNew[i].Y, 1, Color.RED));
+            }
+        }
+
+        private bool CanRotateClockwise(Robot robot)
         {
             for (int i = 0; i < (robot.AllConnections()).Count(); i++)
             {
@@ -482,15 +535,26 @@ namespace Model.Model
             return true;
         }
 
-        public bool CanRotateCounterClockwise(Robot robot)
+        private bool CanRotateCounterClockwise(Robot robot)
         {
+            for (int i = 0; i < (robot.AllConnections()).Count(); i++)
+            {
+                int newX = robot.X - robot.Y + (robot.AllConnections())[i].Y;
+                int newY = robot.X + robot.Y - (robot.AllConnections())[i].X;
+                if (newX < 0 || newY < 0 || newX >= _board.Width || newY >= _board.Height ||
+                    !(_board.GetFieldValue(newX, newY) is Empty))
+                {
+                    return false;
+                }
+
+            }
             return true;
         }
 
     #endregion
 
         #region ConnectRobot
-    public void ConnectRobot(Robot robot)
+        public void ConnectRobot(Robot robot)
         {
             if (_actionDirection == null)
             {

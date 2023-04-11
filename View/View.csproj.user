@@ -10,6 +10,9 @@
     <Compile Update="AdminLobby2.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="MainPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="PlayerLobby2.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -25,6 +28,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="AdminLobby2.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MainPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">

@@ -1,21 +1,19 @@
-﻿<Window x:Class="View.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:View"
-        mc:Ignorable="d"
-        Title="CyberChallenge" 
-        Height="600" Width="1200"
-        MinHeight="600" MinWidth="1200">
-    <Grid>
+﻿<Page x:Class="View.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:View"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="1200"
+      Title="MainPage">
 
+    <Grid>
         <Button x:Name ="btnPlay" Content="Player mode" HorizontalAlignment="Center" Height="26" Margin="0,50,0,0" VerticalAlignment="Top" Width="188" Command="{Binding PlayerModeCommand}"/>
         <Button x:Name ="btnView" Content="Viewer mode" HorizontalAlignment="Center" Height="26" Margin="0,125,0,0" VerticalAlignment="Top" Width="188" Command="{Binding ViewerModeCommand}"/>
         <Button x:Name ="btnAdm" Content="Administrator mode" HorizontalAlignment="Center" Height="26" Margin="0,200,0,0" VerticalAlignment="Top" Width="188" Click="AdmMode_Click"/>
         <Button x:Name ="btnDiary" Content="Diary" HorizontalAlignment="Center" Height="26" Margin="0,275,0,0" VerticalAlignment="Top" Width="188" Click="Diary_Click"/>
         <Button x:Name ="btnExit" Content="Exit" HorizontalAlignment="Center" Height="26" Margin="0,350,0,0" VerticalAlignment="Top" Width="188"  Command="{Binding SaveGameCommand}"/>
 
-
     </Grid>
-</Window>
+</Page>

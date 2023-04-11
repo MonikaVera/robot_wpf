@@ -10,17 +10,13 @@ namespace Model.Model
 {
     public class Game
     {
-        public Game(MyDataAccess _dataAccess)
+        public Game(MyDataAccess dataAccess)
         {
+            _dataAccess = dataAccess;
+            _gameOverTurn = 50;
             _width = 10;
             _height = 12;
-            _board = new Board(_width, _height);
-            _robot = new Robot(1, 1, Direction.EAST);
-            _board.SetValue(1, 1, _robot);
-            _noticeBoard = new NoticeBoard();
-            this._dataAccess = _dataAccess;
-            _round = 1;
-            _gameOverTurn = 50;
+            //NewGame();
         }
 
         #region Fields
@@ -40,6 +36,8 @@ namespace Model.Model
         private int? _actionFieldX;
         private int? _actionFieldY;
         private Direction? _actionDirection;
+        private int _team1points;
+        private int _team2points;
 
         #endregion
 
@@ -52,11 +50,14 @@ namespace Model.Model
 
         public int Round { get { return _round; } set { _round = value; } }
 
+        public int Team1Points { get { return _team1points; } set { _team1points = value; } }
+        public int Team2Points { get { return _team2points; } set { _team2points = value; } }
+
         public int GameTime { get { return _gameTime; } }
 
-        public bool IsGameOver { get { return false; } } //TODO
+        public bool IsGameOver { get { return _round == _gameOverTurn; } } 
 
-        public bool IsRoundOver { get { return _gameTime == 1; } }
+        public bool IsRoundOver { get { return _gameTime == 0; } }
 
         #endregion
 
@@ -69,6 +70,8 @@ namespace Model.Model
         public event EventHandler<RobotEventArgs> RobotAction;
 
         public event EventHandler<GameEventArgs> NewRound;
+
+        public event EventHandler<ActionEventArgs> UpdateFields;
 
         /*public event EventHandler<RobotEventArgs> MoveRobot_;
         public event EventHandler<RobotEventArgs> RotateRobot_;
@@ -86,30 +89,28 @@ namespace Model.Model
 
         public void AdvanceTime()
         {
-            if (IsGameOver) // ha mr vge, nem folytathatjuk
+           
+            if (IsRoundOver)
             {
-                OnGameOver(false, _team1);
-                return;
-            }
-            else if (IsRoundOver)
-            {
-                _round++;
-                OnNewRound(false, _team1);
+                OnNewRound(_team1);
                 return;
             }
 
             _gameTime--;
+            OnGameAdvanced();
 
         }
 
         public void NewGame()
         {
+            _board = new Board(_width, _height);
             _robot = new Robot(1, 1, Direction.EAST);
+            _board.SetValue(1, 1, _robot);
+            _noticeBoard = new NoticeBoard();
             _gameTime = 30;
             _round = 1;
-            _board = new Board(_width, _height);
-            _board.SetValue(1, 1, _robot);
-
+            _team1points = 0;
+            _team2points = 0;
         }
         public async Task LoadGameAsync(string _filepath) {/*code*/ ; }
         public async Task SaveGameAsync(string _filepath) {/*code*/ ; }
@@ -165,26 +166,37 @@ namespace Model.Model
         {
             if (team == _team1)
             {
-                GameOver?.Invoke(this, new GameEventArgs(end, 1, _round));
+                GameOver?.Invoke(this, new GameEventArgs(end, 1, _round, _gameTime, _team1points, _team2points));
             }
             else
             {
-                GameOver?.Invoke(this, new GameEventArgs(end, 2, _round));
+                GameOver?.Invoke(this, new GameEventArgs(end, 2, _round, _gameTime, _team1points, _team2points));
             }
 
         }
 
-        private void OnNewRound(bool end, Team team)
+        private void OnNewRound(Team team)
         {
             _round++;
+            _gameTime = 30;
             if (team == _team1)
             {
-                NewRound?.Invoke(this, new GameEventArgs(end, 1, _round));
+                NewRound?.Invoke(this, new GameEventArgs(false, 1, _round, _gameTime, _team1points, _team2points));
             }
             else
             {
-                NewRound?.Invoke(this, new GameEventArgs(end, 2, _round));
+                NewRound?.Invoke(this, new GameEventArgs(false, 2, _round, _gameTime, _team1points, _team2points));
             }
+        }
+
+        private void OnGameAdvanced()
+        {
+            GameAdvanced?.Invoke(this,new GameEventArgs(false, 1, _round, _gameTime, _team1points, _team2points));
+        }
+
+        private void OnUpdateFields(Robot robot, Direction direction, Action action, bool canExecute)
+        {
+            UpdateFields?.Invoke(this, new ActionEventArgs(robot,direction,action,canExecute));
         }
 
         /*private void MoveRobot_(int x, int y, Direction dir, Robot robot)
@@ -233,6 +245,13 @@ namespace Model.Model
                 if (CanMoveToEast(robot))
                 {
                     MoveToEast(robot);
+                    OnUpdateFields(robot, Direction.EAST, Action.Move, true);
+                    robot.X++;
+
+                }
+                else
+                {
+                    OnUpdateFields(robot, Direction.EAST, Action.Move, false);
                 }
             }
             else if (dir == Direction.WEST)
@@ -240,6 +259,12 @@ namespace Model.Model
                 if (CanMoveToWest(robot))
                 {
                     MoveToWest(robot);
+                    OnUpdateFields(robot, Direction.WEST, Action.Move, true);
+                    robot.X--;
+                }
+                else
+                {
+                    OnUpdateFields(robot, Direction.WEST, Action.Move, false);
                 }
             }
             else if (dir == Direction.NORTH)
@@ -247,6 +272,12 @@ namespace Model.Model
                 if (CanMoveToNorth(robot))
                 {
                     MoveToNorth(robot);
+                    OnUpdateFields(robot, Direction.NORTH, Action.Move, true);
+                    robot.Y--;
+                }
+                else
+                {
+                    OnUpdateFields(robot, Direction.NORTH, Action.Move, false);
                 }
             }
             else if (dir == Direction.SOUTH)
@@ -254,21 +285,37 @@ namespace Model.Model
                 if (CanMoveToSouth(robot))
                 {
                     MoveToSouth(robot);
+                    OnUpdateFields(robot, Direction.SOUTH, Action.Move, true);
+                    robot.Y++;
+                }
+                else
+                {
+                    OnUpdateFields(robot, Direction.SOUTH, Action.Move, false);
                 }
             }
             if (_round == _gameOverTurn)
+            {
                 OnGameOver(true, _team1);
+                return;
+            }
+               
 
-            OnNewRound(false, _team1);
+            OnNewRound(_team1);
         }
 
         private bool CanMoveToEast(Robot robot)
         {
-            List<MyTuple> connections = robot.AllConnections();
+            if ((robot.X + 1) >= _board.Width
+                    || !(_board.GetFieldValue(robot.X + 1, robot.Y) is Empty))
+            {
+                return false;
+            }
+
+            List<XYcoordinates> connections = robot.AllConnections();
             for (int i = 0; i < connections.Count; i++)
             {
-                if (connections[i].X + 1 >= _board.Width
-                    && !(_board.GetFieldValue(connections[i].X + 1, connections[i].Y) is Empty))
+                if ((connections[i].X + 1) >= _board.Width
+                    || !(_board.GetFieldValue(connections[i].X + 1, connections[i].Y) is Empty))
                 {
                     return false;
                 }
@@ -277,11 +324,17 @@ namespace Model.Model
         }
         private bool CanMoveToWest(Robot robot)
         {
-            List<MyTuple> connections = robot.AllConnections();
+            if ((robot.X - 1) < 0
+                    || !(_board.GetFieldValue(robot.X - 1, robot.Y) is Empty))
+            {
+                return false;
+            }
+
+            List<XYcoordinates> connections = robot.AllConnections();
             for (int i = 0; i < connections.Count; i++)
             {
-                if (connections[i].X - 1 < 0
-                    && !(_board.GetFieldValue(connections[i].X - 1, connections[i].Y) is Empty))
+                if ((connections[i].X - 1) < 0
+                    || !(_board.GetFieldValue(connections[i].X - 1, connections[i].Y) is Empty))
                 {
                     return false;
                 }
@@ -291,11 +344,17 @@ namespace Model.Model
 
         private bool CanMoveToNorth(Robot robot)
         {
-            List<MyTuple> connections = robot.AllConnections();
+            if ((robot.Y - 1) < 0
+                    || !(_board.GetFieldValue(robot.X, robot.Y - 1) is Empty))
+            {
+                return false;
+            }
+
+            List<XYcoordinates> connections = robot.AllConnections();
             for (int i = 0; i < connections.Count; i++)
             {
-                if (connections[i].Y - 1 < 0
-                    && !(_board.GetFieldValue(connections[i].X, connections[i].Y - 1) is Empty))
+                if ((connections[i].Y - 1) < 0
+                    || !(_board.GetFieldValue(connections[i].X, connections[i].Y - 1) is Empty))
                 {
                     return false;
                 }
@@ -305,11 +364,18 @@ namespace Model.Model
 
         private bool CanMoveToSouth(Robot robot)
         {
-            List<MyTuple> connections = robot.AllConnections();
+            if (((robot.Y + 1) >= _board.Height)
+                    || !(_board.GetFieldValue(robot.X, robot.Y+1) is Empty))
+            {
+                return false;
+            }
+
+            _board.SetValue(robot.X, robot.Y, new Empty(robot.X, robot.Y));
+            List<XYcoordinates> connections = robot.AllConnections();
             for (int i = 0; i < connections.Count; i++)
             {
-                if (connections[i].Y + 1 >= _board.Height
-                    && !(_board.GetFieldValue(connections[i].X, connections[i].Y + 1) is Empty))
+                if ((connections[i].Y + 1) >= _board.Height
+                    || !(_board.GetFieldValue(connections[i].X, connections[i].Y + 1) is Empty))
                 {
                     return false;
                 }
@@ -318,14 +384,15 @@ namespace Model.Model
         }
         private void MoveToEast(Robot robot)
         {
-            List<MyTuple> connections = robot.AllConnections();
+            _board.SetValue(robot.X, robot.Y, new Empty(robot.X, robot.Y));
+            List<XYcoordinates> connections = robot.AllConnections();
             for (int i = 0; i < connections.Count; i++)
             {
                 _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
             }
             robot.ToEast();
-            List<MyTuple> connectionsNew = robot.AllConnections();
-            _board.SetValue(robot.X + 1, robot.Y, new Robot(robot.X + 1, robot.Y, robot.Direction, connectionsNew));
+            List<XYcoordinates> connectionsNew = robot.AllConnections();
+            _board.SetValue(robot.X + 1, robot.Y, robot);
             for (int i = 0; i < connections.Count; i++)
             {
                 _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
@@ -334,14 +401,15 @@ namespace Model.Model
 
         private void MoveToWest(Robot robot)
         {
-            List<MyTuple> connections = robot.AllConnections();
+            _board.SetValue(robot.X, robot.Y, new Empty(robot.X, robot.Y));
+            List<XYcoordinates> connections = robot.AllConnections();
             for (int i = 0; i < connections.Count; i++)
             {
                 _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
             }
             robot.ToWest();
-            List<MyTuple> connectionsNew = robot.AllConnections();
-            _board.SetValue(robot.X - 1, robot.Y, new Robot(robot.X - 1, robot.Y, robot.Direction, connectionsNew));
+            List<XYcoordinates> connectionsNew = robot.AllConnections();
+            _board.SetValue(robot.X - 1, robot.Y, robot);
             for (int i = 0; i < connections.Count; i++)
             {
                 _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
@@ -350,14 +418,15 @@ namespace Model.Model
 
         private void MoveToNorth(Robot robot)
         {
-            List<MyTuple> connections = robot.AllConnections();
+            _board.SetValue(robot.X, robot.Y, new Empty(robot.X, robot.Y));
+            List<XYcoordinates> connections = robot.AllConnections();
             for (int i = 0; i < connections.Count; i++)
             {
                 _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
             }
             robot.ToNorth();
-            List<MyTuple> connectionsNew = robot.AllConnections();
-            _board.SetValue(robot.X, robot.Y - 1, new Robot(robot.X, robot.Y - 1, robot.Direction, connectionsNew));
+            List<XYcoordinates> connectionsNew = robot.AllConnections();
+            _board.SetValue(robot.X, robot.Y - 1, robot);
             for (int i = 0; i < connections.Count; i++)
             {
                 _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
@@ -366,14 +435,15 @@ namespace Model.Model
 
         private void MoveToSouth(Robot robot)
         {
-            List<MyTuple> connections = robot.AllConnections();
+            _board.SetValue(robot.X, robot.Y, new Empty(robot.X, robot.Y)); 
+            List<XYcoordinates> connections = robot.AllConnections();
             for (int i = 0; i < connections.Count; i++)
             {
                 _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
             }
             robot.ToSouth();
-            List<MyTuple> connectionsNew = robot.AllConnections();
-            _board.SetValue(robot.X, robot.Y + 1, new Robot(robot.X, robot.Y + 1, robot.Direction, connectionsNew));
+            List<XYcoordinates> connectionsNew = robot.AllConnections();
+            _board.SetValue(robot.X, robot.Y + 1, robot);
             for (int i = 0; i < connections.Count; i++)
             {
                 _board.SetValue(connections[i].X, connections[i].Y, new Cube(connections[i].X, connections[i].Y, 1, Color.RED));
@@ -400,56 +470,80 @@ namespace Model.Model
             if (_actionDirection == Direction.EAST)
             {
                 int x = robot.X + 1;
-                while (robot.IsConnected(new MyTuple(x, robot.Y)))
+                while (robot.IsConnected(new XYcoordinates(x, robot.Y)))
                 {
                     x = x + 1;
                 }
                 if (x < _board.Width && _board.GetFieldValue(x, robot.Y) is Cube)
                 {
-                    robot.AddConnection(new MyTuple(x, robot.Y));
+                    robot.AddConnection(new XYcoordinates(x, robot.Y));
+                    OnUpdateFields(robot, Direction.EAST, Action.ConnectRobot, true);
+                }
+                else
+                {
+                    OnUpdateFields(robot, Direction.EAST, Action.ConnectRobot, false);
                 }
             }
             else if (_actionDirection == Direction.WEST)
             {
                 int x = robot.X - 1;
-                while (robot.IsConnected(new MyTuple(x, robot.Y)))
+                while (robot.IsConnected(new XYcoordinates(x, robot.Y)))
                 {
                     x = x - 1;
                 }
                 if (x >= 0 && _board.GetFieldValue(x, robot.Y) is Cube)
                 {
-                    robot.AddConnection(new MyTuple(x, robot.Y));
+                    robot.AddConnection(new XYcoordinates(x, robot.Y));
+                    OnUpdateFields(robot, Direction.WEST, Action.ConnectRobot, true);
+                }
+                else
+                {
+                    OnUpdateFields(robot, Direction.WEST, Action.ConnectRobot, false);
                 }
             }
             else if (_actionDirection == Direction.NORTH)
             {
                 int y = robot.Y - 1;
-                while (robot.IsConnected(new MyTuple(robot.X, y)))
+                while (robot.IsConnected(new XYcoordinates(robot.X, y)))
                 {
                     y = y - 1;
                 }
                 if (y >= 0 && _board.GetFieldValue(robot.X, y) is Cube)
                 {
-                    robot.AddConnection(new MyTuple(robot.X, y));
+                    robot.AddConnection(new XYcoordinates(robot.X, y));
+                    OnUpdateFields(robot, Direction.NORTH, Action.ConnectRobot, true);
+                }
+                else
+                {
+                    OnUpdateFields(robot, Direction.NORTH, Action.ConnectRobot, false);
                 }
             }
             else if (_actionDirection == Direction.SOUTH)
             {
                 int y = robot.Y + 1;
-                while (robot.IsConnected(new MyTuple(robot.X, y)))
+                while (robot.IsConnected(new XYcoordinates(robot.X, y)))
                 {
                     y = y + 1;
                 }
                 if (y < _board.Height && _board.GetFieldValue(robot.X, y) is Cube)
                 {
-                    robot.AddConnection(new MyTuple(robot.X, y));
+                    robot.AddConnection(new XYcoordinates(robot.X, y));
+                    OnUpdateFields(robot, Direction.SOUTH, Action.ConnectRobot, true);
+                }
+                else
+                {
+                    OnUpdateFields(robot, Direction.SOUTH, Action.ConnectRobot, false);
                 }
             }
 
             if (_round == _gameOverTurn)
+            {
                 OnGameOver(true, _team1);
+                return;
+            }
+               
 
-            OnNewRound(false, _team1);
+            OnNewRound(_team1);
 
         }
         #endregion
@@ -489,19 +583,31 @@ namespace Model.Model
 
         public class GameEventArgs : EventArgs
         {
-            public GameEventArgs(bool isGameOver, int winnerTeam, int currentRound)
+            public GameEventArgs(bool isGameOver, int winnerTeam, int currentRound, int gameTime, int team1points, int team2points)
             {
                 _isGameOver = isGameOver;
                 _winnerTeam = winnerTeam;
                 _currentRound = currentRound;
-            }
+                 _gameTime = gameTime;
+                _team1points = team1points;
+                _team2points = team2points;
+        }
             private bool _isGameOver;
             private int _winnerTeam;
             private int _currentRound;
-            public bool IsGameOver { get { return _isGameOver; } set { _isGameOver = value; } }
+            private int _gameTime;
+            private int _team1points;
+            private int _team2points;
+
+        public bool IsGameOver { get { return _isGameOver; } set { _isGameOver = value; } }
             public int WinnerTeam { get { return _winnerTeam; } set { _winnerTeam = value; } }
             public int CurrentRound { get { return _currentRound; } set { _currentRound = value; } }
-        }
+            public int GameTime { get { return _gameTime; } set { _gameTime = value; } }
+            public int Team1Points { get { return _team1points; } set { _team1points = value; } }
+            public int Team2Points { get { return _team2points; } set { _team2points = value; } }
+
+
+    }
 
 
     

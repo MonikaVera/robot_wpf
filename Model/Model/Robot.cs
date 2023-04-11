@@ -11,27 +11,33 @@ namespace Model.Model
     {
         #region Fields
         private Direction _direction;
-        private List<MyTuple> _connected;
+        private List<XYcoordinates> _connected;
         private Team? _team;
         //private int _x;
         //private int _y;
         #endregion
 
         #region Properties
-        public Robot(int x, int y, Direction direction) { _X = x; _Y = y; _direction = direction; }
-        public Robot(int x, int y, Direction direction, List<MyTuple> connected) { 
+        public Robot(int x, int y, Direction direction) 
+        { 
+            _X = x; 
+            _Y = y; 
+            _direction = direction; 
+            _connected = new List<XYcoordinates>();
+        }
+        public Robot(int x, int y, Direction direction, List<XYcoordinates> connected) { 
             _X = x;
             _Y = y;
             _direction = direction;
             _connected = connected;
         }
         public Direction Direction { set { _direction = value; } get { return _direction; } }
-        public void AddConnection(MyTuple tuple)
+        public void AddConnection(XYcoordinates tuple)
         {
             _connected.Add(tuple);
         }
 
-        public void DeleteConnection(MyTuple tuple)
+        public void DeleteConnection(XYcoordinates tuple)
         {
             for(int i=0; i<_connected.Count; i++)
             {
@@ -42,7 +48,7 @@ namespace Model.Model
             }
         }
 
-        public bool IsConnected(MyTuple tuple)
+        public bool IsConnected(XYcoordinates tuple)
         {
             for(int i=0; i< _connected.Count; i++)
             {
@@ -56,7 +62,7 @@ namespace Model.Model
 
 
 
-        public List<MyTuple> AllConnections()
+        public List<XYcoordinates> AllConnections()
         {
             return _connected;
         }
@@ -125,11 +131,35 @@ namespace Model.Model
         public Direction direction { get { return _direction; } }
     }
 
-    public class MyTuple
+    public class ActionEventArgs : EventArgs
+    {
+        public ActionEventArgs(Robot robot, Direction direction, Action action, bool canExecute)
+        {
+            _robot = robot;
+            _direction = direction;
+            _action = action;
+            _canExecute = canExecute;
+        }
+
+        private Robot _robot;
+        private Direction _direction;
+        private Action _action;
+        private bool _canExecute;
+
+        public Robot Robot { get { return _robot; } set { _robot = value; } }
+
+        public Direction Direction { get { return _direction; } set { _direction = value; } }
+
+        public Action Action { get { return _action; } set { _action = value; } }
+
+        public bool CanExecute { get { return _canExecute; } set { _canExecute = value; } }
+    }
+
+    public class XYcoordinates
     {
         public int X;
         public int Y;
-        public MyTuple(int x, int y)
+        public XYcoordinates(int x, int y)
         {
             X = x;
             Y = y;
@@ -144,10 +174,15 @@ namespace Model.Model
             }
             else
             {
-                MyTuple p = (MyTuple)obj;
+                XYcoordinates p = (XYcoordinates)obj;
                 return (X == p.X) && (Y == p.Y);
             }
         }
+    }
+
+    public enum Action
+    {
+        Wait, Clean, Move, Turn, DisconnectRobot, ConnectRobot, DisconnectCubes, ConnectCubes
     }
 }
 

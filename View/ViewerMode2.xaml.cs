@@ -24,5 +24,10 @@ namespace View
         {
             InitializeComponent();
         }
+
+     /*   public void BackClick(object sender, RoutedEventArgs e)
+        {
+            this.Content = new MainWindow();
+        }*/
     }
 }

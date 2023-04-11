@@ -1,54 +1,46 @@
-﻿using System;
+﻿using Model.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Model.Model;
 
 namespace View.ViewModel
 {
-    public class ViewModelField : ViewModelBase
+    public class VMTasksFields : ViewModelBase
     {
-        #region Fields
-        private int _indX;
-        private int _indY;
-        private Color _color;
-        private string? _picture;
+        private String cubeColor = String.Empty;
         private string? _text;
         private int _number;
-        #endregion
 
-        #region Properties
-        public Color setColor { get { return _color; } set { _color = value; } }
-        public int IndY
+        /// <summary>
+        /// Játékos lekérdezése, vagy beállítása.
+        /// </summary>
+        public String CubeColor
         {
-            get { return _indY; }
+            get { return cubeColor; }
             set
             {
-                if (_indY != value)
+                if (cubeColor != value)
                 {
-                    _indY = value;
+                    cubeColor = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        public int IndX
-        {
-            get { return _indX; }
-            set
-            {
-                if (_indX != value)
-                {
-                    _indX = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        
-        public string? Picture { get { return _picture; } set { _picture = value; } }
+        /// <summary>
+        /// Oszlop lekérdezése, vagy beállítása.
+        /// </summary>
+        public Int32 X { get; set; }
+
+        /// <summary>
+        /// Sor lekérdezése, vagy beállítása.
+        /// </summary>
+        public Int32 Y { get; set; }
         public int Number { get { return _number; } set { _number = value; } }
-        public string? Text {
+        public string? Text
+        {
             get { return _text; }
             set
             {
@@ -85,11 +77,10 @@ namespace View.ViewModel
             }
             OnPropertyChanged(nameof(Text));
         }
+
         /// <summary>
         /// Mezőváltoztató parancs lekérdezése, vagy beállítása.
         /// </summary>
-        public DelegateCommand? ChooseActionFieldCommand { get; set; }
-
-        #endregion
+        public DelegateCommand? FieldChangeCommand { get; set; }
     }
 }

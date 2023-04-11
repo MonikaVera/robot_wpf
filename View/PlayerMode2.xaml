@@ -298,15 +298,15 @@
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Width="184">
             <WrapPanel>
             <TextBlock Text="Name: " HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Width="100"/>
-            <TextBlock Text="0" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="49"/>
+                <TextBlock Text="{Binding TaskName}" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="49"/>
             </WrapPanel>
             <WrapPanel>
             <TextBlock Text="Deadline: " HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" Width="100"/>
-            <TextBlock Text="0" HorizontalAlignment="Right" VerticalAlignment="Center" Height="20" Width="49"/>
+                <TextBlock Text="{Binding TaskDeadline}" HorizontalAlignment="Right" VerticalAlignment="Center" Height="20" Width="49"/>
             </WrapPanel>
             <WrapPanel>
             <TextBlock Text="Reward: " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
-            <TextBlock Text="0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
+                <TextBlock Text="{Binding TaskReward}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
             </WrapPanel>
         </StackPanel>
 

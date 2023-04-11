@@ -44,7 +44,7 @@ namespace View
             _viewModel.PlayerModeClick += new EventHandler(ViewModel_PlayerMode);
             _viewModel.ViewerModeClick += new EventHandler(ViewModel_ViewerMode);
             _viewModel.ViewerModeBackClick += new EventHandler(ViewModel_ViewerModeBack);
-            _viewModel.ExitClick += new EventHandler(ViewModel_Exit);
+           // _viewModel.ExitClick += new EventHandler(ViewModel_Exit);
 
             _mainWindow = new MainWindow();
             _mainPage = new MainPage();
@@ -110,7 +110,7 @@ namespace View
         }
 
 
-            private void Model_GameOver(object sender, GameEventArgs e) 
+        private void Model_GameOver(object sender, GameEventArgs e) 
         {
             _timer.Stop();
             
@@ -132,8 +132,9 @@ namespace View
                                MessageBoxImage.Asterisk);
             }
 
-          //TODO vissza a fooldalra
-        
+            //TODO vissza a fooldalra
+            _mainWindow.Content = _mainPage;
+
         }
 
 

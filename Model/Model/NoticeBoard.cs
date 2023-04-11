@@ -9,8 +9,8 @@ using System.Windows.Navigation;
 namespace Model.Model
 {
     public class NoticeBoard
-    {
-        /*     private ExtraTask eTask;
+    {/*
+             private ExtraTask eTask;
              public ExtraTask ETask;
              private List<ExtraTask> extraTasks;
              public NoticeBoard(int a) { eTask.GenerateTasks(a, a); }
@@ -18,23 +18,26 @@ namespace Model.Model
                  extraTask.GenerateTasks(3, 3);
                  extraTasks.Add(extraTask); 
              }
-
-             public bool isExtraTaskFinished(int time, Field field[,]) {
+           
+            public static bool sameF(Field out[,])
+            {
+                for (int i = 0; i < 3; i++)
+                    for (int j = 0; j < 3; j++)
+                        if (eTask[i, j] is out[i, j])
+                                return false;
+                return true;
+            }
+            public bool isExtraTaskFinished(int time, Field outField[,]) {
                 if(time != 0)
                     return false;
-                if( sameF(field, eTask.Fields) == false )
+                if( sameF(outField) == false )
                     return false;
                  eTask.GenerateTasks(3, 3);
                  //add eTask.points
                  return true; 
              }
 
-            public bool sameF(Field f1[,], Field f2[,])
-            {
-
-            }
-
-         }
+    }
 
 
            public class ExtraTask

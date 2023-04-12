@@ -58,3 +58,15 @@ C:\Users\Mathe Arnold\source\repos\csharks\Model\obj\Debug\net6.0-windows\Model.
 C:\Users\Mathe Arnold\source\repos\csharks\Model\obj\Debug\net6.0-windows\refint\Model.dll
 C:\Users\Mathe Arnold\source\repos\csharks\Model\obj\Debug\net6.0-windows\Model.pdb
 C:\Users\Mathe Arnold\source\repos\csharks\Model\obj\Debug\net6.0-windows\ref\Model.dll
+C:\Softtech\clone_gitlab\30%\csharks\Model\bin\Debug\net6.0-windows\Model.deps.json
+C:\Softtech\clone_gitlab\30%\csharks\Model\bin\Debug\net6.0-windows\Model.dll
+C:\Softtech\clone_gitlab\30%\csharks\Model\bin\Debug\net6.0-windows\Model.pdb
+C:\Softtech\clone_gitlab\30%\csharks\Model\obj\Debug\net6.0-windows\Model.csproj.AssemblyReference.cache
+C:\Softtech\clone_gitlab\30%\csharks\Model\obj\Debug\net6.0-windows\Model.GeneratedMSBuildEditorConfig.editorconfig
+C:\Softtech\clone_gitlab\30%\csharks\Model\obj\Debug\net6.0-windows\Model.AssemblyInfoInputs.cache
+C:\Softtech\clone_gitlab\30%\csharks\Model\obj\Debug\net6.0-windows\Model.AssemblyInfo.cs
+C:\Softtech\clone_gitlab\30%\csharks\Model\obj\Debug\net6.0-windows\Model.csproj.CoreCompileInputs.cache
+C:\Softtech\clone_gitlab\30%\csharks\Model\obj\Debug\net6.0-windows\Model.dll
+C:\Softtech\clone_gitlab\30%\csharks\Model\obj\Debug\net6.0-windows\refint\Model.dll
+C:\Softtech\clone_gitlab\30%\csharks\Model\obj\Debug\net6.0-windows\Model.pdb
+C:\Softtech\clone_gitlab\30%\csharks\Model\obj\Debug\net6.0-windows\ref\Model.dll

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Mathe Arnold\\source\\repos\\csharks\\Model\\Model.csproj": {}
+    "C:\\Softtech\\clone_gitlab\\30%\\csharks\\Model\\Model.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Mathe Arnold\\source\\repos\\csharks\\Model\\Model.csproj": {
+    "C:\\Softtech\\clone_gitlab\\30%\\csharks\\Model\\Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Mathe Arnold\\source\\repos\\csharks\\Model\\Model.csproj",
+        "projectUniqueName": "C:\\Softtech\\clone_gitlab\\30%\\csharks\\Model\\Model.csproj",
         "projectName": "Model",
-        "projectPath": "C:\\Users\\Mathe Arnold\\source\\repos\\csharks\\Model\\Model.csproj",
-        "packagesPath": "C:\\Users\\Mathe Arnold\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Mathe Arnold\\source\\repos\\csharks\\Model\\obj\\",
+        "projectPath": "C:\\Softtech\\clone_gitlab\\30%\\csharks\\Model\\Model.csproj",
+        "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
+        "outputPath": "C:\\Softtech\\clone_gitlab\\30%\\csharks\\Model\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Mathe Arnold\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

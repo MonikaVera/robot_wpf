@@ -16,13 +16,18 @@ using System.Windows.Shapes;
 namespace View
 {
     /// <summary>
-    /// Interaction logic for PlayerMode2.xaml
+    /// Interaction logic for ViewerMode.xaml
     /// </summary>
-    public partial class PlayerMode2 : Page
+    public partial class ViewerMode : Page
     {
-        public PlayerMode2()
+        public ViewerMode()
         {
             InitializeComponent();
         }
+
+     /*   public void BackClick(object sender, RoutedEventArgs e)
+        {
+            this.Content = new MainWindow();
+        }*/
     }
 }

@@ -27,7 +27,7 @@ namespace View
         //navigate to ViewerMode page
         public void ViewerMode_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new ViewerMode2();
+            this.Content = new ViewerMode();
 
         }
 

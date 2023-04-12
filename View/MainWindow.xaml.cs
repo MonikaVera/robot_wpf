@@ -31,10 +31,6 @@ namespace View
         /*private void ButtonVisib()
         {
             btnPlay.Visibility = Visibility.Collapsed;
-            btnView.Visibility = Visibility.Collapsed;
-            btnAdm.Visibility = Visibility.Collapsed;
-            btnDiary.Visibility = Visibility.Collapsed;
-            btnExit.Visibility = Visibility.Collapsed;
         }*/
 
         //navigate to PlayerMode page
@@ -43,7 +39,7 @@ namespace View
         //navigate to ViewerMode page
         public void ViewerMode_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new ViewerMode2();
+            this.Content = new ViewerMode();
 
         }
 

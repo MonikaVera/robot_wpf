@@ -24,6 +24,7 @@ namespace View
         private ViewModelGame _viewModel = null!;
         private PlayerMode2 _playerMode = null!;
         private ViewerMode2 _viewerMode = null!;
+        private MainPage _mainPage = null!;
         private MainWindow _mainWindow = null!;
         MyDataAccess _dataAccess = null!;
         private DispatcherTimer _timer = null!;
@@ -42,12 +43,17 @@ namespace View
             _viewModel = new ViewModelGame(_model);
             _viewModel.PlayerModeClick += new EventHandler(ViewModel_PlayerMode);
             _viewModel.ViewerModeClick += new EventHandler(ViewModel_ViewerMode);
-            _viewModel.ExitClick += new EventHandler(ViewModel_Exit);
+            _viewModel.ViewerModeBackClick += new EventHandler(ViewModel_ViewerModeBack);
+           // _viewModel.ExitClick += new EventHandler(ViewModel_Exit);
 
             _mainWindow = new MainWindow();
-            _mainWindow.DataContext = _viewModel;
+            _mainPage = new MainPage();
+           // _mainWindow.DataContext = _viewModel;
             _mainWindow.Closing += new System.ComponentModel.CancelEventHandler(MainWindow_Closing);
+            _mainPage.DataContext = _viewModel;
+            _mainWindow.Content = _mainPage;
             _mainWindow.Show();
+
 
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(1);
@@ -74,6 +80,7 @@ namespace View
             //frame.NavigationService.Navigate(new PlayerMode2());
             _model.NewGame();
             _viewModel.GenerateTable();
+            _viewModel.GenerateTasks();
             _playerMode = new PlayerMode2();
             _playerMode.DataContext = _viewModel;
             _mainWindow.Content = _playerMode;
@@ -83,16 +90,23 @@ namespace View
         private void ViewModel_Exit(object? sender, EventArgs e)
         {
             //TODO
-           //_mainWindow.
+            //_mainWindow.
             //_mainWindow.Content = null;
         }
 
         private void ViewModel_ViewerMode(object? sender, EventArgs e)
         {
-            //frame.NavigationService.Navigate(new PlayerMode2());
+            _model.NewGame();
+            _viewModel.GenerateTable();
+            _viewModel.GenerateTasks();//nem
+
             _viewerMode = new ViewerMode2();
             _viewerMode.DataContext = _viewModel;
             _mainWindow.Content = _viewerMode;
+        }
+        private void ViewModel_ViewerModeBack(object? sender, EventArgs e)
+        {
+            _mainWindow.Content = _mainPage;
         }
 
 
@@ -118,8 +132,9 @@ namespace View
                                MessageBoxImage.Asterisk);
             }
 
-          //TODO vissza a fooldalra
-        
+            //TODO vissza a fooldalra
+            _mainWindow.Content = _mainPage;
+
         }
 
 

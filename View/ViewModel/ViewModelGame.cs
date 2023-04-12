@@ -1,8 +1,10 @@
-﻿using Model.Model;
+﻿using Microsoft.Win32;
+using Model.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,11 +15,13 @@ namespace View.ViewModel
     public class ViewModelGame : ViewModelBase
     {
         public ObservableCollection<ViewModelField> Fields { get; set; }
+        public ObservableCollection<VMTasksFields> FieldsTasks { get; set; }
         private Game _model;
 
         #region Commands
         public DelegateCommand PlayerModeCommand { get; private set; }
         public DelegateCommand ViewerModeCommand { get; private set; }
+        public DelegateCommand ViewerModeBack { get; }
         public DelegateCommand ExitCommand { get; private set; }
         public DelegateCommand KeyDownCommand { get; private set; }
         public DelegateCommand ChooseActionFieldCommand { get; private set; }
@@ -33,6 +37,7 @@ namespace View.ViewModel
         #region Events
         public event EventHandler? PlayerModeClick;
         public event EventHandler? ViewerModeClick;
+        public event EventHandler? ViewerModeBackClick;
         public event EventHandler? ExitClick;
         
 
@@ -109,6 +114,7 @@ namespace View.ViewModel
             // _model.FieldChanged += new EventHandler<Field>(Model_FieldChanged);
             PlayerModeCommand = new DelegateCommand(param => OnPlayerModeClick());
             ViewerModeCommand = new DelegateCommand(param => OnViewerModeClick());
+            ViewerModeBack = new DelegateCommand(param => OnViewerModeBackClick());
             ExitCommand = new DelegateCommand(param => OnExitClick());
             KeyDownCommand = new DelegateCommand(param => KeyDown(Convert.ToString(param)));
 
@@ -134,11 +140,44 @@ namespace View.ViewModel
                 }
         }
         #endregion
+        public void GenerateTasks()
+        {
+            //tasks letrehozasa
+            FieldsTasks = new ObservableCollection<VMTasksFields>();
+            // _model.NoticeBoard.GenerateTasks(3, 3);
+            for (int j = 0; j < 3; j++)
+                for (int i = 0; i < 3; i++)
+                {
+                    VMTasksFields fieldTasks = new VMTasksFields();
+                    fieldTasks.SetText(_model.NoticeBoard.Fields[i, j]);
+                    fieldTasks.Number = j * 3 + i;
+                    fieldTasks.X = i;
+                    fieldTasks.Y = j;
+                   // fieldTasks.CubeColor = CubeToField(_model.NoticeBoard.Fields[i, j]);
+                    fieldTasks.FieldChangeCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
+
+                    FieldsTasks.Add(fieldTasks);
+                }
+        }
+        #endregion
 
         #region Private Methods
+
+        private static String CubeToField(Field field)
+        {
+            if (field is Cube)
+                return "Red";
+            else
+                return "Free";
+        }
+
         private void OnPlayerModeClick()
         {
             PlayerModeClick?.Invoke(this, EventArgs.Empty);
+        }
+        private void OnViewerModeBackClick()
+        {
+            ViewerModeBackClick?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnViewerModeClick()
@@ -234,10 +273,109 @@ namespace View.ViewModel
         /// <summary>
         /// Modell mezőváltozásának eseménykezelése.
         /// </summary>
-        private void Model_FieldChanged(object? sender, Field e)
+        private void Model_UpdateFields(object obj, ActionEventArgs e)
         {
-            // Fields.First(field => field.X == e.X && field.Y == e.Y).Player = PlayerToField(_model[e.X, e.Y]);
-            // lineáris keresés a megadott sorra, oszlopra, majd a játékos átírása
+            if (e.CanExecute == false)
+            {
+                return;
+            }
+
+            if (e.Action == Model.Model.Action.Move)
+            {
+                if (e.Direction == Direction.EAST)
+                {
+                    ViewModelField field = Fields[e.Robot.Y * _model.Board.Width +  e.Robot.X];
+                    field.SetText(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
+                    field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X+1];
+                    field.SetText(_model.Board.GetFieldValue(e.Robot.X+1, e.Robot.Y));
+
+                    foreach (XYcoordinates coord in e.Robot.AllConnections())
+                    {
+                        field = Fields[coord.Y * _model.Board.Width + coord.X];
+                        field.SetText(_model.Board.GetFieldValue(coord.X, coord.Y));
+                        field = Fields[coord.Y * _model.Board.Width + coord.X + 1];
+                        field.SetText(_model.Board.GetFieldValue(coord.X + 1, coord.Y));
+                    }
+                }
+                else if (e.Direction == Direction.WEST){
+                    ViewModelField field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X];
+                    field.SetText(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
+                    field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X - 1];
+                    field.SetText(_model.Board.GetFieldValue(e.Robot.X - 1, e.Robot.Y));
+
+                    foreach (XYcoordinates coord in e.Robot.AllConnections())
+                    {
+                        field = Fields[coord.Y * _model.Board.Width + coord.X];
+                        field.SetText(_model.Board.GetFieldValue(coord.X, coord.Y));
+                        field = Fields[coord.Y * _model.Board.Width + coord.X - 1];
+                        field.SetText(_model.Board.GetFieldValue(coord.X - 1, coord.Y));
+                    }
+                }
+                else if (e.Direction == Direction.NORTH)
+                {
+                    ViewModelField field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X];
+                    field.SetText(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
+                    field = Fields[(e.Robot.Y - 1) * _model.Board.Width + e.Robot.X];
+                    field.SetText(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y - 1));
+
+                    foreach (XYcoordinates coord in e.Robot.AllConnections())
+                    {
+                        field = Fields[coord.Y * _model.Board.Width + coord.X];
+                        field.SetText(_model.Board.GetFieldValue(coord.X, coord.Y));
+                        field = Fields[(coord.Y-1) * _model.Board.Width + coord.X];
+                        field.SetText(_model.Board.GetFieldValue(coord.X, coord.Y-1));
+                    }
+                }
+                else if (e.Direction == Direction.SOUTH)
+                {
+                    ViewModelField field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X];
+                    field.SetText(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
+                    field = Fields[(e.Robot.Y+1) * _model.Board.Width + e.Robot.X];
+                    field.SetText(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y+1));
+                    
+
+                    foreach (XYcoordinates coord in e.Robot.AllConnections())
+                    {
+                        field = Fields[coord.Y * _model.Board.Width + coord.X];
+                        field.SetText(_model.Board.GetFieldValue(coord.X, coord.Y));
+                        field = Fields[(coord.Y+1) * _model.Board.Width + coord.X];
+                        field.SetText(_model.Board.GetFieldValue(coord.X, coord.Y+1));
+                    }
+                }
+            }
+            else if (e.Action == Model.Model.Action.Turn)
+            {
+
+            }
+            else if (e.Action == Model.Model.Action.ConnectRobot)
+            {
+
+            }
+            else if (e.Action == Model.Model.Action.ConnectCubes)
+            {
+
+            }
+            else if (e.Action == Model.Model.Action.DisconnectRobot)
+            {
+
+            }
+            else if (e.Action == Model.Model.Action.DisconnectCubes)
+            {
+
+            }
+            else if (e.Action == Model.Model.Action.Clean)
+            {
+
+            }
+            else if (e.Action == Model.Model.Action.Wait)
+            {
+
+            }
+        }
+
+        private void Model_UpdateTasks(object obj, ActionEventArgs e)
+        {
+
         }
 
         private void Model_UpdateFields(object obj, ActionEventArgs e)

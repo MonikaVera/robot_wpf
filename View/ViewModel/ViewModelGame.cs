@@ -110,7 +110,6 @@ namespace View.ViewModel
             _model.NewRound += new EventHandler<GameEventArgs>(Model_NewRound);
             _model.UpdateFields += new EventHandler<ActionEventArgs>(Model_UpdateFields);
 
-
             //parancsok kezelese
             // _model.FieldChanged += new EventHandler<Field>(Model_FieldChanged);
             PlayerModeCommand = new DelegateCommand(param => OnPlayerModeClick());
@@ -118,8 +117,8 @@ namespace View.ViewModel
             ViewerModeBack = new DelegateCommand(param => OnViewerModeBackClick());
             ExitCommand = new DelegateCommand(param => OnExitClick());
             KeyDownCommand = new DelegateCommand(param => KeyDown(Convert.ToString(param)));
-        }
 
+        }
 
         #region Public Methods
         public void GenerateTable()
@@ -131,7 +130,7 @@ namespace View.ViewModel
                 {
                     ViewModelField field = new ViewModelField();
                     field.Number = j * _model.Board.Width + i;
-                    field.SetText(_model.Board.GetFieldValue(i, j));
+                    field.SetPicture(_model.Board.GetFieldValue(i, j));
                     //field.Number = j * _model.Board.Width + i;
                     field.IndX = i;
                     field.IndY = j;
@@ -139,8 +138,8 @@ namespace View.ViewModel
 
                     Fields.Add(field);
                 }
-
         }
+        #endregion
         public void GenerateTasks()
         {
             //tasks letrehozasa
@@ -379,10 +378,108 @@ namespace View.ViewModel
 
         }
 
+        private void Model_UpdateFields(object obj, ActionEventArgs e)
+        {
+            if (e.CanExecute == false)
+            {
+                return;
+            }
 
-        private void ReFresh() {
-            ;
+            if (e.Action == Model.Model.Action.Move)
+            {
+                if (e.Direction == Direction.EAST)
+                {
+                    ViewModelField field = Fields[e.Robot.Y * _model.Board.Width +  e.Robot.X];
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
+                    field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X+1];
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X+1, e.Robot.Y));
+
+                    foreach (XYcoordinates coord in e.Robot.AllConnections())
+                    {
+                        field = Fields[coord.Y * _model.Board.Width + coord.X];
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X, coord.Y));
+                        field = Fields[coord.Y * _model.Board.Width + coord.X + 1];
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X + 1, coord.Y));
+                    }
+                }
+                else if (e.Direction == Direction.WEST){
+                    ViewModelField field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X];
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
+                    field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X - 1];
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X - 1, e.Robot.Y));
+
+                    foreach (XYcoordinates coord in e.Robot.AllConnections())
+                    {
+                        field = Fields[coord.Y * _model.Board.Width + coord.X];
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X, coord.Y));
+                        field = Fields[coord.Y * _model.Board.Width + coord.X - 1];
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X - 1, coord.Y));
+                    }
+                }
+                else if (e.Direction == Direction.NORTH)
+                {
+                    ViewModelField field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X];
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
+                    field = Fields[(e.Robot.Y - 1) * _model.Board.Width + e.Robot.X];
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y - 1));
+
+                    foreach (XYcoordinates coord in e.Robot.AllConnections())
+                    {
+                        field = Fields[coord.Y * _model.Board.Width + coord.X];
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X, coord.Y));
+                        field = Fields[(coord.Y-1) * _model.Board.Width + coord.X];
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X, coord.Y-1));
+                    }
+                }
+                else if (e.Direction == Direction.SOUTH)
+                {
+                    ViewModelField field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X];
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
+                    field = Fields[(e.Robot.Y+1) * _model.Board.Width + e.Robot.X];
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y+1));
+                    
+
+                    foreach (XYcoordinates coord in e.Robot.AllConnections())
+                    {
+                        field = Fields[coord.Y * _model.Board.Width + coord.X];
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X, coord.Y));
+                        field = Fields[(coord.Y+1) * _model.Board.Width + coord.X];
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X, coord.Y+1));
+                    }
+                }
+            }
+            else if (e.Action == Model.Model.Action.Turn)
+            {
+
+            }
+            else if (e.Action == Model.Model.Action.ConnectRobot)
+            {
+
+            }
+            else if (e.Action == Model.Model.Action.ConnectCubes)
+            {
+
+            }
+            else if (e.Action == Model.Model.Action.DisconnectRobot)
+            {
+
+            }
+            else if (e.Action == Model.Model.Action.DisconnectCubes)
+            {
+
+            }
+            else if (e.Action == Model.Model.Action.Clean)
+            {
+
+            }
+            else if (e.Action == Model.Model.Action.Wait)
+            {
+
+            }
         }
+       
+       
+        private void ReFresh() {/*code*/; }
         private void OnLoadGame() {/*code*/; }
         private void OnNewGame() {/*code*/; }
         private void OnSaveGame() {/*code*/; }

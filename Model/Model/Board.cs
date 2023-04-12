@@ -24,7 +24,7 @@ namespace Model.Model
 
             _fields = new Field[width, height];
             GenerateTable(width, height);
-            //PrintTable(width, height);
+            PrintTable(width, height);
 
         }
 
@@ -73,7 +73,7 @@ namespace Model.Model
 
         private void PrintTable(int width, int height)
         {
-            using (StreamWriter writer = new StreamWriter("C:\\Users\\Mathe Arnold\\Desktop\\proba1.txt"))
+            /*using (StreamWriter writer = new StreamWriter("C:\\Users\\Mathe Arnold\\Desktop\\proba1.txt"))
             {
 
                 for (int j = 0; j < height; j++)
@@ -104,7 +104,7 @@ namespace Model.Model
 
                     }
                 }
-            }
+            }*/
 
         }
 

@@ -81,6 +81,8 @@
             <RowDefinition Height="Auto" MinHeight="31" />
             <RowDefinition />
             <RowDefinition Height="Auto" MinHeight="22" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!--player area-->
@@ -95,8 +97,8 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding ChooseActionFieldCommand}" CommandParameter="{Binding Number}" Content="{Binding Text}">
-
+                    <Button Command="{Binding ChooseActionFieldCommand}" CommandParameter="{Binding Number}" Padding="0,0,0,0" BorderThickness="0">
+                        <Image Source="{Binding Picture, TargetNullValue={x:Null}}" Stretch="Fill" />
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
                         </Button.RenderTransform>
@@ -266,7 +268,7 @@
         <StatusBar Grid.Row="2" >
             <!-- státuszsor a pontok és az időhöz -->
             <StatusBarItem>
-                <TextBlock Text="GameTime: " />
+                <TextBlock Text="Remaining time: " />
             </StatusBarItem>
             <StatusBarItem>
                 <TextBlock Text="{Binding GameTime}" />
@@ -280,18 +282,18 @@
             </StatusBarItem>
             <Separator />
             <StatusBarItem>
-                <TextBlock Text="Team1 points: " />
+                <TextBlock Text="First Team's points: " />
             </StatusBarItem>
             <StatusBarItem>
-                <TextBlock Text="{Binding Team1}" />
+                <TextBlock Text="{Binding Team1Points}" />
             </StatusBarItem>
             <Separator />
             <StatusBarItem />
             <StatusBarItem>
-                <TextBlock Text="Team2 points: " />
+                <TextBlock Text="Second Team's points: " />
             </StatusBarItem>
             <StatusBarItem>
-                <TextBlock Text="{Binding Team2}" />
+                <TextBlock Text="{Binding Team2Points}" />
             </StatusBarItem>
         </StatusBar>
 

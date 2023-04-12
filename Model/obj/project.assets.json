@@ -8,23 +8,23 @@
     "net6.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Acer\\.nuget\\packages\\": {},
+    "C:\\Users\\Mathe Arnold\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Softtech\\clone_gitlab\\new_clone\\csharks\\Model\\Model.csproj",
+      "projectUniqueName": "C:\\Users\\Mathe Arnold\\source\\repos\\csharks\\Model\\Model.csproj",
       "projectName": "Model",
-      "projectPath": "C:\\Softtech\\clone_gitlab\\new_clone\\csharks\\Model\\Model.csproj",
-      "packagesPath": "C:\\Users\\Acer\\.nuget\\packages\\",
-      "outputPath": "C:\\Softtech\\clone_gitlab\\new_clone\\csharks\\Model\\obj\\",
+      "projectPath": "C:\\Users\\Mathe Arnold\\source\\repos\\csharks\\Model\\Model.csproj",
+      "packagesPath": "C:\\Users\\Mathe Arnold\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Mathe Arnold\\source\\repos\\csharks\\Model\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Acer\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Mathe Arnold\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],

@@ -41,12 +41,22 @@ namespace View.ViewModel
                 if (_indX != value)
                 {
                     _indX = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(); 
                 }
             }
         }
         
-        public string? Picture { get { return _picture; } set { _picture = value; } }
+        public string? Picture {
+            get { return _picture; }
+            set
+            {
+                if (_picture != value)
+                {
+                    _picture = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public int Number { get { return _number; } set { _number = value; } }
         public string? Text {
             get { return _text; }
@@ -84,6 +94,48 @@ namespace View.ViewModel
                 _text = ("R");
             }
             OnPropertyChanged(nameof(Text));
+        }
+
+        public void SetPicture(Field field)
+        {
+            //_text = _number.ToString();
+            if (field is Empty)
+            {
+                _picture = "empty.png";
+            }
+            else if (field is Obstacle)
+            {
+                _picture = "obstacle.png";
+            }
+            else if (field is Cube)
+            {
+                _picture = "cube.png";
+            }
+            else if (field is Exit)
+            {
+                _picture = ("empty.png");
+            }
+            else if (field is Robot)
+            {
+                Robot robot = (Robot)field;
+                if (robot.Direction == Direction.EAST)
+                {
+                    _picture = "robot_right.png";
+                }
+                else if (robot.Direction == Direction.WEST)
+                {
+                    _picture = "robot_left.png";
+                }
+                else if (robot.Direction == Direction.SOUTH)
+                {
+                    _picture = "robot_front.png";
+                }
+                else if (robot.Direction == Direction.NORTH)
+                {
+                    _picture = "robot_back.png";
+                }
+            }
+            OnPropertyChanged(nameof(Picture));
         }
         /// <summary>
         /// Mezőváltoztató parancs lekérdezése, vagy beállítása.

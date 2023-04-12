@@ -17,7 +17,7 @@ namespace Model.Model
         //private int _y;
         #endregion
 
-        #region Properties
+       
         public Robot(int x, int y, Direction direction) 
         { 
             _X = x; 
@@ -31,6 +31,8 @@ namespace Model.Model
             _direction = direction;
             _connected = connected;
         }
+
+        #region Properties
         public Direction Direction { set { _direction = value; } get { return _direction; } }
         public void AddConnection(XYcoordinates tuple)
         {
@@ -58,6 +60,11 @@ namespace Model.Model
                 }
             }
             return false;
+        }
+
+        public void clearConnections()
+        {
+            _connected.Clear();
         }
 
 
@@ -96,6 +103,24 @@ namespace Model.Model
             for (int i = 0; i < _connected.Count; i++)
             {
                 _connected[i].Y++;
+            }
+        }
+
+        public void RotateClockwise()
+        {
+            for (int i = 0; i < _connected.Count(); i++)
+            {
+                _connected[i].X = _X + _Y - _connected[i].Y;
+                _connected[i].Y = -_X + _Y + _connected[i].X;
+            }
+        }
+
+        public void RotateCounterClockwise()
+        {
+            for (int i = 0; i < _connected.Count(); i++)
+            {
+                _connected[i].X = _X - _Y + _connected[i].Y;
+                _connected[i].Y = _X + _Y - _connected[i].X;
             }
         }
 

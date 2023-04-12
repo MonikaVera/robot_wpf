@@ -248,7 +248,7 @@ namespace Model.Model
                     MoveToEast(robot);
                     OnUpdateFields(robot, Direction.EAST, Action.Move, true);
                     robot.X++;
-                    robot.Direction = Direction.EAST;
+                   // robot.Direction = Direction.EAST;
 
                 }
                 else
@@ -263,7 +263,7 @@ namespace Model.Model
                     MoveToWest(robot);
                     OnUpdateFields(robot, Direction.WEST, Action.Move, true);
                     robot.X--;
-                    robot.Direction = Direction.WEST;
+                    //robot.Direction = Direction.WEST;
                 }
                 else
                 {
@@ -277,7 +277,7 @@ namespace Model.Model
                     MoveToNorth(robot);
                     OnUpdateFields(robot, Direction.NORTH, Action.Move, true);
                     robot.Y--;
-                    robot.Direction = Direction.NORTH;
+                    //robot.Direction = Direction.NORTH;
                 }
                 else
                 {
@@ -291,7 +291,7 @@ namespace Model.Model
                     MoveToSouth(robot);
                     OnUpdateFields(robot, Direction.SOUTH, Action.Move, true);
                     robot.Y++;
-                    robot.Direction = Direction.SOUTH;
+                    //robot.Direction = Direction.SOUTH;
                 }
                 else
                 {

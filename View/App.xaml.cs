@@ -22,8 +22,8 @@ namespace View
         private Game _model = null!;
         private NoticeBoard _board = null!;
         private ViewModelGame _viewModel = null!;
-        private PlayerMode2 _playerMode = null!;
-        private ViewerMode2 _viewerMode = null!;
+        private PlayerMode _playerMode = null!;
+        private ViewerMode _viewerMode = null!;
         private MainPage _mainPage = null!;
         private MainWindow _mainWindow = null!;
         MyDataAccess _dataAccess = null!;
@@ -81,7 +81,7 @@ namespace View
             _model.NewGame();
             _viewModel.GenerateTable();
             _viewModel.GenerateTasks();
-            _playerMode = new PlayerMode2();
+            _playerMode = new PlayerMode();
             _playerMode.DataContext = _viewModel;
             _mainWindow.Content = _playerMode;
             _timer.Start();
@@ -100,7 +100,7 @@ namespace View
             _viewModel.GenerateTable();
             _viewModel.GenerateTasks();//nem
 
-            _viewerMode = new ViewerMode2();
+            _viewerMode = new ViewerMode();
             _viewerMode.DataContext = _viewModel;
             _mainWindow.Content = _viewerMode;
         }

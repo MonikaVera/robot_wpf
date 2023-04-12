@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace View
 {
     /// <summary>
-    /// Interaction logic for PlayerMode2.xaml
+    /// Interaction logic for PlayerLobby.xaml
     /// </summary>
-    public partial class PlayerMode2 : Page
+    public partial class PlayerLobby : Page
     {
-        public PlayerMode2()
+        public PlayerLobby()
         {
             InitializeComponent();
         }

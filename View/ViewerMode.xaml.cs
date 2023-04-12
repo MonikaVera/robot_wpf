@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace View
 {
     /// <summary>
-    /// Interaction logic for ViewerMode2.xaml
+    /// Interaction logic for ViewerMode.xaml
     /// </summary>
-    public partial class ViewerMode2 : Page
+    public partial class ViewerMode : Page
     {
-        public ViewerMode2()
+        public ViewerMode()
         {
             InitializeComponent();
         }

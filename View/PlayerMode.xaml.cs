@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace View
@@ -17,7 +18,7 @@ namespace View
     /// <summary>
     /// Interaction logic for PlayerMode.xaml
     /// </summary>
-    public partial class PlayerMode : Window
+    public partial class PlayerMode : Page
     {
         public PlayerMode()
         {

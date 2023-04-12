@@ -8,6 +8,10 @@
       d:DesignHeight="600" d:DesignWidth="1200"
       Title="MainPage">
 
+    <Page.Background>
+        <ImageBrush ImageSource="wallpaper_robot.jpg"></ImageBrush>
+    </Page.Background>
+
     <Grid>
         <Button x:Name ="btnPlay" Content="Player mode" HorizontalAlignment="Center" Height="26" Margin="0,50,0,0" VerticalAlignment="Top" Width="188" Command="{Binding PlayerModeCommand}"/>
         <Button x:Name ="btnView" Content="Viewer mode" HorizontalAlignment="Center" Height="26" Margin="0,125,0,0" VerticalAlignment="Top" Width="188" Command="{Binding ViewerModeCommand}"/>

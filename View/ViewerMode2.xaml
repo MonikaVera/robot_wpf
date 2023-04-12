@@ -27,8 +27,8 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding FieldChangeCommand}" CommandParameter="{Binding Number}" Content="{Binding Text}">
-
+                    <Button Command="{Binding FieldChangeCommand}" CommandParameter="{Binding Number}">
+                        <Image Source="{Binding Picture, TargetNullValue={x:Null}}" Stretch="Fill" />
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
                         </Button.RenderTransform>

@@ -124,7 +124,7 @@ namespace View.ViewModel
                 {
                     ViewModelField field = new ViewModelField();
                     field.Number = j * _model.Board.Width + i;
-                    field.SetText(_model.Board.GetFieldValue(i, j));
+                    field.SetPicture(_model.Board.GetFieldValue(i, j));
                     //field.Number = j * _model.Board.Width + i;
                     field.IndX = i;
                     field.IndY = j;
@@ -252,61 +252,61 @@ namespace View.ViewModel
                 if (e.Direction == Direction.EAST)
                 {
                     ViewModelField field = Fields[e.Robot.Y * _model.Board.Width +  e.Robot.X];
-                    field.SetText(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
                     field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X+1];
-                    field.SetText(_model.Board.GetFieldValue(e.Robot.X+1, e.Robot.Y));
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X+1, e.Robot.Y));
 
                     foreach (XYcoordinates coord in e.Robot.AllConnections())
                     {
                         field = Fields[coord.Y * _model.Board.Width + coord.X];
-                        field.SetText(_model.Board.GetFieldValue(coord.X, coord.Y));
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X, coord.Y));
                         field = Fields[coord.Y * _model.Board.Width + coord.X + 1];
-                        field.SetText(_model.Board.GetFieldValue(coord.X + 1, coord.Y));
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X + 1, coord.Y));
                     }
                 }
                 else if (e.Direction == Direction.WEST){
                     ViewModelField field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X];
-                    field.SetText(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
                     field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X - 1];
-                    field.SetText(_model.Board.GetFieldValue(e.Robot.X - 1, e.Robot.Y));
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X - 1, e.Robot.Y));
 
                     foreach (XYcoordinates coord in e.Robot.AllConnections())
                     {
                         field = Fields[coord.Y * _model.Board.Width + coord.X];
-                        field.SetText(_model.Board.GetFieldValue(coord.X, coord.Y));
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X, coord.Y));
                         field = Fields[coord.Y * _model.Board.Width + coord.X - 1];
-                        field.SetText(_model.Board.GetFieldValue(coord.X - 1, coord.Y));
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X - 1, coord.Y));
                     }
                 }
                 else if (e.Direction == Direction.NORTH)
                 {
                     ViewModelField field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X];
-                    field.SetText(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
                     field = Fields[(e.Robot.Y - 1) * _model.Board.Width + e.Robot.X];
-                    field.SetText(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y - 1));
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y - 1));
 
                     foreach (XYcoordinates coord in e.Robot.AllConnections())
                     {
                         field = Fields[coord.Y * _model.Board.Width + coord.X];
-                        field.SetText(_model.Board.GetFieldValue(coord.X, coord.Y));
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X, coord.Y));
                         field = Fields[(coord.Y-1) * _model.Board.Width + coord.X];
-                        field.SetText(_model.Board.GetFieldValue(coord.X, coord.Y-1));
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X, coord.Y-1));
                     }
                 }
                 else if (e.Direction == Direction.SOUTH)
                 {
                     ViewModelField field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X];
-                    field.SetText(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
                     field = Fields[(e.Robot.Y+1) * _model.Board.Width + e.Robot.X];
-                    field.SetText(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y+1));
+                    field.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y+1));
                     
 
                     foreach (XYcoordinates coord in e.Robot.AllConnections())
                     {
                         field = Fields[coord.Y * _model.Board.Width + coord.X];
-                        field.SetText(_model.Board.GetFieldValue(coord.X, coord.Y));
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X, coord.Y));
                         field = Fields[(coord.Y+1) * _model.Board.Width + coord.X];
-                        field.SetText(_model.Board.GetFieldValue(coord.X, coord.Y+1));
+                        field.SetPicture(_model.Board.GetFieldValue(coord.X, coord.Y+1));
                     }
                 }
             }

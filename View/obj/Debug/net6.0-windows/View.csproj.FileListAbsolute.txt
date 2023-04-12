@@ -32,3 +32,12 @@ C:\Users\Mathe Arnold\source\repos\csharks\View\obj\Debug\net6.0-windows\refint\
 C:\Users\Mathe Arnold\source\repos\csharks\View\obj\Debug\net6.0-windows\View.pdb
 C:\Users\Mathe Arnold\source\repos\csharks\View\obj\Debug\net6.0-windows\View.genruntimeconfig.cache
 C:\Users\Mathe Arnold\source\repos\csharks\View\obj\Debug\net6.0-windows\ref\View.dll
+C:\Users\Mathe Arnold\source\repos\csharks\View\bin\Debug\net6.0-windows\wallpaper_robot.jpg
+C:\Users\Mathe Arnold\source\repos\csharks\View\obj\Debug\net6.0-windows\View_Content.g.cs
+C:\Users\Mathe Arnold\source\repos\csharks\View\bin\Debug\net6.0-windows\cube.png
+C:\Users\Mathe Arnold\source\repos\csharks\View\bin\Debug\net6.0-windows\empty.png
+C:\Users\Mathe Arnold\source\repos\csharks\View\bin\Debug\net6.0-windows\obstacle.png
+C:\Users\Mathe Arnold\source\repos\csharks\View\bin\Debug\net6.0-windows\robot_back.png
+C:\Users\Mathe Arnold\source\repos\csharks\View\bin\Debug\net6.0-windows\robot_front.png
+C:\Users\Mathe Arnold\source\repos\csharks\View\bin\Debug\net6.0-windows\robot_left.png
+C:\Users\Mathe Arnold\source\repos\csharks\View\bin\Debug\net6.0-windows\robot_right.png

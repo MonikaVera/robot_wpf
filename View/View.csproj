@@ -8,6 +8,44 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="cube.png" />
+    <None Remove="empty.png" />
+    <None Remove="obstacle.png" />
+    <None Remove="robot_back.png" />
+    <None Remove="robot_front.png" />
+    <None Remove="robot_left.png" />
+    <None Remove="robot_right.png" />
+    <None Remove="wallpaper_robot.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="cube.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="empty.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="obstacle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="robot_back.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="robot_front.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="robot_left.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="robot_right.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="wallpaper_robot.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Model\Model.csproj" />
   </ItemGroup>
 

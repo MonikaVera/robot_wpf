@@ -31,10 +31,6 @@ namespace View
         /*private void ButtonVisib()
         {
             btnPlay.Visibility = Visibility.Collapsed;
-            btnView.Visibility = Visibility.Collapsed;
-            btnAdm.Visibility = Visibility.Collapsed;
-            btnDiary.Visibility = Visibility.Collapsed;
-            btnExit.Visibility = Visibility.Collapsed;
         }*/
 
         //navigate to PlayerMode page

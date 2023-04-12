@@ -57,7 +57,6 @@ C:\Softtech\clone_gitlab\30%\csharks\View\bin\Debug\net6.0-windows\View.pdb
 C:\Softtech\clone_gitlab\30%\csharks\View\bin\Debug\net6.0-windows\Model.dll
 C:\Softtech\clone_gitlab\30%\csharks\View\bin\Debug\net6.0-windows\Model.pdb
 C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\View.csproj.AssemblyReference.cache
-C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\AdminLobby2.g.cs
 C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\MainPage.g.cs
 C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\MainWindow.g.cs
 C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\PlayerMode.g.cs
@@ -65,7 +64,6 @@ C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\App.g.cs
 C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\View_Content.g.cs
 C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\View_MarkupCompile.cache
 C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\View_MarkupCompile.lref
-C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\AdminLobby2.baml
 C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\MainPage.baml
 C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\MainWindow.baml
 C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\PlayerMode.baml
@@ -84,3 +82,5 @@ C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\PlayerLobby.g
 C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\PlayerLobby.baml
 C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\ViewerMode.g.cs
 C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\ViewerMode.baml
+C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\AdminLobby.g.cs
+C:\Softtech\clone_gitlab\30%\csharks\View\obj\Debug\net6.0-windows\AdminLobby.baml

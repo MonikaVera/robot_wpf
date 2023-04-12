@@ -44,7 +44,7 @@ namespace View
             _viewModel.PlayerModeClick += new EventHandler(ViewModel_PlayerMode);
             _viewModel.ViewerModeClick += new EventHandler(ViewModel_ViewerMode);
             _viewModel.ViewerModeBackClick += new EventHandler(ViewModel_ViewerModeBack);
-           // _viewModel.ExitClick += new EventHandler(ViewModel_Exit);
+            _viewModel.ExitClick += new EventHandler(ViewModel_Exit);
 
             _mainWindow = new MainWindow();
             _mainPage = new MainPage();
@@ -89,9 +89,7 @@ namespace View
 
         private void ViewModel_Exit(object? sender, EventArgs e)
         {
-            //TODO
-            //_mainWindow.
-            //_mainWindow.Content = null;
+            Shutdown(); // a teljes alkalmazás bezárása
         }
 
         private void ViewModel_ViewerMode(object? sender, EventArgs e)

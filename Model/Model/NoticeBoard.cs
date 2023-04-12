@@ -43,11 +43,17 @@ namespace Model.Model
            public class ExtraTask
            {*/
 
+        private string taskName = "task1";
+        private int deadline;
+
+        public int Deadline { get { return deadline; } set { deadline = value; } }
+        public string TaskNaem { get { return taskName; } set { taskName = value; } }
+
         public NoticeBoard() { GenerateTasks(3, 3); }
 
         private int points;
         private Field[,] fields = new Field[3, 3];
-        public int Points { get { return points; } set { points = value; } }
+        public int TaskReward { get { return points; } set { points = value; } }
         public Field[,] Fields { get { return fields; } set { fields = value; } }
 
         private readonly Random rand = new Random();

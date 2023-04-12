@@ -60,6 +60,11 @@ namespace Model.Model
             return false;
         }
 
+        public void clearConnections()
+        {
+            _connected.Clear();
+        }
+
 
 
         public List<XYcoordinates> AllConnections()
@@ -96,6 +101,24 @@ namespace Model.Model
             for (int i = 0; i < _connected.Count; i++)
             {
                 _connected[i].Y++;
+            }
+        }
+
+        public void RotateClockwise()
+        {
+            for (int i = 0; i < _connected.Count(); i++)
+            {
+                _connected[i].X = _X + _Y - _connected[i].Y;
+                _connected[i].Y = -_X + _Y + _connected[i].X;
+            }
+        }
+
+        public void RotateCounterClockwise()
+        {
+            for (int i = 0; i < _connected.Count(); i++)
+            {
+                _connected[i].X = _X - _Y + _connected[i].Y;
+                _connected[i].Y = _X + _Y - _connected[i].X;
             }
         }
 

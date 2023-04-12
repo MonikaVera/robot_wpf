@@ -41,7 +41,7 @@ namespace View.ViewModel
                 if (_indX != value)
                 {
                     _indX = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(); 
                 }
             }
         }

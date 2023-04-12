@@ -53,7 +53,7 @@ namespace View {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/View;component/playermode2.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/View;V1.0.0.0;component/playermode2.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\PlayerMode2.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

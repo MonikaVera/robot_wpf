@@ -17,7 +17,7 @@ namespace Model.Model
         //private int _y;
         #endregion
 
-        #region Properties
+       
         public Robot(int x, int y, Direction direction) 
         { 
             _X = x; 
@@ -31,6 +31,8 @@ namespace Model.Model
             _direction = direction;
             _connected = connected;
         }
+
+        #region Properties
         public Direction Direction { set { _direction = value; } get { return _direction; } }
         public void AddConnection(XYcoordinates tuple)
         {

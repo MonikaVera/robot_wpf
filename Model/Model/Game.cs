@@ -465,6 +465,7 @@ namespace Model.Model
                 || (angle == Angle.CounterClockwise && CanRotateCounterClockwise(robot)))
             {
                 RotateAll(robot, angle);
+                OnUpdateFields(robot, robot.Direction, Action.Turn, true);
             }
         }
 

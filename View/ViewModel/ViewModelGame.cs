@@ -349,7 +349,8 @@ namespace View.ViewModel
             }
             else if (e.Action == Model.Model.Action.Turn)
             {
-
+                ViewModelField field = Fields[e.Robot.Y * _model.Board.Width + e.Robot.X];
+                field.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
             }
             else if (e.Action == Model.Model.Action.ConnectRobot)
             {

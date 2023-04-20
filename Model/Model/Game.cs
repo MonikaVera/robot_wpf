@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Documents;
 using Model.Persistence;
 using System.Linq;
+using System.Diagnostics.Eventing.Reader;
 
 namespace Model.Model
 {
@@ -246,10 +247,9 @@ namespace Model.Model
                 if (CanMoveToEast(robot))
                 {
                     MoveToEast(robot);
-                    OnUpdateFields(robot, Direction.EAST, Action.Move, true);
                     robot.X++;
                    // robot.Direction = Direction.EAST;
-
+                    OnUpdateFields(robot, Direction.EAST, Action.Move, true);
                 }
                 else
                 {
@@ -261,9 +261,9 @@ namespace Model.Model
                 if (CanMoveToWest(robot))
                 {
                     MoveToWest(robot);
-                    OnUpdateFields(robot, Direction.WEST, Action.Move, true);
                     robot.X--;
                     //robot.Direction = Direction.WEST;
+                    OnUpdateFields(robot, Direction.WEST, Action.Move, true);
                 }
                 else
                 {
@@ -275,9 +275,9 @@ namespace Model.Model
                 if (CanMoveToNorth(robot))
                 {
                     MoveToNorth(robot);
-                    OnUpdateFields(robot, Direction.NORTH, Action.Move, true);
                     robot.Y--;
                     //robot.Direction = Direction.NORTH;
+                    OnUpdateFields(robot, Direction.NORTH, Action.Move, true);
                 }
                 else
                 {
@@ -289,8 +289,8 @@ namespace Model.Model
                 if (CanMoveToSouth(robot))
                 {
                     MoveToSouth(robot);
-                    OnUpdateFields(robot, Direction.SOUTH, Action.Move, true);
                     robot.Y++;
+                    OnUpdateFields(robot, Direction.SOUTH, Action.Move, true);
                     //robot.Direction = Direction.SOUTH;
                 }
                 else
@@ -465,6 +465,14 @@ namespace Model.Model
                 || (angle == Angle.CounterClockwise && CanRotateCounterClockwise(robot)))
             {
                 RotateAll(robot, angle);
+                if(angle==Angle.Clockwise)
+                {
+                    OnUpdateFields(robot, Direction.EAST, Action.Turn, true);
+                } 
+                else
+                {
+                    OnUpdateFields(robot, Direction.WEST, Action.Turn, true);
+                }
             }
         }
 
@@ -556,6 +564,7 @@ namespace Model.Model
         #region ConnectRobot
         public void ConnectRobot(Robot robot)
         {
+            _actionDirection = robot.Direction;
             if (_actionDirection == null)
             {
                 return;

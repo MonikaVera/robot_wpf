@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <!--map-->
-        <ItemsControl ItemsSource="{Binding Fields}" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="350" MinWidth="600" Height="534" Margin="10,10,10,10" Width="982" Grid.RowSpan="2">
+        <ItemsControl ItemsSource="{Binding FieldsMapView}" VerticalAlignment="Top" HorizontalAlignment="Left" MinHeight="350" MinWidth="600" Height="534" Margin="10,10,10,10" Width="982" Grid.RowSpan="2">
             <!--az mezőket tároló vezérlő-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -27,7 +27,7 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding FieldChangeCommand}" CommandParameter="{Binding Number}">
+                    <Button Command="{Binding ChooseActionFieldCommand}" CommandParameter="{Binding Number}">
                         <Image Source="{Binding Picture, TargetNullValue={x:Null}}" Stretch="Fill" />
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
@@ -79,8 +79,8 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding FieldChangeCommand}" CommandParameter="{Binding Number}" Content="{Binding Text}">
-
+                    <Button Command="{Binding TaskFieldChangeCommand}" CommandParameter="{Binding Number}" >
+                        <Image Source="{Binding Image, TargetNullValue={x:Null}}" Stretch="Fill" />
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
                         </Button.RenderTransform>

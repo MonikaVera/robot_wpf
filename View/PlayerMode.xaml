@@ -150,9 +150,10 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding TaskFieldChangeCommand}" CommandParameter="{Binding Number}" Content="{Binding Text}">
-
-                        <Button.RenderTransform>
+                 <!--   <Button Command="{Binding TaskFieldChangeCommand}" CommandParameter="{Binding Number}" Content="{Binding Text}"> -->
+                        <Button Command="{Binding TaskFieldChangeCommand}" CommandParameter="{Binding Number}" >
+                            <Image Source="{Binding Image, TargetNullValue={x:Null}}" Stretch="Fill" />
+                            <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
                         </Button.RenderTransform>
                         <Button.Style>
@@ -212,7 +213,7 @@
         <!--   </Grid> -->
 
         <!--map-->
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding FieldsMap}" HorizontalAlignment="Right" Height="240" VerticalAlignment="Center" Width="186" Background="White">
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding FieldsMap}" HorizontalAlignment="Right" Height="240" VerticalAlignment="Center" Width="186" Background="Black">
             <!--az mezőket tároló vezérlő-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -223,7 +224,7 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding ChooseActionFieldCommand}" CommandParameter="{Binding Number}" Padding="0,0,0,0" BorderThickness="0">
+                    <Button Command="{Binding ChooseActionFieldCommand}" CommandParameter="{Binding Number}" Padding="0,0,0,0" BorderThickness="0" Background="Black">
                         <Image Source="{Binding Picture, TargetNullValue={x:Null}}" Stretch="Fill" />
                         <!--
                         <Button Command="{Binding MapFieldChangeCommand}" CommandParameter="{Binding}"> -->

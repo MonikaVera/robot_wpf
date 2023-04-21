@@ -174,17 +174,30 @@ namespace View.ViewModel
 
             for (int j = 0; j < _model.Board.Height; j++)
                 for (int i = 0; i < _model.Board.Width; i++)
-                {
-                    ViewModelField fieldMap = new ViewModelField();
-                    // fieldMap.Number = j * _model.Board.Width + i;
-                    fieldMap.SetPicture(_model.Board.GetFieldValue(i, j));
-                    //fieldMap.Number = j * _model.Board.Width + i;
-                    fieldMap.IndX = i;
-                    fieldMap.IndY = j;
-                    fieldMap.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
+                    if ( (Math.Abs(j - _model.Robot.Y) + Math.Abs(i - _model.Robot.X)) <= 3)
+                    {
+                        ViewModelField fieldMap = new ViewModelField();
+                        // fieldMap.Number = j * _model.Board.Width + i;
+                        fieldMap.SetPicture(_model.Board.GetFieldValue(i, j));
+                        //fieldMap.Number = j * _model.Board.Width + i;
+                        fieldMap.IndX = i;
+                        fieldMap.IndY = j;
+                        fieldMap.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
 
-                    FieldsMap.Add(fieldMap);
-                }
+                        FieldsMap.Add(fieldMap);
+                    }
+                    else
+                    {
+                        ViewModelField fieldMap = new ViewModelField();
+                        // fieldMap.Number = j * _model.Board.Width + i;
+                        fieldMap.SetText(_model.Board.GetFieldValue(i, j));
+                        //fieldMap.Number = j * _model.Board.Width + i;
+                        fieldMap.IndX = i;
+                        fieldMap.IndY = j;
+                        fieldMap.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
+
+                        FieldsMap.Add(fieldMap);
+                    }
         }
 
         public void GenerateTasks()
@@ -224,6 +237,8 @@ namespace View.ViewModel
                     {
                         ViewModelField field = Fields[y]; //x,y
                         field.SetPicture(_model.Board.GetFieldValue(i, j));
+                        ViewModelField fieldMap = FieldsMap[j * _model.Board.Width + i];
+                        fieldMap.SetPicture(_model.Board.GetFieldValue(i,j));
                         ++y;
                     }
                     else

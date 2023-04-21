@@ -81,8 +81,8 @@ namespace Model.Model
 
             while (generCubeNr < cubeNr)
             {
-                int x = rand.Next(0, 3);
-                int y = rand.Next(0, 3);
+                int x = ( rand.Next(0, 6) ) % 3;
+                int y = ( rand.Next(0, 6) ) % 3;
 
                 if (fields[x, y] is Empty)
                     if ((x > 0 && fields[x - 1, y] is Cube)

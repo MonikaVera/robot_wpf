@@ -42,6 +42,19 @@ namespace View.ViewModel
             }
         }
 
+        public string? Image
+        {
+            get { return _image; }
+            set
+            {
+                if (_image != value)
+                {
+                    _image = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public void SetText(Field field)
         {
             //_text = _number.ToString();
@@ -56,6 +69,28 @@ namespace View.ViewModel
             }
 
             OnPropertyChanged(nameof(Text));
+        }
+
+        public void SetImage(Field field)
+        {
+            //_text = _number.ToString();
+            if (field is Empty)
+            {
+                _image = "empty.png";
+            }
+            else if (field is Obstacle)
+            {
+                _image = "obstacle.png";
+            }
+            else if (field is Cube)
+            {
+                _image = "cube.png";
+            }
+            else if (field is Exit)
+            {
+                _image = ("empty.png");
+            }
+            OnPropertyChanged(nameof(Image));
         }
 
         /// <summary>

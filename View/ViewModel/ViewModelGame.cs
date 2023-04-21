@@ -14,6 +14,7 @@ namespace View.ViewModel
     {
         public ObservableCollection<ViewModelField> Fields { get; set; }
         public ObservableCollection<ViewModelField> FieldsMap { get; set; }
+        public ObservableCollection<ViewModelField> FieldsMapView { get; set; }
         public ObservableCollection<VMTasksFields> FieldsTasks { get; set; }
         private Game _model;
 
@@ -144,6 +145,7 @@ namespace View.ViewModel
             //jatektabla letrehozasa
             Fields = new ObservableCollection<ViewModelField>();
             FieldsMap = new ObservableCollection<ViewModelField>();
+            FieldsMapView = new ObservableCollection<ViewModelField>();
             int x = 0, y = 0;
             for (int j = _model.Robot.Y - 3; j <= _model.Robot.Y + 3; j++)
             {
@@ -179,7 +181,6 @@ namespace View.ViewModel
                         ViewModelField fieldMap = new ViewModelField();
                         // fieldMap.Number = j * _model.Board.Width + i;
                         fieldMap.SetPicture(_model.Board.GetFieldValue(i, j));
-                        //fieldMap.Number = j * _model.Board.Width + i;
                         fieldMap.IndX = i;
                         fieldMap.IndY = j;
                         fieldMap.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
@@ -191,14 +192,28 @@ namespace View.ViewModel
                         ViewModelField fieldMap = new ViewModelField();
                         // fieldMap.Number = j * _model.Board.Width + i;
                         fieldMap.SetText(_model.Board.GetFieldValue(i, j));
-                        //fieldMap.Number = j * _model.Board.Width + i;
                         fieldMap.IndX = i;
                         fieldMap.IndY = j;
                         fieldMap.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
 
                         FieldsMap.Add(fieldMap);
                     }
+
+            //viewer mode fields
+            for (int j = 0; j < _model.Board.Height; j++)
+                for (int i = 0; i < _model.Board.Width; i++)
+                    {
+                        ViewModelField fieldMapView = new ViewModelField();
+                        fieldMapView.SetPicture(_model.Board.GetFieldValue(i, j));
+                        fieldMapView.IndX = i;
+                        fieldMapView.IndY = j;
+                        fieldMapView.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
+
+                        FieldsMapView.Add(fieldMapView);
+                    }
         }
+
+
 
         public void GenerateTasks()
         {
@@ -209,7 +224,7 @@ namespace View.ViewModel
                 for (int i = 0; i < 3; i++)
                 {
                     VMTasksFields fieldTasks = new VMTasksFields();
-                    fieldTasks.SetText(_model.NoticeBoard.Fields[i, j]);
+                    fieldTasks.SetImage(_model.NoticeBoard.Fields[i, j]);
                     fieldTasks.Number = j * 3 + i;
                     fieldTasks.X = i;
                     fieldTasks.Y = j;
@@ -232,13 +247,18 @@ namespace View.ViewModel
             for (int j = _model.Robot.Y - 3; j <= _model.Robot.Y + 3; j++)
             {
                 for (int i = _model.Robot.X - 3; i <= _model.Robot.X + 3; i++)
+                {
                     if (j >= 0 && i >= 0 && (Math.Abs(j - _model.Robot.Y) + Math.Abs(i - _model.Robot.X)) <= 3
                         && j < _model.Board.Height && i < _model.Board.Width)
                     {
                         ViewModelField field = Fields[y]; //x,y
                         field.SetPicture(_model.Board.GetFieldValue(i, j));
                         ViewModelField fieldMap = FieldsMap[j * _model.Board.Width + i];
-                        fieldMap.SetPicture(_model.Board.GetFieldValue(i,j));
+                        fieldMap.SetPicture(_model.Board.GetFieldValue(i, j));
+
+                        //viewer mode table refresh
+                        ViewModelField fieldMapView = FieldsMapView[j * _model.Board.Width + i];
+                        fieldMapView.SetPicture(_model.Board.GetFieldValue(i, j));
                         ++y;
                     }
                     else
@@ -247,6 +267,8 @@ namespace View.ViewModel
                         field.SetText(_model.Board.GetFieldValue(0, 0));
                         ++y;
                     }
+
+                }
             }
 
             // frissítjük a megszerzett kosarak számát és a játékidőt

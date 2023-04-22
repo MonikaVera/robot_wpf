@@ -11,13 +11,7 @@ namespace View.ViewModel
     {
         private string? _text;
         private String? _image = null;
-        private Color _color;
         private int _number;
-
-        /// <summary>
-        /// Játékos lekérdezése, vagy beállítása.
-        /// </summary>
-        public Color setColor { get { return _color; } set { _color = value; } }
 
         /// <summary>
         /// Oszlop lekérdezése, vagy beállítása.
@@ -78,17 +72,27 @@ namespace View.ViewModel
             {
                 _image = "empty.png";
             }
-            else if (field is Obstacle)
-            {
-                _image = "obstacle.png";
-            }
             else if (field is Cube)
             {
+              /*  Cube cube = (Cube)field;
+
+                if (cube.CubeColor == Color.RED)
+                    _image = "red.png";
+                else if (cube.CubeColor == Color.YELLOW)
+                    _image = "yellow.png";
+                else if (cube.CubeColor == Color.PINK)
+                    _image = "pink.png";
+                else if (cube.CubeColor == Color.PURPLE)
+                    _image = "purple.png";
+                else if (cube.CubeColor == Color.BLUE)
+                    _image = "blue.png";
+                else if (cube.CubeColor == Color.ORANGE)
+                    _image = "brown.png";
+                else if (cube.CubeColor == Color.GRAY)
+                    _image = "gray.png";
+                // else if (cube.CubeColor == Color.GREEN)
+                _image = "green.png";*/
                 _image = "cube.png";
-            }
-            else if (field is Exit)
-            {
-                _image = ("empty.png");
             }
             OnPropertyChanged(nameof(Image));
         }

@@ -39,6 +39,7 @@ namespace Model.Model
         private Color color;
         private int health;
         private List<Direction> connected;
+        public Color CubeColor { get { return color; } }
         public Cube(int x, int y, int _health, Color _color)
         {
             _X = x;
@@ -47,7 +48,6 @@ namespace Model.Model
             color = _color;
         }
 
-        public Color CubeColor { get { return color; } }
     }
 
     public enum Color

@@ -246,9 +246,9 @@ namespace Model.Model
             {
                 if (CanMoveToEast(robot))
                 {
-                    MoveToEast(robot);
+                    MoveToDirection(robot, dir);
                     robot.X++;
-                    _board.SetValue(robot.X, robot.Y, robot);
+                    _board.SetValueNewField(robot);
                    // robot.Direction = Direction.EAST;
                     OnUpdateFields(robot, Direction.EAST, Action.Move, true);
                 }
@@ -261,9 +261,9 @@ namespace Model.Model
             {
                 if (CanMoveToWest(robot))
                 {
-                    MoveToWest(robot);
+                    MoveToDirection(robot, dir);
                     robot.X--;
-                    _board.SetValue(robot.X, robot.Y, robot);
+                    _board.SetValueNewField(robot);
                     //robot.Direction = Direction.WEST;
                     OnUpdateFields(robot, Direction.WEST, Action.Move, true);
                 }
@@ -276,9 +276,9 @@ namespace Model.Model
             {
                 if (CanMoveToNorth(robot))
                 {
-                    MoveToNorth(robot);
+                    MoveToDirection(robot, dir);
                     robot.Y--;
-                    _board.SetValue(robot.X, robot.Y, robot);
+                    _board.SetValueNewField(robot);
                     //robot.Direction = Direction.NORTH;
                     OnUpdateFields(robot, Direction.NORTH, Action.Move, true);
                 }
@@ -291,9 +291,9 @@ namespace Model.Model
             {
                 if (CanMoveToSouth(robot))
                 {
-                    MoveToSouth(robot);
+                    MoveToDirection(robot, dir);
                     robot.Y++;
-                    _board.SetValue(robot.X, robot.Y, robot);
+                    _board.SetValueNewField(robot);
                     OnUpdateFields(robot, Direction.SOUTH, Action.Move, true);
                     //robot.Direction = Direction.SOUTH;
                 }
@@ -419,74 +419,43 @@ namespace Model.Model
             }
             return true;
         }
-        private void MoveToEast(Robot robot)
+        private void MoveToDirection(Robot robot, Direction dir)
         {
-            _board.SetValue(robot.X, robot.Y, new Empty(robot.X, robot.Y));
+            _board.SetValueNewField(new Empty(robot.X, robot.Y));
             List<XYcoordinates> connections = robot.AllConnections();
+            int[] HealthArr= new int[connections.Count];
+            Color[] ColorArr= new Color[connections.Count];
             for (int i = 0; i < connections.Count; i++)
             {
-                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
+                HealthArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Health;
+                ColorArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Color;
+                _board.SetValueNewField(new Empty(connections[i].X, connections[i].Y));
             }
-            robot.ToEast();
+
+            if(dir==Direction.EAST)
+            {
+                robot.ToEast();
+            }
+            else if(dir==Direction.WEST)
+            {
+                robot.ToWest();
+            }
+            else if(dir ==Direction.NORTH)
+            {
+                robot.ToNorth();
+            }
+            else if(dir ==Direction.SOUTH)
+            {
+                robot.ToSouth();
+            }
+            
             List<XYcoordinates> connectionsNew = robot.AllConnections();
-            _board.SetValue(robot.X + 1, robot.Y, robot);
             for (int i = 0; i < connectionsNew.Count; i++)
             {
-                _board.SetValue(connectionsNew[i].X, connectionsNew[i].Y, new Cube(connectionsNew[i].X, connectionsNew[i].Y, 1, Color.RED));
+                _board.SetValueNewField( new Cube(connectionsNew[i].X, connectionsNew[i].Y,
+                    HealthArr[i], ColorArr[i]));
             }
         }
-
-        private void MoveToWest(Robot robot)
-        {
-            _board.SetValue(robot.X, robot.Y, new Empty(robot.X, robot.Y));
-            List<XYcoordinates> connections = robot.AllConnections();
-            for (int i = 0; i < connections.Count; i++)
-            {
-                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
-            }
-            robot.ToWest();
-            List<XYcoordinates> connectionsNew = robot.AllConnections();
-            _board.SetValue(robot.X - 1, robot.Y, robot);
-            for (int i = 0; i < connectionsNew.Count; i++)
-            {
-                _board.SetValue(connectionsNew[i].X, connectionsNew[i].Y, new Cube(connectionsNew[i].X, connectionsNew[i].Y, 1, Color.RED));
-            }
-        }
-
-        private void MoveToNorth(Robot robot)
-        {
-            _board.SetValue(robot.X, robot.Y, new Empty(robot.X, robot.Y));
-            List<XYcoordinates> connections = robot.AllConnections();
-            for (int i = 0; i < connections.Count; i++)
-            {
-                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
-            }
-            robot.ToNorth();
-            List<XYcoordinates> connectionsNew = robot.AllConnections();
-            _board.SetValue(robot.X, robot.Y - 1, robot);
-            for (int i = 0; i < connectionsNew.Count; i++)
-            {
-                _board.SetValue(connectionsNew[i].X, connectionsNew[i].Y, new Cube(connectionsNew[i].X, connectionsNew[i].Y, 1, Color.RED));
-            }
-        }
-
-        private void MoveToSouth(Robot robot)
-        {
-            _board.SetValue(robot.X, robot.Y, new Empty(robot.X, robot.Y)); 
-            List<XYcoordinates> connections = robot.AllConnections();
-            for (int i = 0; i < connections.Count; i++)
-            {
-                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
-            }
-            robot.ToSouth();
-            List<XYcoordinates> connectionsNew = robot.AllConnections();
-            _board.SetValue(robot.X, robot.Y + 1, robot);
-            for (int i = 0; i < connectionsNew.Count; i++)
-            {
-                _board.SetValue(connectionsNew[i].X, connectionsNew[i].Y, new Cube(connectionsNew[i].X, connectionsNew[i].Y, 1, Color.RED));
-            }
-        }
-
 
         #endregion
 
@@ -511,9 +480,13 @@ namespace Model.Model
         private void RotateAll(Robot robot, Angle angle)
         {
             List<XYcoordinates> connections = robot.AllConnections();
+            int[] HealthArr = new int[connections.Count];
+            Color[] ColorArr = new Color[connections.Count];
             for (int i = 0; i < connections.Count; i++)
             {
-                _board.SetValue(connections[i].X, connections[i].Y, new Empty(connections[i].X, connections[i].Y));
+                HealthArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Health;
+                ColorArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Color;
+                _board.SetValueNewField(new Empty(connections[i].X, connections[i].Y));
             }
 
             if(angle==Angle.Clockwise)
@@ -555,7 +528,9 @@ namespace Model.Model
 
             for (int i = 0; i < connectionsNew.Count; i++)
             {
-                _board.SetValue(connectionsNew[i].X, connectionsNew[i].Y, new Cube(connectionsNew[i].X, connectionsNew[i].Y, 1, Color.RED));
+                _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
+                    HealthArr[i], ColorArr[i]));
+                
             }
         }
 
@@ -715,13 +690,12 @@ namespace Model.Model
                     obs.DecreaseHealth();
                     if(obs.Health==0)
                     {
-                        _board.SetValue(robot.X + 1, robot.Y, new Empty(robot.X + 1, robot.Y));
+                        _board.SetValueNewField(new Empty(robot.X + 1, robot.Y));
                     } 
                     else
                     {
-                        _board.SetValue(robot.X + 1, robot.Y, obs);
+                        _board.SetValueNewField(obs);
                     }
-                    
                 }
             }
             else if (robot.Direction == Direction.WEST)
@@ -732,11 +706,11 @@ namespace Model.Model
                     obs.DecreaseHealth();
                     if (obs.Health == 0)
                     {
-                        _board.SetValue(robot.X - 1, robot.Y, new Empty(robot.X - 1, robot.Y));
+                        _board.SetValueNewField(new Empty(robot.X - 1, robot.Y));
                     }
                     else
                     {
-                        _board.SetValue(robot.X - 1, robot.Y, obs);
+                        _board.SetValueNewField(obs);
                     }
                 }
             }
@@ -748,11 +722,11 @@ namespace Model.Model
                     obs.DecreaseHealth();
                     if (obs.Health == 0)
                     {
-                        _board.SetValue(robot.X , robot.Y-1, new Empty(robot.X, robot.Y-1));
+                        _board.SetValueNewField(new Empty(robot.X, robot.Y-1));
                     }
                     else
                     {
-                        _board.SetValue(robot.X , robot.Y-1, obs);
+                        _board.SetValueNewField(obs);
                     }
                 }
             }
@@ -762,15 +736,12 @@ namespace Model.Model
                 obs.DecreaseHealth();
                 if (obs.Health == 0)
                 {
-                    _board.SetValue(robot.X, robot.Y + 1, new Empty(robot.X, robot.Y + 1));
+                    _board.SetValueNewField(new Empty(robot.X, robot.Y + 1));
                 }
                 else
                 {
-                    _board.SetValue(robot.X, robot.Y + 1, obs);
+                    _board.SetValueNewField(obs);
                 }
-            }
-            else 
-            { 
             }
             OnUpdateFields(robot, robot.Direction, Action.Clean, true);
         }

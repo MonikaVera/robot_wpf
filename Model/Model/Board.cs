@@ -67,6 +67,16 @@ namespace Model.Model
             _fields[x, y] = field;
         }
 
+        public void SetValueNewField(Field field)
+        {
+            if (field.X < 0 || field.X >= _fields.GetLength(0))
+                throw new ArgumentOutOfRangeException(nameof(field.X), "The X coordinate is out of range.");
+            if (field.Y < 0 || field.Y >= _fields.GetLength(1))
+                throw new ArgumentOutOfRangeException(nameof(field.Y), "The Y coordinate is out of range.");
+
+            _fields[field.X, field.Y] = field;
+        }
+
         #endregion
 
         #region Private Methods

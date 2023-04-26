@@ -49,6 +49,8 @@ namespace Model.Model
             health = _health;
             color = _color;
         }
+        public int Health { get { return health; } }
+        public Color Color { get { return color; } }
     }
 
     public enum Color

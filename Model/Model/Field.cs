@@ -14,7 +14,6 @@ namespace Model.Model
         public int X { set { _X = value; } get { return _X; } }
         public int Y { set { _Y = value; } get { return _Y; } }
 
-
     }
 
     public class Empty : Field
@@ -32,6 +31,10 @@ namespace Model.Model
         private int health;
         public int Health { get { return health; } }
         public Obstacle(int x, int y, int _health) { _X = x; _Y = y; health = _health; }
+        public bool DecreaseHealth() {
+            health -= 1;
+            return true;
+        }
     }
 
     public class Cube : Field
@@ -47,7 +50,8 @@ namespace Model.Model
             health = _health;
             color = _color;
         }
-
+        public int Health { get { return health; } }
+        public Color Color { get { return color; } }
     }
 
     public enum Color

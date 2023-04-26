@@ -706,7 +706,31 @@ namespace Model.Model
 
         #region Clean
 
-        public void Clean(Robot robot) { /*code*/ }
+        public void Clean(Robot robot) {
+            if (robot.Direction == Direction.EAST)
+            {
+                if(_board.GetFieldValue(robot.X+1, robot.Y) is Obstacle)
+                {
+                    Obstacle obs = _board.GetFieldValue(robot.X + 1, robot.Y);
+                    obs.DecreaseHealth();
+                }
+            }
+            else if (robot.Direction == Direction.WEST)
+            {
+
+            }
+            else if (robot.Direction == Direction.NORTH)
+            {
+
+            }
+            else if (robot.Direction == Direction.SOUTH)
+            {
+
+            }
+            else 
+            { 
+            }
+        }
 
         #endregion
 

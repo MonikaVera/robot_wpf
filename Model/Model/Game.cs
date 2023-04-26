@@ -711,25 +711,68 @@ namespace Model.Model
             {
                 if(_board.GetFieldValue(robot.X+1, robot.Y) is Obstacle)
                 {
-                    Obstacle obs = _board.GetFieldValue(robot.X + 1, robot.Y);
+                    Obstacle obs = (Obstacle)_board.GetFieldValue(robot.X + 1, robot.Y);
                     obs.DecreaseHealth();
+                    if(obs.Health==0)
+                    {
+                        _board.SetValue(robot.X + 1, robot.Y, new Empty(robot.X + 1, robot.Y));
+                    } 
+                    else
+                    {
+                        _board.SetValue(robot.X + 1, robot.Y, obs);
+                    }
+                    
                 }
             }
             else if (robot.Direction == Direction.WEST)
             {
-
+                if (_board.GetFieldValue(robot.X - 1, robot.Y) is Obstacle)
+                {
+                    Obstacle obs = (Obstacle)_board.GetFieldValue(robot.X - 1, robot.Y);
+                    obs.DecreaseHealth();
+                    if (obs.Health == 0)
+                    {
+                        _board.SetValue(robot.X - 1, robot.Y, new Empty(robot.X - 1, robot.Y));
+                    }
+                    else
+                    {
+                        _board.SetValue(robot.X - 1, robot.Y, obs);
+                    }
+                }
             }
             else if (robot.Direction == Direction.NORTH)
             {
-
+                if (_board.GetFieldValue(robot.X, robot.Y-1) is Obstacle)
+                {
+                    Obstacle obs = (Obstacle)_board.GetFieldValue(robot.X , robot.Y-1);
+                    obs.DecreaseHealth();
+                    if (obs.Health == 0)
+                    {
+                        _board.SetValue(robot.X , robot.Y-1, new Empty(robot.X, robot.Y-1));
+                    }
+                    else
+                    {
+                        _board.SetValue(robot.X , robot.Y-1, obs);
+                    }
+                }
             }
             else if (robot.Direction == Direction.SOUTH)
             {
-
+                Obstacle obs = (Obstacle)_board.GetFieldValue(robot.X, robot.Y + 1);
+                obs.DecreaseHealth();
+                if (obs.Health == 0)
+                {
+                    _board.SetValue(robot.X, robot.Y + 1, new Empty(robot.X, robot.Y + 1));
+                }
+                else
+                {
+                    _board.SetValue(robot.X, robot.Y + 1, obs);
+                }
             }
             else 
             { 
             }
+            OnUpdateFields(robot, robot.Direction, Action.Clean, true);
         }
 
         #endregion

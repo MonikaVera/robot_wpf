@@ -490,7 +490,7 @@ namespace View.ViewModel
             }
             else if (e.Action == Model.Model.Action.ConnectRobot)
             {
-
+                //semmi sem kell
             }
             else if (e.Action == Model.Model.Action.ConnectCubes)
             {
@@ -506,7 +506,27 @@ namespace View.ViewModel
             }
             else if (e.Action == Model.Model.Action.Clean)
             {
-
+                ViewModelField fieldMap;
+                if (e.Direction == Direction.EAST)
+                {
+                    fieldMap = FieldsMap[e.Robot.Y * _model.Board.Width + e.Robot.X+1];
+                    fieldMap.SetPicture(_model.Board.GetFieldValue(e.Robot.X+1, e.Robot.Y));
+                }
+                else if(e.Direction == Direction.WEST)
+                {
+                    fieldMap = FieldsMap[e.Robot.Y * _model.Board.Width + e.Robot.X - 1];
+                    fieldMap.SetPicture(_model.Board.GetFieldValue(e.Robot.X - 1, e.Robot.Y));
+                }
+                else if(e.Direction == Direction.NORTH)
+                {
+                    fieldMap = FieldsMap[(e.Robot.Y-1) * _model.Board.Width + e.Robot.X ];
+                    fieldMap.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y-1));
+                }
+                else if(e.Direction == Direction.SOUTH)
+                {
+                    fieldMap = FieldsMap[(e.Robot.Y+1) * _model.Board.Width + e.Robot.X];
+                    fieldMap.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y+1));
+                }
             }
             else if (e.Action == Model.Model.Action.Wait)
             {

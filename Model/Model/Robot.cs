@@ -110,8 +110,9 @@ namespace Model.Model
         {
             for (int i = 0; i < _connected.Count(); i++)
             {
+                int temp = _connected[i].X;
                 _connected[i].X = _X + _Y - _connected[i].Y;
-                _connected[i].Y = -_X + _Y + _connected[i].X;
+                _connected[i].Y = -_X + _Y + temp;
             }
         }
 
@@ -119,8 +120,9 @@ namespace Model.Model
         {
             for (int i = 0; i < _connected.Count(); i++)
             {
+                int temp = _connected[i].X;
                 _connected[i].X = _X - _Y + _connected[i].Y;
-                _connected[i].Y = _X + _Y - _connected[i].X;
+                _connected[i].Y = _X + _Y - temp;
             }
         }
 

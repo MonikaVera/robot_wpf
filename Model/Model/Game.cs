@@ -687,6 +687,7 @@ namespace Model.Model
 
         public void DisconnectRobot(Robot robot) {
             Robot.clearConnections();
+            OnUpdateFields(robot, Direction.WEST, Action.DisconnectRobot, true);
         }
 
         #endregion

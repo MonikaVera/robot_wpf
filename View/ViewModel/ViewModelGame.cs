@@ -498,7 +498,7 @@ namespace View.ViewModel
             }
             else if (e.Action == Model.Model.Action.DisconnectRobot)
             {
-
+                //semmi sem kell
             }
             else if (e.Action == Model.Model.Action.DisconnectCubes)
             {

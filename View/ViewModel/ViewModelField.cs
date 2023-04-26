@@ -107,9 +107,27 @@ namespace View.ViewModel
             {
                 _picture = "obstacle.png";
             }
-            else if (field is Cube)
+            else if (field is Cube )
             {
-                _picture = "cube.png";
+                Cube cube = (Cube)field;
+
+                if (cube.CubeColor == Color.RED)
+                    _picture = "red.png";
+                else if (cube.CubeColor == Color.YELLOW)
+                    _picture = "yellow.png";
+                else if (cube.CubeColor == Color.PINK)
+                    _picture = "pink.png";
+                else if (cube.CubeColor == Color.PURPLE)
+                    _picture = "purple.png";
+                else if (cube.CubeColor == Color.BLUE)
+                    _picture = "blue.png";
+                else if (cube.CubeColor == Color.ORANGE)
+                    _picture = "brown.png";
+                else if (cube.CubeColor == Color.GRAY)
+                    _picture = "gray.png";
+                else //if (cube.CubeColor == Color.GREEN)
+                  _picture = "green.png";
+               //_picture = "cube.png";
             }
             else if (field is Exit)
             {

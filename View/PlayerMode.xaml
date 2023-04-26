@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:View"
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="1200"
-      Title="PlayerMode2">
+      Title="PlayerMode">
 
     <!--key binding-->
     <Page.InputBindings>
@@ -101,6 +101,7 @@
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
                         </Button.RenderTransform>
+                        
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Style.Triggers>
@@ -119,9 +120,9 @@
 -->
                                 </Style.Triggers>
 
-
                             </Style>
                         </Button.Style>
+                        
                     </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

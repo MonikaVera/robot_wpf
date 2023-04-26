@@ -125,9 +125,9 @@ namespace View.ViewModel
                     _picture = "brown.png";
                 else if (cube.CubeColor == Color.GRAY)
                     _picture = "gray.png";
-                // else if (cube.CubeColor == Color.GREEN)
+                else //if (cube.CubeColor == Color.GREEN)
                   _picture = "green.png";
-                //_picture = "cube.png";
+               //_picture = "cube.png";
             }
             else if (field is Exit)
             {

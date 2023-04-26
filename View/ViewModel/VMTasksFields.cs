@@ -74,7 +74,7 @@ namespace View.ViewModel
             }
             else if (field is Cube)
             {
-              /*  Cube cube = (Cube)field;
+                Cube cube = (Cube)field;
 
                 if (cube.CubeColor == Color.RED)
                     _image = "red.png";
@@ -90,9 +90,9 @@ namespace View.ViewModel
                     _image = "brown.png";
                 else if (cube.CubeColor == Color.GRAY)
                     _image = "gray.png";
-                // else if (cube.CubeColor == Color.GREEN)
-                _image = "green.png";*/
-                _image = "cube.png";
+                else if (cube.CubeColor == Color.GREEN)
+                    _image = "green.png";
+               // _image = "cube.png";
             }
             OnPropertyChanged(nameof(Image));
         }

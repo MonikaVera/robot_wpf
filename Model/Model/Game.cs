@@ -697,6 +697,20 @@ namespace Model.Model
                         _board.SetValueNewField(obs);
                     }
                 }
+                else if(_board.GetFieldValue(robot.X + 1, robot.Y) is Cube &&
+                    !robot.IsConnected(new XYcoordinates(robot.X + 1, robot.Y)))
+                {
+                    Cube cube = (Cube)_board.GetFieldValue(robot.X + 1, robot.Y);
+                    cube.DecreaseHealth();
+                    if (cube.Health == 0)
+                    {
+                        _board.SetValueNewField(new Empty(robot.X + 1, robot.Y));
+                    }
+                    else
+                    {
+                        _board.SetValueNewField(cube);
+                    }
+                }
             }
             else if (robot.Direction == Direction.WEST)
             {
@@ -711,6 +725,20 @@ namespace Model.Model
                     else
                     {
                         _board.SetValueNewField(obs);
+                    }
+                }
+                else if (_board.GetFieldValue(robot.X - 1, robot.Y) is Cube &&
+                   !robot.IsConnected(new XYcoordinates(robot.X - 1, robot.Y)))
+                {
+                    Cube cube = (Cube)_board.GetFieldValue(robot.X - 1, robot.Y);
+                    cube.DecreaseHealth();
+                    if (cube.Health == 0)
+                    {
+                        _board.SetValueNewField(new Empty(robot.X - 1, robot.Y));
+                    }
+                    else
+                    {
+                        _board.SetValueNewField(cube);
                     }
                 }
             }
@@ -729,19 +757,51 @@ namespace Model.Model
                         _board.SetValueNewField(obs);
                     }
                 }
+                else if (_board.GetFieldValue(robot.X, robot.Y-1) is Cube &&
+                   !robot.IsConnected(new XYcoordinates(robot.X, robot.Y-1)))
+                {
+                    Cube cube = (Cube)_board.GetFieldValue(robot.X, robot.Y-1);
+                    cube.DecreaseHealth();
+                    if (cube.Health == 0)
+                    {
+                        _board.SetValueNewField(new Empty(robot.X, robot.Y-1));
+                    }
+                    else
+                    {
+                        _board.SetValueNewField(cube);
+                    }
+                }
             }
             else if (robot.Direction == Direction.SOUTH)
             {
-                Obstacle obs = (Obstacle)_board.GetFieldValue(robot.X, robot.Y + 1);
-                obs.DecreaseHealth();
-                if (obs.Health == 0)
+                if (_board.GetFieldValue(robot.X, robot.Y + 1) is Obstacle)
                 {
-                    _board.SetValueNewField(new Empty(robot.X, robot.Y + 1));
+                    Obstacle obs = (Obstacle)_board.GetFieldValue(robot.X, robot.Y + 1);
+                    obs.DecreaseHealth();
+                    if (obs.Health == 0)
+                    {
+                        _board.SetValueNewField(new Empty(robot.X, robot.Y + 1));
+                    }
+                    else
+                    {
+                        _board.SetValueNewField(obs);
+                    }
                 }
-                else
+                else if (_board.GetFieldValue(robot.X, robot.Y+1) is Cube &&
+                   !robot.IsConnected(new XYcoordinates(robot.X, robot.Y+1)))
                 {
-                    _board.SetValueNewField(obs);
+                    Cube cube = (Cube)_board.GetFieldValue(robot.X, robot.Y+1);
+                    cube.DecreaseHealth();
+                    if (cube.Health == 0)
+                    {
+                        _board.SetValueNewField(new Empty(robot.X, robot.Y+1));
+                    }
+                    else
+                    {
+                        _board.SetValueNewField(cube);
+                    }
                 }
+
             }
             OnUpdateFields(robot, robot.Direction, Action.Clean, true);
         }

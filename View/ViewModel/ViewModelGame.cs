@@ -398,7 +398,7 @@ namespace View.ViewModel
                 return;
             }
 
-            if (e.Action == Model.Model.Action.Move)
+            /*if (e.Action == Model.Model.Action.Move)
             {
                 ViewModelField fieldMap;
                 if (e.Direction == Direction.EAST)
@@ -531,7 +531,7 @@ namespace View.ViewModel
             else if (e.Action == Model.Model.Action.Wait)
             {
 
-            }
+            }*/
             RefreshTable();
         }
         private void Model_UpdateTasks(object obj, ActionEventArgs e)

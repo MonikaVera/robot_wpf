@@ -140,7 +140,7 @@ namespace View
         {
             _timer.Stop();
            
-                if (e.CanExecute == false)
+             /*   if (e.CanExecute == false)
                 {
                 MessageBox.Show("A művelet nem végrehajtható.", "CyberChallenge játék",
                            MessageBoxButton.OK,
@@ -151,7 +151,7 @@ namespace View
                 MessageBox.Show("A művelet sikeres volt", "CyberChallenge játék",
                            MessageBoxButton.OK,
                            MessageBoxImage.Asterisk);
-            }
+            }*/
             _timer.Start();
             
         }

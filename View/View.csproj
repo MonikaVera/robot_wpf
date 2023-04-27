@@ -8,76 +8,87 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="blue.jpg" />
     <None Remove="blue.png" />
+    <None Remove="brown.jpg" />
     <None Remove="brown.png" />
     <None Remove="cube.png" />
+    <None Remove="empty.jpg" />
     <None Remove="empty.png" />
+    <None Remove="exit.jpg" />
+    <None Remove="gray.jpg" />
     <None Remove="gray.png" />
+    <None Remove="green.jpg" />
     <None Remove="green.png" />
+    <None Remove="obstacle.jpg" />
     <None Remove="obstacle.png" />
+    <None Remove="pink.jpg" />
     <None Remove="pink.png" />
+    <None Remove="purple.jpg" />
     <None Remove="purple.png" />
     <None Remove="red.jpg" />
     <None Remove="red.png" />
+    <None Remove="robot_back.jpg" />
     <None Remove="robot_back.png" />
+    <None Remove="robot_front.jpg" />
     <None Remove="robot_front.png" />
+    <None Remove="robot_left.jpg" />
     <None Remove="robot_left.png" />
+    <None Remove="robot_right.jpg" />
     <None Remove="robot_right.png" />
     <None Remove="wall1.jpg" />
     <None Remove="wall2.jpg" />
     <None Remove="wall3.jpg" />
     <None Remove="wallpaper_robot.jpg" />
     <None Remove="water.jpg" />
+    <None Remove="yellow.jpg" />
     <None Remove="yellow.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="blue.png">
+    <Content Include="exit.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="brown.png">
+    <Content Include="robot_right.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="cube.png">
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="blue.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="empty.png">
+    <Content Include="brown.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="green.png">
+    <Content Include="empty.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="gray.png">
+    <Content Include="gray.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="obstacle.png">
+    <Content Include="green.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="pink.png">
+    <Content Include="obstacle.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="purple.png">
+    <Content Include="pink.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="purple.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="red.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="red.png">
+    <Content Include="robot_back.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="robot_back.png">
+    <Content Include="robot_front.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="robot_front.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="robot_left.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="robot_right.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="wall2.jpg">
+    <Content Include="robot_left.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="wallpaper_robot.jpg">
@@ -86,7 +97,7 @@
     <Content Include="water.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="yellow.png">
+    <Content Include="yellow.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

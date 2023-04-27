@@ -101,56 +101,65 @@ namespace View.ViewModel
             //_text = _number.ToString();
             if (field is Empty)
             {
-                _picture = "empty.png";
+                _picture = "empty.jpg";
             }
             else if (field is Obstacle)
             {
-                _picture = "obstacle.png";
+                if(((Obstacle)field).Health>500)
+                {
+                    _picture = "water.jpg";
+                } 
+                else
+                {
+                    _picture = "obstacle.jpg";
+                }
+                
+                
             }
             else if (field is Cube )
             {
                 Cube cube = (Cube)field;
 
                 if (cube.CubeColor == Color.RED)
-                    _picture = "red.png";
+                    _picture = "red.jpg";
                 else if (cube.CubeColor == Color.YELLOW)
-                    _picture = "yellow.png";
+                    _picture = "yellow.jpg";
                 else if (cube.CubeColor == Color.PINK)
-                    _picture = "pink.png";
+                    _picture = "pink.jpg";
                 else if (cube.CubeColor == Color.PURPLE)
-                    _picture = "purple.png";
+                    _picture = "purple.jpg";
                 else if (cube.CubeColor == Color.BLUE)
-                    _picture = "blue.png";
+                    _picture = "blue.jpg";
                 else if (cube.CubeColor == Color.ORANGE)
-                    _picture = "brown.png";
+                    _picture = "brown.jpg";
                 else if (cube.CubeColor == Color.GRAY)
-                    _picture = "gray.png";
+                    _picture = "gray.jpg";
                 else //if (cube.CubeColor == Color.GREEN)
-                  _picture = "green.png";
+                  _picture = "green.jpg";
                //_picture = "cube.png";
             }
             else if (field is Exit)
             {
-                _picture = ("empty.png");
+                _picture = ("exit.jpg");
             }
             else if (field is Robot)
             {
                 Robot robot = (Robot)field;
                 if (robot.Direction == Direction.EAST)
                 {
-                    _picture = "robot_right.png";
+                    _picture = "robot_right.jpg";
                 }
                 else if (robot.Direction == Direction.WEST)
                 {
-                    _picture = "robot_left.png";
+                    _picture = "robot_left.jpg";
                 }
                 else if (robot.Direction == Direction.SOUTH)
                 {
-                    _picture = "robot_front.png";
+                    _picture = "robot_front.jpg";
                 }
                 else if (robot.Direction == Direction.NORTH)
                 {
-                    _picture = "robot_back.png";
+                    _picture = "robot_back.jpg";
                 }
             }
             OnPropertyChanged(nameof(Picture));

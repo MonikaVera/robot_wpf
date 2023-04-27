@@ -31,9 +31,8 @@ namespace Model.Model
         private int health;
         public int Health { get { return health; } }
         public Obstacle(int x, int y, int _health) { _X = x; _Y = y; health = _health; }
-        public bool DecreaseHealth() {
+        public void DecreaseHealth() {
             health -= 1;
-            return true;
         }
     }
 
@@ -52,6 +51,11 @@ namespace Model.Model
         }
         public int Health { get { return health; } }
         public Color Color { get { return color; } }
+
+        public void DecreaseHealth()
+        {
+            health -= 1;
+        }
     }
 
     public enum Color

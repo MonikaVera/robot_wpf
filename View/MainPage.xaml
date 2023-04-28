@@ -16,7 +16,7 @@
         <Button x:Name ="btnPlay" Content="Player mode" HorizontalAlignment="Left" Height="26" Margin="120,80,0,0" VerticalAlignment="Top" Width="188" Command="{Binding PlayerModeCommand}"/>
         <Button x:Name ="btnView" Content="Viewer mode" HorizontalAlignment="Left" Height="26" Margin="120,180,0,0" VerticalAlignment="Top" Width="188" Command="{Binding ViewerModeCommand}"/>
         <Button x:Name ="btnAdm" Content="Administrator mode" HorizontalAlignment="Left" Height="26" Margin="120,280,0,0" VerticalAlignment="Top" Width="188" Click="AdmMode_Click"/>
-        <Button x:Name ="btnDiary" Content="Diary" HorizontalAlignment="Left" Height="26" Margin="120,380,0,0" VerticalAlignment="Top" Width="188" Click="Diary_Click"/>
+        <Button x:Name ="btnDiary" Content="Diary" HorizontalAlignment="Left" Height="26" Margin="120,380,0,0" VerticalAlignment="Top" Width="188" Command="{Binding DiaryCommand}"/>
         <Button x:Name ="btnExit" Content="Exit" HorizontalAlignment="Left" Height="26" Margin="120,480,0,0" VerticalAlignment="Top" Width="188"  Command="{Binding ExitCommand}"/>
 
     </Grid>

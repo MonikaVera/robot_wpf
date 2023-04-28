@@ -114,8 +114,20 @@ namespace Model.Model
             _team1points = 0;
             _team2points = 0;
         }
-        public async Task LoadGameAsync(string _filepath) {/*code*/ ; }
-        public async Task SaveGameAsync(string _filepath) {/*code*/ ; }
+        public async Task LoadGameAsync(string _filepath) {
+           if (_dataAccess == null)
+                throw new InvalidOperationException("No data access is provided.");
+
+            Board board = await _dataAccess.LoadAsync(_filepath,_board.Height, _board.Width);
+            _board = board;
+        }
+        public async Task SaveGameAsync(string _filepath) {
+            if (_dataAccess == null)
+                return;
+
+            await _dataAccess.SaveAsync(_filepath, _board);
+
+        }
 
         public void ChooseActionField (int x, int y)
         {

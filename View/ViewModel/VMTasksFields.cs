@@ -70,29 +70,29 @@ namespace View.ViewModel
             //_text = _number.ToString();
             if (field is Empty)
             {
-                _image = "empty.png";
+                _image = "empty.jpg";
             }
             else if (field is Cube)
             {
                 Cube cube = (Cube)field;
 
                 if (cube.CubeColor == Color.RED)
-                    _image = "red.png";
+                    _image = "red.jpg";
                 else if (cube.CubeColor == Color.YELLOW)
-                    _image = "yellow.png";
+                    _image = "yellow.jpg";
                 else if (cube.CubeColor == Color.PINK)
-                    _image = "pink.png";
+                    _image = "pink.jpg";
                 else if (cube.CubeColor == Color.PURPLE)
-                    _image = "purple.png";
+                    _image = "purple.jpg";
                 else if (cube.CubeColor == Color.BLUE)
-                    _image = "blue.png";
+                    _image = "blue.jpg";
                 else if (cube.CubeColor == Color.ORANGE)
-                    _image = "brown.png";
+                    _image = "brown.jpg";
                 else if (cube.CubeColor == Color.GRAY)
-                    _image = "gray.png";
+                    _image = "gray.jpg";
                 else if (cube.CubeColor == Color.GREEN)
-                    _image = "green.png";
-               // _image = "cube.png";
+                    _image = "green.jpg";
+               // _image = "cube.jpg";
             }
             OnPropertyChanged(nameof(Image));
         }

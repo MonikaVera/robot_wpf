@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Model.Persistence;
 using System.Windows.Threading;
+using Microsoft.Win32;
 
 namespace View
 {
@@ -28,6 +29,8 @@ namespace View
         private MainWindow _mainWindow = null!;
         MyDataAccess _dataAccess = null!;
         private DispatcherTimer _timer = null!;
+        private OpenFileDialog? _openFileDialog;
+        private SaveFileDialog? _saveFileDialog;
         public App()
         {
             Startup += new StartupEventHandler(App_Startup);
@@ -45,6 +48,8 @@ namespace View
             _viewModel.ViewerModeClick += new EventHandler(ViewModel_ViewerMode);
             _viewModel.ViewerModeBackClick += new EventHandler(ViewModel_ViewerModeBack);
             _viewModel.ExitClick += new EventHandler(ViewModel_Exit);
+            _viewModel.LoadGame += new EventHandler(ViewModel_LoadGame); // kezeljük a nézetmodell eseményeit
+            _viewModel.SaveGame += new EventHandler(ViewModel_SaveGame);
 
             _mainWindow = new MainWindow();
             _mainPage = new MainPage();
@@ -156,14 +161,66 @@ namespace View
             
         }
 
+        /// <summary>
+        /// Játék betöltésének eseménykezelője.
+        /// </summary>
+        private async void ViewModel_LoadGame(object? sender, System.EventArgs e)
+        {
+            _timer.Stop();
+            if (_openFileDialog == null)
+            {
+                _openFileDialog = new OpenFileDialog();
+                _openFileDialog.Title = "Robot - Játék betöltése";
+                _openFileDialog.Filter = "Szövegfájlok|*.txt";
+            }
+
+            // nyithatunk új nézetet
+            if (_openFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    await _model.LoadGameAsync(_openFileDialog.FileName); // játék betöltése
+                }
+                catch (RobotDataException)
+                {
+                    MessageBox.Show("Hiba keletkezett a betöltés során.", "Robot", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            _timer.Start();
+        }
+        /// <summary>
+        /// Játék mentésének eseménykezelője.
+        /// </summary>
+        private async void ViewModel_SaveGame(object? sender, System.EventArgs e)
+        {
+            _timer.Stop();
+            if (_saveFileDialog == null)
+            {
+                _saveFileDialog = new SaveFileDialog();
+                _saveFileDialog.Title = "Robot - Játék mentése";
+                _saveFileDialog.Filter = "Szövegfájlok|*.txt";
+            }
+
+            if (_saveFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    await _model.SaveGameAsync(_saveFileDialog.FileName); // játék mentése
+                }
+                catch (RobotDataException)
+                {
+                    MessageBox.Show("Hiba keletkezett a mentés során.", "Robot", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            _timer.Start();
+        }
+
         private void Model_NewRound(object sender, GameEventArgs e)
         {
             /*MessageBox.Show("Új kör kezdődött.", "CyberChallenge játék", MessageBoxButton.OK,
                                MessageBoxImage.Asterisk);*/
         }
 
-        private async void ViewModel_LoadGame(object sender, EventArgs e) {/*code*/; }
-        private async void ViewModel_SaveGame(object sender, EventArgs e) {/*code*/; }
        
     }
 }

@@ -16,6 +16,8 @@ namespace View.ViewModel
         public ObservableCollection<ViewModelField> FieldsMap { get; set; }
         public ObservableCollection<ViewModelField> FieldsMapView { get; set; }
         public ObservableCollection<VMTasksFields> FieldsTasks { get; set; }
+        public DelegateCommand LoadGameCommand { get; private set; }
+
         private Game _model;
 
         #region Commands
@@ -117,6 +119,9 @@ namespace View.ViewModel
             ExitCommand = new DelegateCommand(param => OnExitClick());
             ViewerModeBack = new DelegateCommand(param => OnViewerModeBackClick());
             KeyDownCommand = new DelegateCommand(param => KeyDown(Convert.ToString(param)));
+
+            LoadGameCommand = new DelegateCommand(param => OnLoadGame());
+            SaveGameCommand = new DelegateCommand(param => OnSaveGame());
 
         }
 
@@ -398,7 +403,8 @@ namespace View.ViewModel
                 return;
             }
 
-            /*if (e.Action == Model.Model.Action.Move)
+            RefreshTable();
+            if (e.Action == Model.Model.Action.Move)
             {
                 ViewModelField fieldMap;
                 if (e.Direction == Direction.EAST)
@@ -531,8 +537,8 @@ namespace View.ViewModel
             else if (e.Action == Model.Model.Action.Wait)
             {
 
-            }*/
-            RefreshTable();
+            }
+          //  RefreshTable();
         }
         private void Model_UpdateTasks(object obj, ActionEventArgs e)
         {
@@ -541,9 +547,9 @@ namespace View.ViewModel
 
 
         private void ReFresh() {/*code*/; }
-        private void OnLoadGame() {/*code*/; }
+        private void OnLoadGame() { LoadGame?.Invoke(this, EventArgs.Empty); }
         private void OnNewGame() {/*code*/; }
-        private void OnSaveGame() {/*code*/; }
+        private void OnSaveGame() { SaveGame?.Invoke(this, EventArgs.Empty); }
         private void OnExitGame() {/*code*/; }
         private void OnExtraTask() {/*code*/; }
 

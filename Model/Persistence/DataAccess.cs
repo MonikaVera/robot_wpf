@@ -9,7 +9,16 @@ namespace Model.Persistence
 {
     public interface IDataAccess
     {
-        Task<Board> LoadAsync(String path);
+        /// <summary>
+        /// Fájl betöltése.
+        /// </summary>
+        /// <returns>A beolvasott mezőértékek.</returns>
+
+        Task<Board> LoadAsync(String path, int height, int width);
+
+        /// <summary>
+        /// Fájl mentése.
+        /// </summary>
         Task SaveAsync(String path, Board table);
     }
 }

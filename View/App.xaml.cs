@@ -47,6 +47,7 @@ namespace View
             _viewModel.PlayerModeClick += new EventHandler(ViewModel_PlayerMode);
             _viewModel.ViewerModeClick += new EventHandler(ViewModel_ViewerMode);
             _viewModel.ViewerModeBackClick += new EventHandler(ViewModel_ViewerModeBack);
+            _viewModel.DiaryClick += new EventHandler(ViewModel_Diary);
             _viewModel.ExitClick += new EventHandler(ViewModel_Exit);
             _viewModel.LoadGame += new EventHandler(ViewModel_LoadGame); // kezeljük a nézetmodell eseményeit
             _viewModel.SaveGame += new EventHandler(ViewModel_SaveGame);
@@ -107,6 +108,16 @@ namespace View
             _viewerMode.DataContext = _viewModel;
             _mainWindow.Content = _viewerMode;
         }
+        private void ViewModel_Diary(object? sender, EventArgs e)
+        {
+            _model.NewGame();
+            _viewModel.GenerateTable();
+            _viewModel.GenerateTasks();//nem
+
+            _viewerMode = new ViewerMode();
+            _viewerMode.DataContext = _viewModel;
+            _mainWindow.Content = _viewerMode;
+        }
         private void ViewModel_ViewerModeBack(object? sender, EventArgs e)
         {
             _mainWindow.Content = _mainPage;
@@ -145,13 +156,13 @@ namespace View
         {
             _timer.Stop();
            
-             /*   if (e.CanExecute == false)
+                if (e.CanExecute == false)
                 {
                 MessageBox.Show("A művelet nem végrehajtható.", "CyberChallenge játék",
                            MessageBoxButton.OK,
                            MessageBoxImage.Asterisk);
                 }
-                else
+           /*     else
             {
                 MessageBox.Show("A művelet sikeres volt", "CyberChallenge játék",
                            MessageBoxButton.OK,

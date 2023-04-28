@@ -16,7 +16,6 @@ namespace View.ViewModel
         public ObservableCollection<ViewModelField> FieldsMap { get; set; }
         public ObservableCollection<ViewModelField> FieldsMapView { get; set; }
         public ObservableCollection<VMTasksFields> FieldsTasks { get; set; }
-        public DelegateCommand LoadGameCommand { get; private set; }
 
         private Game _model;
 
@@ -24,6 +23,7 @@ namespace View.ViewModel
         public DelegateCommand PlayerModeCommand { get; private set; }
         public DelegateCommand ViewerModeCommand { get; private set; }
         public DelegateCommand ViewerModeBack { get; }
+        public DelegateCommand DiaryCommand { get; private set; }
         public DelegateCommand ExitCommand { get; private set; }
         public DelegateCommand KeyDownCommand { get; private set; }
         public DelegateCommand ChooseActionFieldCommand { get; private set; }
@@ -40,6 +40,7 @@ namespace View.ViewModel
         public event EventHandler? PlayerModeClick;
         public event EventHandler? ViewerModeClick;
         public event EventHandler? ViewerModeBackClick;
+        public event EventHandler? DiaryClick;
         public event EventHandler? ExitClick;
         
 
@@ -116,6 +117,7 @@ namespace View.ViewModel
             // _model.FieldChanged += new EventHandler<Field>(Model_FieldChanged);
             PlayerModeCommand = new DelegateCommand(param => OnPlayerModeClick());
             ViewerModeCommand = new DelegateCommand(param => OnViewerModeClick());
+            DiaryCommand = new DelegateCommand(param => OnDiaryClick());
             ExitCommand = new DelegateCommand(param => OnExitClick());
             ViewerModeBack = new DelegateCommand(param => OnViewerModeBackClick());
             KeyDownCommand = new DelegateCommand(param => KeyDown(Convert.ToString(param)));
@@ -215,7 +217,7 @@ namespace View.ViewModel
                         fieldMapView.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
 
                         FieldsMapView.Add(fieldMapView);
-                    }
+                     }
         }
 
 
@@ -280,13 +282,6 @@ namespace View.ViewModel
             OnPropertyChanged(nameof(GameTime));
         }
 
-        private static String CubeToField(Field field)
-        {
-            if (field is Cube)
-                return "Red";
-            else
-                return "Free";
-        }
         private void OnPlayerModeClick()
         {
             PlayerModeClick?.Invoke(this, EventArgs.Empty);
@@ -295,6 +290,11 @@ namespace View.ViewModel
         private void OnViewerModeClick()
         {
             ViewerModeClick?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnDiaryClick()
+        {
+            DiaryClick?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnViewerModeBackClick()
@@ -385,15 +385,6 @@ namespace View.ViewModel
             OnPropertyChanged(nameof(Round));
             OnPropertyChanged(nameof(Team1Points));
             OnPropertyChanged(nameof(Team2Points));
-        }
-
-        /// <summary>
-        /// Modell mezőváltozásának eseménykezelése.
-        /// </summary>
-        private void Model_FieldChanged(object? sender, Field e)
-        {
-            // Fields.First(field => field.X == e.X && field.Y == e.Y).Player = PlayerToField(_model[e.X, e.Y]);
-            // lineáris keresés a megadott sorra, oszlopra, majd a játékos átírása
         }
 
         private void Model_UpdateFields(object obj, ActionEventArgs e)

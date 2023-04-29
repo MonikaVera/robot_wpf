@@ -166,7 +166,7 @@ namespace Model.Persistence
             try
             {
                 // kiírjuk a tartalmat a megadott fájlba
-                using (StreamWriter writer = File.AppendText(path))
+                using (StreamWriter writer = new StreamWriter(path))
                 {
 
                     for (int j = 0; j < table.Height; j++)

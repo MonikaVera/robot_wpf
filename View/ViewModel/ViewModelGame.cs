@@ -277,6 +277,7 @@ namespace View.ViewModel
 
                 }
             }
+            _model.SaveGameAsync("file" + _model.Round+".txt");
 
             // frissítjük a megszerzett kosarak számát és a játékidőt
             OnPropertyChanged(nameof(GameTime));

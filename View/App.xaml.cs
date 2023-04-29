@@ -12,6 +12,8 @@ using System.Windows.Controls;
 using Model.Persistence;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using System.IO;
+using System.Threading;
 
 namespace View
 {
@@ -25,6 +27,7 @@ namespace View
         private ViewModelGame _viewModel = null!;
         private PlayerMode _playerMode = null!;
         private ViewerMode _viewerMode = null!;
+        private Diary _diary = null!;
         private MainPage _mainPage = null!;
         private MainWindow _mainWindow = null!;
         MyDataAccess _dataAccess = null!;
@@ -110,13 +113,19 @@ namespace View
         }
         private void ViewModel_Diary(object? sender, EventArgs e)
         {
-            _model.NewGame();
-            _viewModel.GenerateTable();
-            _viewModel.GenerateTasks();//nem
+            int i = 1;
+            while (File.Exists("file" + i + ".txt"))
+            {
+               // _model.NewGame();
+                _model.LoadGameAsync("file" + i + ".txt");
+                _viewModel.GenerateTable();
+                _diary = new Diary();
+                _diary.DataContext = _viewModel;
+                _mainWindow.Content = _diary;
+                ++i;
+                Thread.Sleep(10000);//will sleep for 10 sec
+            }
 
-            _viewerMode = new ViewerMode();
-            _viewerMode.DataContext = _viewModel;
-            _mainWindow.Content = _viewerMode;
         }
         private void ViewModel_ViewerModeBack(object? sender, EventArgs e)
         {

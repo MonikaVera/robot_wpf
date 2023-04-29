@@ -114,10 +114,10 @@ namespace View
         private void ViewModel_Diary(object? sender, EventArgs e)
         {
             int i = 1;
-          //  while (File.Exists("file" + i + ".txt"))
+            _model.NewGame();
+           // while (File.Exists("file" + i + ".txt"))
             {
-                _model.NewGame();
-                _model.LoadGameAsync("file" + i + ".txt");
+                Task task = _model.LoadGameAsync("file" + i + ".txt");
                 _viewModel.GenerateTableVM();
 
                 _diary = new Diary();

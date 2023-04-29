@@ -118,7 +118,7 @@ namespace Model.Model
            if (_dataAccess == null)
                 throw new InvalidOperationException("No data access is provided.");
 
-            Board board = await _dataAccess.LoadAsync(_filepath,_board.Height, _board.Width);
+            Board board = await _dataAccess.LoadAsync(_filepath, _board.Height, _board.Width);
             _board = board;
         }
         public async Task SaveGameAsync(string _filepath) {

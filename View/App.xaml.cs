@@ -104,7 +104,7 @@ namespace View
         private void ViewModel_ViewerMode(object? sender, EventArgs e)
         {
             _model.NewGame();
-            _viewModel.GenerateTable();
+            _viewModel.GenerateTableVM();
             _viewModel.GenerateTasks();//nem
 
             _viewerMode = new ViewerMode();
@@ -114,16 +114,17 @@ namespace View
         private void ViewModel_Diary(object? sender, EventArgs e)
         {
             int i = 1;
-            while (File.Exists("file" + i + ".txt"))
+          //  while (File.Exists("file" + i + ".txt"))
             {
-               // _model.NewGame();
+                _model.NewGame();
                 _model.LoadGameAsync("file" + i + ".txt");
-                _viewModel.GenerateTable();
+                _viewModel.GenerateTableVM();
+
                 _diary = new Diary();
                 _diary.DataContext = _viewModel;
                 _mainWindow.Content = _diary;
-                ++i;
-                Thread.Sleep(10000);//will sleep for 10 sec
+             //   ++i;
+             //   Thread.Sleep(10000);//will sleep for 10 sec
             }
 
         }

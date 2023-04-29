@@ -152,7 +152,7 @@ namespace View.ViewModel
             //jatektabla letrehozasa
             Fields = new ObservableCollection<ViewModelField>();
             FieldsMap = new ObservableCollection<ViewModelField>();
-            FieldsMapView = new ObservableCollection<ViewModelField>();
+
             int x = 0, y = 0;
             for (int j = _model.Robot.Y - 3; j <= _model.Robot.Y + 3; j++)
             {
@@ -206,21 +206,24 @@ namespace View.ViewModel
                         FieldsMap.Add(fieldMap);
                     }
 
+        }
+
+        public void GenerateTableVM()
+        {
+            FieldsMapView = new ObservableCollection<ViewModelField>();
             //viewer mode fields
             for (int j = 0; j < _model.Board.Height; j++)
                 for (int i = 0; i < _model.Board.Width; i++)
-                    {
-                        ViewModelField fieldMapView = new ViewModelField();
-                        fieldMapView.SetPicture(_model.Board.GetFieldValue(i, j));
-                        fieldMapView.IndX = i;
-                        fieldMapView.IndY = j;
-                        fieldMapView.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
+                {
+                    ViewModelField fieldMapView = new ViewModelField();
+                    fieldMapView.SetPicture(_model.Board.GetFieldValue(i, j));
+                    fieldMapView.IndX = i;
+                    fieldMapView.IndY = j;
+                    fieldMapView.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
 
-                        FieldsMapView.Add(fieldMapView);
-                     }
+                    FieldsMapView.Add(fieldMapView);
+                }
         }
-
-
 
         public void GenerateTasks()
         {

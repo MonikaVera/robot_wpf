@@ -35,19 +35,23 @@ namespace Model.Persistence
                             if ("empty".Equals(ln))
                                 table.SetValue(i, j, new Empty(i, j));
                             //exit
-                            else if ("water".Equals(ln))
+                            else if ("exit".Equals(ln))
                                 table.SetValue(i, j, new Exit(i, j));
+                            else if ("water".Equals(ln))
+                                table.SetValue(i, j, new Obstacle(i, j, 1000));
                             //obstacle
-                            else if ("obstacle1".Equals(ln))
+                            else if ("obstacle".Equals(ln))
                                 table.SetValue(i, j, new Obstacle(i, j, 1));
-                            else if ("obstacle2".Equals(ln))
-                                table.SetValue(i, j, new Obstacle(i, j, 2));
-                            else if ("obstacle3".Equals(ln))
-                                table.SetValue(i, j, new Obstacle(i, j, 3));
-                            else if ("obstacle4".Equals(ln))
-                                table.SetValue(i, j, new Obstacle(i, j, 4));
-                            else if ("obstacle5".Equals(ln))
-                                table.SetValue(i, j, new Obstacle(i, j, 5));
+                            /*  else if ("obstacle1".Equals(ln))
+                                  table.SetValue(i, j, new Obstacle(i, j, 1));
+                              else if ("obstacle2".Equals(ln))
+                                  table.SetValue(i, j, new Obstacle(i, j, 2));
+                              else if ("obstacle3".Equals(ln))
+                                  table.SetValue(i, j, new Obstacle(i, j, 3));
+                              else if ("obstacle4".Equals(ln))
+                                  table.SetValue(i, j, new Obstacle(i, j, 4));
+                              else if ("obstacle5".Equals(ln))
+                                  table.SetValue(i, j, new Obstacle(i, j, 5));*/
                             //cube red
                             else if ("red1".Equals(ln))
                                 table.SetValue(i, j, new Cube(i, j, 1, Color.RED));
@@ -185,7 +189,7 @@ namespace Model.Persistence
                                 if (obs.Health > 500)
                                     await Task.Run(() => writer.WriteLine("water"));
                                 else
-                                    await Task.Run(() => writer.WriteLine("obstacle" + obs.Health));
+                                    await Task.Run(() => writer.WriteLine("obstacle"));// + obs.Health));
                             }
                             else if (table.GetFieldValue(i, j) is Cube)
                             {
@@ -211,7 +215,7 @@ namespace Model.Persistence
                             }
                             else if (table.GetFieldValue(i, j) is Exit)
                             {
-                                await Task.Run(() => writer.WriteLine(("empty")));
+                                await Task.Run(() => writer.WriteLine(("exit")));
                             }
                             else if (table.GetFieldValue(i, j) is Robot)
                             {

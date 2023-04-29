@@ -23,6 +23,7 @@ namespace View.ViewModel
         public DelegateCommand PlayerModeCommand { get; private set; }
         public DelegateCommand ViewerModeCommand { get; private set; }
         public DelegateCommand ViewerModeBack { get; }
+        public DelegateCommand ViewerModeNext { get; }
         public DelegateCommand DiaryCommand { get; private set; }
         public DelegateCommand ExitCommand { get; private set; }
         public DelegateCommand KeyDownCommand { get; private set; }
@@ -40,6 +41,7 @@ namespace View.ViewModel
         public event EventHandler? PlayerModeClick;
         public event EventHandler? ViewerModeClick;
         public event EventHandler? ViewerModeBackClick;
+        public event EventHandler? ViewerModeNextClick;
         public event EventHandler? DiaryClick;
         public event EventHandler? ExitClick;
         
@@ -120,6 +122,7 @@ namespace View.ViewModel
             DiaryCommand = new DelegateCommand(param => OnDiaryClick());
             ExitCommand = new DelegateCommand(param => OnExitClick());
             ViewerModeBack = new DelegateCommand(param => OnViewerModeBackClick());
+            ViewerModeNext = new DelegateCommand(param => OnViewerModeNextClick());
             KeyDownCommand = new DelegateCommand(param => KeyDown(Convert.ToString(param)));
 
             LoadGameCommand = new DelegateCommand(param => OnLoadGame());
@@ -224,7 +227,7 @@ namespace View.ViewModel
 
                     FieldsMapView.Add(fieldMapView);
                 }
-            _model.SaveGameAsync("file" + _model.Round + ".txt");
+            _model.SaveGameAsync("file" + 1 + ".txt");
         }
 
         public void GenerateTasks()
@@ -306,6 +309,10 @@ namespace View.ViewModel
         private void OnViewerModeBackClick()
         {
             ViewerModeBackClick?.Invoke(this, EventArgs.Empty);
+        }
+        private void OnViewerModeNextClick()
+        {
+            ViewerModeNextClick?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnExitClick()

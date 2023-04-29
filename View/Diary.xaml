@@ -48,7 +48,7 @@
 
 
         <Button Grid.Row="0" Content="Back to menu" Width="185" Height="20" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding ViewerModeBack}"  RenderTransformOrigin="0.442,-0.104"/>
-        <Button Grid.Row="0" Content="Next step" Width="185" Height="20" HorizontalAlignment="left" VerticalAlignment="Top" Command="{Binding Next}"  RenderTransformOrigin="0.442,-0.104"/>
+        <Button Grid.Row="0" Content="Next step" Width="185" Height="20" HorizontalAlignment="left" VerticalAlignment="Top" Command="{Binding ViewerModeNext}"  RenderTransformOrigin="0.442,-0.104"/>
 
 
         <StatusBar Grid.Row="2">

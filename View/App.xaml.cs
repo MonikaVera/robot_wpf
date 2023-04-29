@@ -50,6 +50,7 @@ namespace View
             _viewModel.PlayerModeClick += new EventHandler(ViewModel_PlayerMode);
             _viewModel.ViewerModeClick += new EventHandler(ViewModel_ViewerMode);
             _viewModel.ViewerModeBackClick += new EventHandler(ViewModel_ViewerModeBack);
+            _viewModel.ViewerModeNextClick += new EventHandler(ViewModel_ViewerModeNext);
             _viewModel.DiaryClick += new EventHandler(ViewModel_Diary);
             _viewModel.ExitClick += new EventHandler(ViewModel_Exit);
             _viewModel.LoadGame += new EventHandler(ViewModel_LoadGame); // kezeljük a nézetmodell eseményeit
@@ -111,11 +112,13 @@ namespace View
             _viewerMode.DataContext = _viewModel;
             _mainWindow.Content = _viewerMode;
         }
+        int i = 1;
         private void ViewModel_Diary(object? sender, EventArgs e)
         {
-            int i = 1;
+
             _model.NewGame();
             //while (File.Exists("file" + i + ".txt"))
+            if(File.Exists("file" + i + ".txt"))
             {
                  _model.LoadGameAsync("file" + i + ".txt");
                 _viewModel.GenerateTableVM();
@@ -123,7 +126,7 @@ namespace View
                 _diary = new Diary();
                 _diary.DataContext = _viewModel;
                 _mainWindow.Content = _diary;
-              //  ++i;
+                ++i;
              //   Thread.Sleep(10000);//will sleep for 10 sec
             }
 
@@ -131,6 +134,19 @@ namespace View
         private void ViewModel_ViewerModeBack(object? sender, EventArgs e)
         {
             _mainWindow.Content = _mainPage;
+        }
+        private void ViewModel_ViewerModeNext(object? sender, EventArgs e)
+        {
+            if (File.Exists("file" + i + ".txt"))
+            {
+                _model.LoadGameAsync("file" + i + ".txt");
+                _viewModel.GenerateTableVM();
+
+                _diary = new Diary();
+                _diary.DataContext = _viewModel;
+                _mainWindow.Content = _diary;
+                ++i;
+            }
         }
 
 

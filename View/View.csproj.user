@@ -10,6 +10,9 @@
     <Compile Update="AdminLobby.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Diary.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MainPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -25,6 +28,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="AdminLobby.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Diary.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainPage.xaml">

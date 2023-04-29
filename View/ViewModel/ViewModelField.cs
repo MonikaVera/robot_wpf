@@ -111,7 +111,8 @@ namespace View.ViewModel
                 } 
                 else
                 {
-                    _picture = "obstacle.jpg";
+                    // _picture = "obstacle.jpg";
+                    _picture = "cart1.jpg";
                 }
                 
                 

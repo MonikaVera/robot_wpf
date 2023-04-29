@@ -11,6 +11,9 @@ using System.Windows;
 using System.Windows.Controls;
 using Model.Persistence;
 using System.Windows.Threading;
+using Microsoft.Win32;
+using System.IO;
+using System.Threading;
 
 namespace View
 {
@@ -24,10 +27,13 @@ namespace View
         private ViewModelGame _viewModel = null!;
         private PlayerMode _playerMode = null!;
         private ViewerMode _viewerMode = null!;
+        private Diary _diary = null!;
         private MainPage _mainPage = null!;
         private MainWindow _mainWindow = null!;
         MyDataAccess _dataAccess = null!;
         private DispatcherTimer _timer = null!;
+        private OpenFileDialog? _openFileDialog;
+        private SaveFileDialog? _saveFileDialog;
         public App()
         {
             Startup += new StartupEventHandler(App_Startup);
@@ -44,7 +50,11 @@ namespace View
             _viewModel.PlayerModeClick += new EventHandler(ViewModel_PlayerMode);
             _viewModel.ViewerModeClick += new EventHandler(ViewModel_ViewerMode);
             _viewModel.ViewerModeBackClick += new EventHandler(ViewModel_ViewerModeBack);
+            _viewModel.ViewerModeNextClick += new EventHandler(ViewModel_ViewerModeNext);
+            _viewModel.DiaryClick += new EventHandler(ViewModel_Diary);
             _viewModel.ExitClick += new EventHandler(ViewModel_Exit);
+            _viewModel.LoadGame += new EventHandler(ViewModel_LoadGame); // kezeljük a nézetmodell eseményeit
+            _viewModel.SaveGame += new EventHandler(ViewModel_SaveGame);
 
             _mainWindow = new MainWindow();
             _mainPage = new MainPage();
@@ -95,16 +105,48 @@ namespace View
         private void ViewModel_ViewerMode(object? sender, EventArgs e)
         {
             _model.NewGame();
-            _viewModel.GenerateTable();
+            _viewModel.GenerateTableVM();
             _viewModel.GenerateTasks();//nem
 
             _viewerMode = new ViewerMode();
             _viewerMode.DataContext = _viewModel;
             _mainWindow.Content = _viewerMode;
         }
+        int i = 1;
+        private void ViewModel_Diary(object? sender, EventArgs e)
+        {
+
+            _model.NewGame();
+            //while (File.Exists("file" + i + ".txt"))
+            if(File.Exists("file" + i + ".txt"))
+            {
+                 _model.LoadGameAsync("file" + i + ".txt");
+                _viewModel.GenerateTableVM();
+
+                _diary = new Diary();
+                _diary.DataContext = _viewModel;
+                _mainWindow.Content = _diary;
+                ++i;
+             //   Thread.Sleep(10000);//will sleep for 10 sec
+            }
+
+        }
         private void ViewModel_ViewerModeBack(object? sender, EventArgs e)
         {
             _mainWindow.Content = _mainPage;
+        }
+        private void ViewModel_ViewerModeNext(object? sender, EventArgs e)
+        {
+            if (File.Exists("file" + i + ".txt"))
+            {
+                _model.LoadGameAsync("file" + i + ".txt");
+                _viewModel.GenerateTableVM();
+
+                _diary = new Diary();
+                _diary.DataContext = _viewModel;
+                _mainWindow.Content = _diary;
+                ++i;
+            }
         }
 
 
@@ -140,13 +182,13 @@ namespace View
         {
             _timer.Stop();
            
-             /*   if (e.CanExecute == false)
+                if (e.CanExecute == false)
                 {
                 MessageBox.Show("A művelet nem végrehajtható.", "CyberChallenge játék",
                            MessageBoxButton.OK,
                            MessageBoxImage.Asterisk);
                 }
-                else
+           /*     else
             {
                 MessageBox.Show("A művelet sikeres volt", "CyberChallenge játék",
                            MessageBoxButton.OK,
@@ -156,14 +198,66 @@ namespace View
             
         }
 
+        /// <summary>
+        /// Játék betöltésének eseménykezelője.
+        /// </summary>
+        private void ViewModel_LoadGame(object? sender, System.EventArgs e)
+        {
+            _timer.Stop();
+            if (_openFileDialog == null)
+            {
+                _openFileDialog = new OpenFileDialog();
+                _openFileDialog.Title = "Robot - Játék betöltése";
+                _openFileDialog.Filter = "Szövegfájlok|*.txt";
+            }
+
+            // nyithatunk új nézetet
+            if (_openFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    _model.LoadGameAsync(_openFileDialog.FileName); // játék betöltése
+                }
+                catch (RobotDataException)
+                {
+                    MessageBox.Show("Hiba keletkezett a betöltés során.", "Robot", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            _timer.Start();
+        }
+        /// <summary>
+        /// Játék mentésének eseménykezelője.
+        /// </summary>
+        private async void ViewModel_SaveGame(object? sender, System.EventArgs e)
+        {
+            _timer.Stop();
+            if (_saveFileDialog == null)
+            {
+                _saveFileDialog = new SaveFileDialog();
+                _saveFileDialog.Title = "Robot - Játék mentése";
+                _saveFileDialog.Filter = "Szövegfájlok|*.txt";
+            }
+
+            if (_saveFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    await _model.SaveGameAsync(_saveFileDialog.FileName); // játék mentése
+                }
+                catch (RobotDataException)
+                {
+                    MessageBox.Show("Hiba keletkezett a mentés során.", "Robot", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            _timer.Start();
+        }
+
         private void Model_NewRound(object sender, GameEventArgs e)
         {
             /*MessageBox.Show("Új kör kezdődött.", "CyberChallenge játék", MessageBoxButton.OK,
                                MessageBoxImage.Asterisk);*/
         }
 
-        private async void ViewModel_LoadGame(object sender, EventArgs e) {/*code*/; }
-        private async void ViewModel_SaveGame(object sender, EventArgs e) {/*code*/; }
        
     }
 }

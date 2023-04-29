@@ -16,12 +16,15 @@ namespace View.ViewModel
         public ObservableCollection<ViewModelField> FieldsMap { get; set; }
         public ObservableCollection<ViewModelField> FieldsMapView { get; set; }
         public ObservableCollection<VMTasksFields> FieldsTasks { get; set; }
+
         private Game _model;
 
         #region Commands
         public DelegateCommand PlayerModeCommand { get; private set; }
         public DelegateCommand ViewerModeCommand { get; private set; }
         public DelegateCommand ViewerModeBack { get; }
+        public DelegateCommand ViewerModeNext { get; }
+        public DelegateCommand DiaryCommand { get; private set; }
         public DelegateCommand ExitCommand { get; private set; }
         public DelegateCommand KeyDownCommand { get; private set; }
         public DelegateCommand ChooseActionFieldCommand { get; private set; }
@@ -38,6 +41,8 @@ namespace View.ViewModel
         public event EventHandler? PlayerModeClick;
         public event EventHandler? ViewerModeClick;
         public event EventHandler? ViewerModeBackClick;
+        public event EventHandler? ViewerModeNextClick;
+        public event EventHandler? DiaryClick;
         public event EventHandler? ExitClick;
         
 
@@ -114,9 +119,14 @@ namespace View.ViewModel
             // _model.FieldChanged += new EventHandler<Field>(Model_FieldChanged);
             PlayerModeCommand = new DelegateCommand(param => OnPlayerModeClick());
             ViewerModeCommand = new DelegateCommand(param => OnViewerModeClick());
+            DiaryCommand = new DelegateCommand(param => OnDiaryClick());
             ExitCommand = new DelegateCommand(param => OnExitClick());
             ViewerModeBack = new DelegateCommand(param => OnViewerModeBackClick());
+            ViewerModeNext = new DelegateCommand(param => OnViewerModeNextClick());
             KeyDownCommand = new DelegateCommand(param => KeyDown(Convert.ToString(param)));
+
+            LoadGameCommand = new DelegateCommand(param => OnLoadGame());
+            SaveGameCommand = new DelegateCommand(param => OnSaveGame());
 
         }
 
@@ -145,7 +155,7 @@ namespace View.ViewModel
             //jatektabla letrehozasa
             Fields = new ObservableCollection<ViewModelField>();
             FieldsMap = new ObservableCollection<ViewModelField>();
-            FieldsMapView = new ObservableCollection<ViewModelField>();
+
             int x = 0, y = 0;
             for (int j = _model.Robot.Y - 3; j <= _model.Robot.Y + 3; j++)
             {
@@ -198,22 +208,27 @@ namespace View.ViewModel
 
                         FieldsMap.Add(fieldMap);
                     }
+            GenerateTableVM();
 
+        }
+
+        public void GenerateTableVM()
+        {
+            FieldsMapView = new ObservableCollection<ViewModelField>();
             //viewer mode fields
             for (int j = 0; j < _model.Board.Height; j++)
                 for (int i = 0; i < _model.Board.Width; i++)
-                    {
-                        ViewModelField fieldMapView = new ViewModelField();
-                        fieldMapView.SetPicture(_model.Board.GetFieldValue(i, j));
-                        fieldMapView.IndX = i;
-                        fieldMapView.IndY = j;
-                        fieldMapView.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
+                {
+                    ViewModelField fieldMapView = new ViewModelField();
+                    fieldMapView.SetPicture(_model.Board.GetFieldValue(i, j));
+                    fieldMapView.IndX = i;
+                    fieldMapView.IndY = j;
+                    fieldMapView.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
 
-                        FieldsMapView.Add(fieldMapView);
-                    }
+                    FieldsMapView.Add(fieldMapView);
+                }
+            _model.SaveGameAsync("file" + 1 + ".txt");
         }
-
-
 
         public void GenerateTasks()
         {
@@ -270,18 +285,12 @@ namespace View.ViewModel
 
                 }
             }
+            _model.SaveGameAsync("file" + (_model.Round+1)+".txt");
 
             // frissítjük a megszerzett kosarak számát és a játékidőt
             OnPropertyChanged(nameof(GameTime));
         }
 
-        private static String CubeToField(Field field)
-        {
-            if (field is Cube)
-                return "Red";
-            else
-                return "Free";
-        }
         private void OnPlayerModeClick()
         {
             PlayerModeClick?.Invoke(this, EventArgs.Empty);
@@ -292,9 +301,18 @@ namespace View.ViewModel
             ViewerModeClick?.Invoke(this, EventArgs.Empty);
         }
 
+        private void OnDiaryClick()
+        {
+            DiaryClick?.Invoke(this, EventArgs.Empty);
+        }
+
         private void OnViewerModeBackClick()
         {
             ViewerModeBackClick?.Invoke(this, EventArgs.Empty);
+        }
+        private void OnViewerModeNextClick()
+        {
+            ViewerModeNextClick?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnExitClick()
@@ -382,15 +400,6 @@ namespace View.ViewModel
             OnPropertyChanged(nameof(Team2Points));
         }
 
-        /// <summary>
-        /// Modell mezőváltozásának eseménykezelése.
-        /// </summary>
-        private void Model_FieldChanged(object? sender, Field e)
-        {
-            // Fields.First(field => field.X == e.X && field.Y == e.Y).Player = PlayerToField(_model[e.X, e.Y]);
-            // lineáris keresés a megadott sorra, oszlopra, majd a játékos átírása
-        }
-
         private void Model_UpdateFields(object obj, ActionEventArgs e)
         {
             if (e.CanExecute == false)
@@ -398,7 +407,8 @@ namespace View.ViewModel
                 return;
             }
 
-            /*if (e.Action == Model.Model.Action.Move)
+            RefreshTable();
+            if (e.Action == Model.Model.Action.Move)
             {
                 ViewModelField fieldMap;
                 if (e.Direction == Direction.EAST)
@@ -531,8 +541,8 @@ namespace View.ViewModel
             else if (e.Action == Model.Model.Action.Wait)
             {
 
-            }*/
-            RefreshTable();
+            }
+          //  RefreshTable();
         }
         private void Model_UpdateTasks(object obj, ActionEventArgs e)
         {
@@ -541,9 +551,9 @@ namespace View.ViewModel
 
 
         private void ReFresh() {/*code*/; }
-        private void OnLoadGame() {/*code*/; }
+        private void OnLoadGame() { LoadGame?.Invoke(this, EventArgs.Empty); }
         private void OnNewGame() {/*code*/; }
-        private void OnSaveGame() {/*code*/; }
+        private void OnSaveGame() { SaveGame?.Invoke(this, EventArgs.Empty); }
         private void OnExitGame() {/*code*/; }
         private void OnExtraTask() {/*code*/; }
 

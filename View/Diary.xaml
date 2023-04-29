@@ -1,0 +1,89 @@
+﻿<Page x:Class="View.Diary"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:View"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="1200"
+      Title="Diary">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="22" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--map-->
+        <ItemsControl ItemsSource="{Binding FieldsMapView}" VerticalAlignment="Center" HorizontalAlignment="Center" MinHeight="350" MinWidth="600" Height="536" Width="1180" Grid.Row="1">
+            <!--az mezőket tároló vezérlő-->
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <!--a gombokat egy rácsba fűzzük fel-->
+                    <UniformGrid Name="_unifGrid" Rows="{Binding Height}" Columns="{Binding Width}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Command="{Binding ChooseActionFieldCommand}" CommandParameter="{Binding Number}">
+                        <Image Source="{Binding Picture, TargetNullValue={x:Null}}" Stretch="Fill" />
+                        <Button.RenderTransform>
+                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                        </Button.RenderTransform>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+
+            <ItemsControl.ItemContainerStyle>
+                <!--a függőségi tulajdonságokat külön kell kötnünk-->
+                <Style>
+                    <Setter Property="Grid.Row" Value="{Binding IndY}" />
+                    <Setter Property="Grid.Column" Value="{Binding IndX}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+
+        </ItemsControl>
+
+
+        <Button Grid.Row="0" Content="Back to menu" Width="185" Height="20" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding ViewerModeBack}"  RenderTransformOrigin="0.442,-0.104"/>
+        <Button Grid.Row="0" Content="Next step" Width="185" Height="20" HorizontalAlignment="left" VerticalAlignment="Top" Command="{Binding ViewerModeNext}"  RenderTransformOrigin="0.442,-0.104"/>
+
+
+        <StatusBar Grid.Row="2">
+            <!-- státuszsor a currentPlayer és az időhöz -->
+            <StatusBarItem>
+                <TextBlock Text="Round: " />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding Round}" />
+            </StatusBarItem>
+            <Separator />
+
+            <!--      <StatusBarItem>
+                <TextBlock Text="GameTime: " />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding GameTime}" />
+            </StatusBarItem>
+            <Separator /> -->
+
+            <StatusBarItem>
+                <TextBlock Text="Team1 points: " />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding Team1}" />
+            </StatusBarItem>
+            <Separator />
+            <StatusBarItem />
+            <StatusBarItem>
+                <TextBlock Text="Team2 points: " />
+            </StatusBarItem>
+            <StatusBarItem>
+                <TextBlock Text="{Binding Team2}" />
+            </StatusBarItem>
+        </StatusBar>
+
+    </Grid>
+</Page>

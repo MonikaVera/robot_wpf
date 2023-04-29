@@ -205,6 +205,7 @@ namespace View.ViewModel
 
                         FieldsMap.Add(fieldMap);
                     }
+            GenerateTableVM();
 
         }
 

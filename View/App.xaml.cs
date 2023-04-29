@@ -115,15 +115,15 @@ namespace View
         {
             int i = 1;
             _model.NewGame();
-           // while (File.Exists("file" + i + ".txt"))
+            //while (File.Exists("file" + i + ".txt"))
             {
-                Task task = _model.LoadGameAsync("file" + i + ".txt");
+                 _model.LoadGameAsync("file" + i + ".txt");
                 _viewModel.GenerateTableVM();
 
                 _diary = new Diary();
                 _diary.DataContext = _viewModel;
                 _mainWindow.Content = _diary;
-             //   ++i;
+              //  ++i;
              //   Thread.Sleep(10000);//will sleep for 10 sec
             }
 
@@ -185,7 +185,7 @@ namespace View
         /// <summary>
         /// Játék betöltésének eseménykezelője.
         /// </summary>
-        private async void ViewModel_LoadGame(object? sender, System.EventArgs e)
+        private void ViewModel_LoadGame(object? sender, System.EventArgs e)
         {
             _timer.Stop();
             if (_openFileDialog == null)
@@ -200,7 +200,7 @@ namespace View
             {
                 try
                 {
-                    await _model.LoadGameAsync(_openFileDialog.FileName); // játék betöltése
+                    _model.LoadGameAsync(_openFileDialog.FileName); // játék betöltése
                 }
                 catch (RobotDataException)
                 {

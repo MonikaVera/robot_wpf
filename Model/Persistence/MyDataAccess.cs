@@ -12,7 +12,7 @@ namespace Model.Persistence
 {
     public class MyDataAccess : IDataAccess
     {
-        public async Task<Board> LoadAsync(String path, int height, int width) {
+        public Board LoadAsync(String path, int height, int width) {
 
             if (path == null)
                 throw new ArgumentNullException("path");
@@ -29,14 +29,14 @@ namespace Model.Persistence
                     for (int j = 0; j < height; j++)
                         for (int i = 0; i < width; i++)
                         {
-                            ln = await Task.Run(() => file.ReadLine());
-
+                            ln = file.ReadLine();
+                            if(ln == null ) continue;
                             //empty
                             if ("empty".Equals(ln))
                                 table.SetValue(i, j, new Empty(i, j));
                             //exit
                             else if ("water".Equals(ln))
-                                table.SetValue(i, j, new Obstacle(i, j, 1000));
+                                table.SetValue(i, j, new Exit(i, j));
                             //obstacle
                             else if ("obstacle1".Equals(ln))
                                 table.SetValue(i, j, new Obstacle(i, j, 1));

@@ -224,6 +224,7 @@ namespace View.ViewModel
 
                     FieldsMapView.Add(fieldMapView);
                 }
+            _model.SaveGameAsync("file" + _model.Round + ".txt");
         }
 
         public void GenerateTasks()
@@ -281,7 +282,7 @@ namespace View.ViewModel
 
                 }
             }
-            _model.SaveGameAsync("file" + _model.Round+".txt");
+            _model.SaveGameAsync("file" + (_model.Round+1)+".txt");
 
             // frissítjük a megszerzett kosarak számát és a játékidőt
             OnPropertyChanged(nameof(GameTime));

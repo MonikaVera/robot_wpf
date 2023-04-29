@@ -14,7 +14,7 @@ namespace Model.Persistence
         /// </summary>
         /// <returns>A beolvasott mezőértékek.</returns>
 
-        Task<Board> LoadAsync(String path, int height, int width);
+        Board LoadAsync(String path, int height, int width);
 
         /// <summary>
         /// Fájl mentése.

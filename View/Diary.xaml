@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <!--map-->
-        <ItemsControl ItemsSource="{Binding ViewModelField}" VerticalAlignment="Center" HorizontalAlignment="Center" MinHeight="350" MinWidth="600" Height="536" Width="1180" Grid.Row="1">
+        <ItemsControl ItemsSource="{Binding FieldsMapView}" VerticalAlignment="Center" HorizontalAlignment="Center" MinHeight="350" MinWidth="600" Height="536" Width="1180" Grid.Row="1">
             <!--az mezőket tároló vezérlő-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

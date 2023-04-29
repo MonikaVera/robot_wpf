@@ -16,7 +16,9 @@ namespace Model.Persistence
 
             if (path == null)
                 throw new ArgumentNullException("path");
+
             Board table = new Board(width, height);
+
             try
             {
                 // Read file line by line

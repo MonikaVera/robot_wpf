@@ -257,12 +257,10 @@ namespace Model.Model
         #region Move
         public void MoveRobot(Robot robot, Direction dir)
         {
-            List<XYcoordinates> toexit = new List<XYcoordinates>();
             if (dir == Direction.EAST)
             {
-                if (CanMoveToDirection(robot,1,0,toexit))
+                if (CanMoveToDirection(robot,1,0))
                 {
-                    MovedToExit(robot, toexit);
                     MoveToDirection(robot, dir);
                     robot.X++;
                     _board.SetValueNewField(robot);
@@ -275,9 +273,8 @@ namespace Model.Model
             }
             else if (dir == Direction.WEST)
             {
-                if (CanMoveToDirection(robot,-1,0,toexit))
+                if (CanMoveToDirection(robot,-1,0))
                 {
-                    MovedToExit(robot, toexit);
                     MoveToDirection(robot, dir);
                     robot.X--;
                     _board.SetValueNewField(robot);
@@ -290,9 +287,8 @@ namespace Model.Model
             }
             else if (dir == Direction.NORTH)
             {
-                if (CanMoveToDirection(robot,0,-1,toexit))
+                if (CanMoveToDirection(robot,0,-1))
                 {
-                    MovedToExit(robot, toexit);
                     MoveToDirection(robot, dir);
                     robot.Y--;
                     _board.SetValueNewField(robot);
@@ -305,9 +301,8 @@ namespace Model.Model
             }
             else if (dir == Direction.SOUTH)
             {
-                if (CanMoveToDirection(robot,0,1,toexit))
+                if (CanMoveToDirection(robot,0,1))
                 {
-                    MovedToExit(robot, toexit);
                     MoveToDirection(robot, dir);
                     robot.Y++;
                     _board.SetValueNewField(robot);
@@ -326,20 +321,29 @@ namespace Model.Model
             OnNewRound(_team1);
         }
 
-        private void MovedToExit(Robot robot, List<XYcoordinates> toexit)
+        public bool IsOnBoard(int x, int y)
         {
-            for(int i=0; i<toexit.Count; i++)
+            if (x >= _board.Width || x < 0 || y >= _board.Height || y < 0)
             {
-                robot.DeleteConnection(toexit[i]);
-                _board.SetValueNewField(new Empty(toexit[i].X, toexit[i].Y));
+                return false;
             }
+            return true;
         }
 
-        private bool CanMoveToDirection(Robot robot, int a, int b, List<XYcoordinates> toexit)
+        private bool IsOnEdge(int x, int y)
         {
-            if ((robot.X + a) >= _board.Width || (robot.X + a) < 0
-                || (robot.Y + b) >= _board.Height || (robot.Y + b)<0
-                   || !((_board.GetFieldValue(robot.X + a, robot.Y + b) is Empty)
+            if(x==0 || y==0 || x==_board.Width-1 || y==_board.Height)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool CanMoveToDirection(Robot robot, int a, int b)
+        {
+            if (!IsOnBoard(robot.X + a,robot.Y + b)
+                   || !((_board.GetFieldValue(robot.X + a, robot.Y + b) is Exit)
+                   ||  (_board.GetFieldValue(robot.X + a, robot.Y + b) is Empty)
                    || ((_board.GetFieldValue(robot.X + a, robot.Y + b) is Cube) &&
                    robot.IsConnected(new XYcoordinates(robot.X + a, robot.Y + b)))))
             {
@@ -349,8 +353,7 @@ namespace Model.Model
             List<XYcoordinates> connections = robot.AllConnections();
             for (int i = 0; i < connections.Count; i++)
             {
-                if ((connections[i].X + a) < _board.Width && (connections[i].X + a) >= 0
-                    && (connections[i].Y + b) < _board.Height && (connections[i].Y + b) >=0)
+                if (IsOnBoard(connections[i].X + a, connections[i].Y + b))
                 {
                     if(_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Empty) 
                     {
@@ -368,16 +371,12 @@ namespace Model.Model
                     }
                     else if(_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Exit)
                     {
-                        toexit.Add(new XYcoordinates(connections[i].X, connections[i].Y));
+                        continue;
                     }
                     else
                     {
                         return false;
                     }
-                }
-                else
-                {
-                    return false;
                 }
             }
             return true;
@@ -391,9 +390,20 @@ namespace Model.Model
             Color[] ColorArr= new Color[connections.Count];
             for (int i = 0; i < connections.Count; i++)
             {
-                HealthArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Health;
-                ColorArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Color;
-                _board.SetValueNewField(new Empty(connections[i].X, connections[i].Y));
+                if(IsOnBoard(connections[i].X, connections[i].Y))
+                {
+                    HealthArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Health;
+                    ColorArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Color;
+                    if (IsOnEdge(connections[i].X, connections[i].Y))
+                    {
+                        _board.SetValueNewField(new Exit(connections[i].X, connections[i].Y));
+                    }
+                    else
+                    {
+                        _board.SetValueNewField(new Empty(connections[i].X, connections[i].Y));
+                    }
+                }
+                
             }
 
             if(dir==Direction.EAST)
@@ -416,8 +426,11 @@ namespace Model.Model
             List<XYcoordinates> connectionsNew = robot.AllConnections();
             for (int i = 0; i < connectionsNew.Count; i++)
             {
-                _board.SetValueNewField( new Cube(connectionsNew[i].X, connectionsNew[i].Y,
-                    HealthArr[i], ColorArr[i]));
+                if(IsOnBoard(connectionsNew[i].X, connectionsNew[i].Y))
+                {
+                    _board.SetValueNewField( new Cube(connectionsNew[i].X, connectionsNew[i].Y,
+                        HealthArr[i], ColorArr[i]));
+                }
             }
         }
 
@@ -426,11 +439,9 @@ namespace Model.Model
         #region Rotate
 
         public void RotateRobot(Robot robot, Angle angle) {
-            List<XYcoordinates> toexit = new List<XYcoordinates>();
-            if ((angle == Angle.Clockwise && CanRotateClockwise(robot, toexit))
-                || (angle == Angle.CounterClockwise && CanRotateCounterClockwise(robot, toexit)))
+            if ((angle == Angle.Clockwise && CanRotateClockwise(robot))
+                || (angle == Angle.CounterClockwise && CanRotateCounterClockwise(robot)))
             {
-                MovedToExit(robot, toexit);
                 RotateAll(robot, angle);
                 if(angle==Angle.Clockwise)
                 {
@@ -450,9 +461,19 @@ namespace Model.Model
             Color[] ColorArr = new Color[connections.Count];
             for (int i = 0; i < connections.Count; i++)
             {
-                HealthArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Health;
-                ColorArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Color;
-                _board.SetValueNewField(new Empty(connections[i].X, connections[i].Y));
+                if(IsOnBoard(connections[i].X, connections[i].Y))
+                {
+                    HealthArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Health;
+                    ColorArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Color;
+                    if(IsOnEdge(connections[i].X, connections[i].Y))
+                    {
+                        _board.SetValueNewField(new Exit(connections[i].X, connections[i].Y));
+                    } 
+                    else
+                    {
+                        _board.SetValueNewField(new Empty(connections[i].X, connections[i].Y));
+                    }  
+                }   
             }
 
             if(angle==Angle.Clockwise)
@@ -494,19 +515,21 @@ namespace Model.Model
 
             for (int i = 0; i < connectionsNew.Count; i++)
             {
-                _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
-                    HealthArr[i], ColorArr[i]));
-                
+                if(IsOnBoard(connectionsNew[i].X, connectionsNew[i].Y))
+                {
+                     _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
+                        HealthArr[i], ColorArr[i]));
+                }
             }
         }
 
-        private bool CanRotateClockwise(Robot robot, List<XYcoordinates> toexit)
+        private bool CanRotateClockwise(Robot robot)
         {
             for (int i = 0; i < (robot.AllConnections()).Count(); i++)
             {
                 int newX = robot.X + robot.Y - (robot.AllConnections())[i].Y;
                 int newY = -robot.X + robot.Y + (robot.AllConnections())[i].X;
-                if(newX>=0 && newY>=0 && newX<_board.Width && newY<_board.Height)
+                if(IsOnBoard(newX, newY))
                 {
                     if(_board.GetFieldValue(newX,newY) is Empty)
                     {
@@ -514,29 +537,24 @@ namespace Model.Model
                     }
                     else if(_board.GetFieldValue(newX, newY) is Exit)
                     {
-                        toexit.Add(new XYcoordinates
-                            ((robot.AllConnections())[i].X, (robot.AllConnections())[i].Y));
+                        continue;
                     }
                     else
                     {
                         return false;
                     }
                 }
-                else
-                {
-                    return false;
-                }
             }
             return true;
         }
 
-        private bool CanRotateCounterClockwise(Robot robot, List<XYcoordinates> toexit)
+        private bool CanRotateCounterClockwise(Robot robot)
         {
             for (int i = 0; i < (robot.AllConnections()).Count(); i++)
             {
                 int newX = robot.X - robot.Y + (robot.AllConnections())[i].Y;
                 int newY = robot.X + robot.Y - (robot.AllConnections())[i].X;
-                if (newX >= 0 && newY >= 0 && newX < _board.Width && newY < _board.Height)
+                if (IsOnBoard(newX, newY))
                 {
                     if (_board.GetFieldValue(newX, newY) is Empty)
                     {
@@ -544,17 +562,12 @@ namespace Model.Model
                     }
                     else if (_board.GetFieldValue(newX, newY) is Exit)
                     {
-                        toexit.Add(new XYcoordinates
-                            ((robot.AllConnections())[i].X, (robot.AllConnections())[i].Y));
+                        continue;
                     }
                     else
                     {
                         return false;
                     }
-                }
-                else
-                {
-                    return false;
                 }
             }
             return true;

@@ -408,7 +408,7 @@ namespace View.ViewModel
             }
 
             RefreshTable();
-            if (e.Action == Model.Model.Action.Move)
+            /*if (e.Action == Model.Model.Action.Move)
             {
                 ViewModelField fieldMap;
                 if (e.Direction == Direction.EAST)
@@ -457,8 +457,11 @@ namespace View.ViewModel
                 }
                 foreach (XYcoordinates coord in e.Robot.AllConnections())
                 {
-                    fieldMap = FieldsMap[coord.Y * _model.Board.Width + coord.X];
-                    fieldMap.SetPicture(_model.Board.GetFieldValue(coord.X, coord.Y));
+                    if(Game.IsOnBoard(coord.X, coord.Y))
+                    {
+                        fieldMap = FieldsMap[coord.Y * _model.Board.Width + coord.X];
+                        fieldMap.SetPicture(_model.Board.GetFieldValue(coord.X, coord.Y));
+                    }
                 }
                 fieldMap = FieldsMap[e.Robot.Y * _model.Board.Width + e.Robot.X];
                 fieldMap.SetPicture(_model.Board.GetFieldValue(e.Robot.X, e.Robot.Y));
@@ -541,7 +544,7 @@ namespace View.ViewModel
             else if (e.Action == Model.Model.Action.Wait)
             {
 
-            }
+            }*/
           //  RefreshTable();
         }
         private void Model_UpdateTasks(object obj, ActionEventArgs e)

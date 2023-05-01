@@ -7,6 +7,8 @@ using System.Windows.Documents;
 using Model.Persistence;
 using System.Linq;
 using System.Diagnostics.Eventing.Reader;
+using static System.Net.Mime.MediaTypeNames;
+using System.Windows;
 
 namespace Model.Model
 {
@@ -257,12 +259,11 @@ namespace Model.Model
         {
             if (dir == Direction.EAST)
             {
-                if (CanMoveToEast(robot))
+                if (CanMoveToDirection(robot,1,0))
                 {
                     MoveToDirection(robot, dir);
                     robot.X++;
                     _board.SetValueNewField(robot);
-                   // robot.Direction = Direction.EAST;
                     OnUpdateFields(robot, Direction.EAST, Action.Move, true);
                 }
                 else
@@ -272,12 +273,11 @@ namespace Model.Model
             }
             else if (dir == Direction.WEST)
             {
-                if (CanMoveToWest(robot))
+                if (CanMoveToDirection(robot,-1,0))
                 {
                     MoveToDirection(robot, dir);
                     robot.X--;
                     _board.SetValueNewField(robot);
-                    //robot.Direction = Direction.WEST;
                     OnUpdateFields(robot, Direction.WEST, Action.Move, true);
                 }
                 else
@@ -287,12 +287,11 @@ namespace Model.Model
             }
             else if (dir == Direction.NORTH)
             {
-                if (CanMoveToNorth(robot))
+                if (CanMoveToDirection(robot,0,-1))
                 {
                     MoveToDirection(robot, dir);
                     robot.Y--;
                     _board.SetValueNewField(robot);
-                    //robot.Direction = Direction.NORTH;
                     OnUpdateFields(robot, Direction.NORTH, Action.Move, true);
                 }
                 else
@@ -302,13 +301,12 @@ namespace Model.Model
             }
             else if (dir == Direction.SOUTH)
             {
-                if (CanMoveToSouth(robot))
+                if (CanMoveToDirection(robot,0,1))
                 {
                     MoveToDirection(robot, dir);
                     robot.Y++;
                     _board.SetValueNewField(robot);
                     OnUpdateFields(robot, Direction.SOUTH, Action.Move, true);
-                    //robot.Direction = Direction.SOUTH;
                 }
                 else
                 {
@@ -320,17 +318,34 @@ namespace Model.Model
                 OnGameOver(true, _team1);
                 return;
             }
-               
-
             OnNewRound(_team1);
         }
 
-        private bool CanMoveToEast(Robot robot)
+        public bool IsOnBoard(int x, int y)
         {
-            if ((robot.X + 1) >= _board.Width
-                    || !((_board.GetFieldValue(robot.X + 1, robot.Y) is Empty)
-                    || ((_board.GetFieldValue(robot.X + 1, robot.Y) is Cube) && 
-                    robot.IsConnected(new XYcoordinates(robot.X+1, robot.Y)))))
+            if (x >= _board.Width || x < 0 || y >= _board.Height || y < 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool IsOnEdge(int x, int y)
+        {
+            if(x==0 || y==0 || x==_board.Width-1 || y==_board.Height)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool CanMoveToDirection(Robot robot, int a, int b)
+        {
+            if (!IsOnBoard(robot.X + a,robot.Y + b)
+                   || !((_board.GetFieldValue(robot.X + a, robot.Y + b) is Exit)
+                   ||  (_board.GetFieldValue(robot.X + a, robot.Y + b) is Empty)
+                   || ((_board.GetFieldValue(robot.X + a, robot.Y + b) is Cube) &&
+                   robot.IsConnected(new XYcoordinates(robot.X + a, robot.Y + b)))))
             {
                 return false;
             }
@@ -338,100 +353,35 @@ namespace Model.Model
             List<XYcoordinates> connections = robot.AllConnections();
             for (int i = 0; i < connections.Count; i++)
             {
-                if ((connections[i].X + 1) >= _board.Width
-                    || !((_board.GetFieldValue(connections[i].X + 1, connections[i].Y) is Empty)
-                    || ((_board.GetFieldValue(connections[i].X + 1, connections[i].Y) is Robot)
-                    && (connections[i].X + 1==robot.X && connections[i].Y==robot.Y))
-                    || ((_board.GetFieldValue(connections[i].X + 1, connections[i].Y) is Cube) &&
-                    robot.IsConnected(new XYcoordinates(connections[i].X + 1, connections[i].Y)))
-                    ))
+                if (IsOnBoard(connections[i].X + a, connections[i].Y + b))
                 {
-                    return false;
-                }
-            }
-            return true;
-        }
-        private bool CanMoveToWest(Robot robot)
-        {
-            if ((robot.X - 1) < 0
-                    || !((_board.GetFieldValue(robot.X - 1, robot.Y) is Empty)
-                    || ((_board.GetFieldValue(robot.X - 1, robot.Y) is Cube) &&
-                    robot.IsConnected(new XYcoordinates(robot.X - 1, robot.Y)))))
-            {
-                return false;
-            }
-
-            List<XYcoordinates> connections = robot.AllConnections();
-            for (int i = 0; i < connections.Count; i++)
-            {
-                if ((connections[i].X - 1) < 0
-                    || !((_board.GetFieldValue(connections[i].X - 1, connections[i].Y) is Empty)
-                    || ((_board.GetFieldValue(connections[i].X - 1, connections[i].Y) is Robot)
-                    && (connections[i].X - 1 == robot.X && connections[i].Y == robot.Y))
-                    || ((_board.GetFieldValue(connections[i].X - 1, connections[i].Y) is Cube) &&
-                    robot.IsConnected(new XYcoordinates(connections[i].X - 1, connections[i].Y)))
-                    ))
-                {
-                    return false;
+                    if(_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Empty) 
+                    {
+                        continue;
+                    }
+                    else if((_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Robot)
+                    && (connections[i].X + a == robot.X && connections[i].Y + b == robot.Y))
+                    {
+                        continue;
+                    }
+                    else if((_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Cube) &&
+                    robot.IsConnected(new XYcoordinates(connections[i].X + a, connections[i].Y + b))) 
+                    {
+                        continue;
+                    }
+                    else if(_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Exit)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
             }
             return true;
         }
 
-        private bool CanMoveToNorth(Robot robot)
-        {
-            if ((robot.Y - 1) < 0
-                    || !((_board.GetFieldValue(robot.X, robot.Y - 1) is Empty)
-                    || ((_board.GetFieldValue(robot.X, robot.Y-1) is Cube) &&
-                    robot.IsConnected(new XYcoordinates(robot.X, robot.Y-1)))))
-            {
-                return false;
-            }
-
-            List<XYcoordinates> connections = robot.AllConnections();
-            for (int i = 0; i < connections.Count; i++)
-            {
-                if ((connections[i].Y - 1) < 0
-                    || !((_board.GetFieldValue(connections[i].X, connections[i].Y - 1) is Empty)
-                    || ((_board.GetFieldValue(connections[i].X, connections[i].Y-1) is Robot)
-                    && (connections[i].X == robot.X && connections[i].Y - 1 == robot.Y))
-                    || ((_board.GetFieldValue(connections[i].X, connections[i].Y - 1) is Cube) &&
-                    robot.IsConnected(new XYcoordinates(connections[i].X, connections[i].Y - 1)))
-                    ))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        private bool CanMoveToSouth(Robot robot)
-        {
-            if (((robot.Y + 1) >= _board.Height)
-                    || !((_board.GetFieldValue(robot.X, robot.Y+1) is Empty)
-                    || ((_board.GetFieldValue(robot.X, robot.Y+1) is Cube) &&
-                    robot.IsConnected(new XYcoordinates(robot.X, robot.Y+1)))))
-            {
-                return false;
-            }
-
-            _board.SetValue(robot.X, robot.Y, new Empty(robot.X, robot.Y));
-            List<XYcoordinates> connections = robot.AllConnections();
-            for (int i = 0; i < connections.Count; i++)
-            {
-                if ((connections[i].Y + 1) >= _board.Height
-                    || !((_board.GetFieldValue(connections[i].X, connections[i].Y + 1) is Empty)
-                    || ((_board.GetFieldValue(connections[i].X, connections[i].Y+1) is Robot)
-                    && (connections[i].X == robot.X && connections[i].Y + 1 == robot.Y))
-                    || ((_board.GetFieldValue(connections[i].X, connections[i].Y + 1) is Cube) &&
-                    robot.IsConnected(new XYcoordinates(connections[i].X, connections[i].Y + 1)))
-                    ))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
         private void MoveToDirection(Robot robot, Direction dir)
         {
             _board.SetValueNewField(new Empty(robot.X, robot.Y));
@@ -440,9 +390,20 @@ namespace Model.Model
             Color[] ColorArr= new Color[connections.Count];
             for (int i = 0; i < connections.Count; i++)
             {
-                HealthArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Health;
-                ColorArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Color;
-                _board.SetValueNewField(new Empty(connections[i].X, connections[i].Y));
+                if(IsOnBoard(connections[i].X, connections[i].Y))
+                {
+                    HealthArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Health;
+                    ColorArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Color;
+                    if (IsOnEdge(connections[i].X, connections[i].Y))
+                    {
+                        _board.SetValueNewField(new Exit(connections[i].X, connections[i].Y));
+                    }
+                    else
+                    {
+                        _board.SetValueNewField(new Empty(connections[i].X, connections[i].Y));
+                    }
+                }
+                
             }
 
             if(dir==Direction.EAST)
@@ -465,8 +426,11 @@ namespace Model.Model
             List<XYcoordinates> connectionsNew = robot.AllConnections();
             for (int i = 0; i < connectionsNew.Count; i++)
             {
-                _board.SetValueNewField( new Cube(connectionsNew[i].X, connectionsNew[i].Y,
-                    HealthArr[i], ColorArr[i]));
+                if(IsOnBoard(connectionsNew[i].X, connectionsNew[i].Y))
+                {
+                    _board.SetValueNewField( new Cube(connectionsNew[i].X, connectionsNew[i].Y,
+                        HealthArr[i], ColorArr[i]));
+                }
             }
         }
 
@@ -497,9 +461,19 @@ namespace Model.Model
             Color[] ColorArr = new Color[connections.Count];
             for (int i = 0; i < connections.Count; i++)
             {
-                HealthArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Health;
-                ColorArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Color;
-                _board.SetValueNewField(new Empty(connections[i].X, connections[i].Y));
+                if(IsOnBoard(connections[i].X, connections[i].Y))
+                {
+                    HealthArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Health;
+                    ColorArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Color;
+                    if(IsOnEdge(connections[i].X, connections[i].Y))
+                    {
+                        _board.SetValueNewField(new Exit(connections[i].X, connections[i].Y));
+                    } 
+                    else
+                    {
+                        _board.SetValueNewField(new Empty(connections[i].X, connections[i].Y));
+                    }  
+                }   
             }
 
             if(angle==Angle.Clockwise)
@@ -541,9 +515,11 @@ namespace Model.Model
 
             for (int i = 0; i < connectionsNew.Count; i++)
             {
-                _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
-                    HealthArr[i], ColorArr[i]));
-                
+                if(IsOnBoard(connectionsNew[i].X, connectionsNew[i].Y))
+                {
+                     _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
+                        HealthArr[i], ColorArr[i]));
+                }
             }
         }
 
@@ -553,12 +529,21 @@ namespace Model.Model
             {
                 int newX = robot.X + robot.Y - (robot.AllConnections())[i].Y;
                 int newY = -robot.X + robot.Y + (robot.AllConnections())[i].X;
-                if(newX<0 || newY<0 || newX>=_board.Width || newY>=_board.Height || 
-                    !(_board.GetFieldValue(newX,newY) is Empty))
+                if(IsOnBoard(newX, newY))
                 {
-                    return false;
+                    if(_board.GetFieldValue(newX,newY) is Empty)
+                    {
+                        continue;
+                    }
+                    else if(_board.GetFieldValue(newX, newY) is Exit)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
-
             }
             return true;
         }
@@ -569,12 +554,21 @@ namespace Model.Model
             {
                 int newX = robot.X - robot.Y + (robot.AllConnections())[i].Y;
                 int newY = robot.X + robot.Y - (robot.AllConnections())[i].X;
-                if (newX < 0 || newY < 0 || newX >= _board.Width || newY >= _board.Height ||
-                    !(_board.GetFieldValue(newX, newY) is Empty))
+                if (IsOnBoard(newX, newY))
                 {
-                    return false;
+                    if (_board.GetFieldValue(newX, newY) is Empty)
+                    {
+                        continue;
+                    }
+                    else if (_board.GetFieldValue(newX, newY) is Exit)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
-
             }
             return true;
         }

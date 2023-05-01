@@ -255,10 +255,12 @@ namespace Model.Model
         #region Move
         public void MoveRobot(Robot robot, Direction dir)
         {
+            List<XYcoordinates> toexit = new List<XYcoordinates>();
             if (dir == Direction.EAST)
             {
-                if (CanMoveToDirection(robot,1,0))
+                if (CanMoveToDirection(robot,1,0,toexit))
                 {
+                    MovedToExit(robot, toexit);
                     MoveToDirection(robot, dir);
                     robot.X++;
                     _board.SetValueNewField(robot);
@@ -271,8 +273,9 @@ namespace Model.Model
             }
             else if (dir == Direction.WEST)
             {
-                if (CanMoveToDirection(robot,-1,0))
+                if (CanMoveToDirection(robot,-1,0,toexit))
                 {
+                    MovedToExit(robot, toexit);
                     MoveToDirection(robot, dir);
                     robot.X--;
                     _board.SetValueNewField(robot);
@@ -285,8 +288,9 @@ namespace Model.Model
             }
             else if (dir == Direction.NORTH)
             {
-                if (CanMoveToDirection(robot,0,-1))
+                if (CanMoveToDirection(robot,0,-1,toexit))
                 {
+                    MovedToExit(robot, toexit);
                     MoveToDirection(robot, dir);
                     robot.Y--;
                     _board.SetValueNewField(robot);
@@ -299,8 +303,9 @@ namespace Model.Model
             }
             else if (dir == Direction.SOUTH)
             {
-                if (CanMoveToDirection(robot,0,1))
+                if (CanMoveToDirection(robot,0,1,toexit))
                 {
+                    MovedToExit(robot, toexit);
                     MoveToDirection(robot, dir);
                     robot.Y++;
                     _board.SetValueNewField(robot);
@@ -319,7 +324,16 @@ namespace Model.Model
             OnNewRound(_team1);
         }
 
-        private bool CanMoveToDirection(Robot robot, int a, int b)
+        private void MovedToExit(Robot robot, List<XYcoordinates> toexit)
+        {
+            for(int i=0; i<toexit.Count; i++)
+            {
+                robot.DeleteConnection(toexit[i]);
+                _board.SetValueNewField(new Empty(toexit[i].X, toexit[i].Y));
+            }
+        }
+
+        private bool CanMoveToDirection(Robot robot, int a, int b, List<XYcoordinates> toexit)
         {
             if ((robot.X + a) >= _board.Width || (robot.X + a) < 0
                 || (robot.Y + b) >= _board.Height || (robot.Y + b)<0
@@ -333,14 +347,33 @@ namespace Model.Model
             List<XYcoordinates> connections = robot.AllConnections();
             for (int i = 0; i < connections.Count; i++)
             {
-                if ((connections[i].X + a) >= _board.Width || (connections[i].X + a) < 0
-                    || (connections[i].Y + b)>= _board.Height || (connections[i].Y + b)<0
-                    || !((_board.GetFieldValue(connections[i].X + a, connections[i].Y+b) is Empty)
-                    || ((_board.GetFieldValue(connections[i].X + a, connections[i].Y+b) is Robot)
-                    && (connections[i].X + a == robot.X && connections[i].Y+b == robot.Y))
-                    || ((_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Cube) &&
-                    robot.IsConnected(new XYcoordinates(connections[i].X + a, connections[i].Y+b)))
-                    ))
+                if ((connections[i].X + a) < _board.Width || (connections[i].X + a) >= 0
+                    || (connections[i].Y + b) < _board.Height || (connections[i].Y + b) >=0)
+                {
+                    if(_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Empty) 
+                    {
+                        continue;
+                    }
+                    else if((_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Robot)
+                    && (connections[i].X + a == robot.X && connections[i].Y + b == robot.Y))
+                    {
+                        continue;
+                    }
+                    else if((_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Cube) &&
+                    robot.IsConnected(new XYcoordinates(connections[i].X + a, connections[i].Y + b))) 
+                    {
+                        continue;
+                    }
+                    else if(_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Exit)
+                    {
+                        toexit.Add(new XYcoordinates(connections[i].X, connections[i].Y));
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
                 {
                     return false;
                 }

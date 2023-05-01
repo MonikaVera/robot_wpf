@@ -7,6 +7,8 @@ using System.Windows.Documents;
 using Model.Persistence;
 using System.Linq;
 using System.Diagnostics.Eventing.Reader;
+using static System.Net.Mime.MediaTypeNames;
+using System.Windows;
 
 namespace Model.Model
 {
@@ -347,8 +349,8 @@ namespace Model.Model
             List<XYcoordinates> connections = robot.AllConnections();
             for (int i = 0; i < connections.Count; i++)
             {
-                if ((connections[i].X + a) < _board.Width || (connections[i].X + a) >= 0
-                    || (connections[i].Y + b) < _board.Height || (connections[i].Y + b) >=0)
+                if ((connections[i].X + a) < _board.Width && (connections[i].X + a) >= 0
+                    && (connections[i].Y + b) < _board.Height && (connections[i].Y + b) >=0)
                 {
                     if(_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Empty) 
                     {
@@ -424,9 +426,11 @@ namespace Model.Model
         #region Rotate
 
         public void RotateRobot(Robot robot, Angle angle) {
-            if ((angle == Angle.Clockwise && CanRotateClockwise(robot))
-                || (angle == Angle.CounterClockwise && CanRotateCounterClockwise(robot)))
+            List<XYcoordinates> toexit = new List<XYcoordinates>();
+            if ((angle == Angle.Clockwise && CanRotateClockwise(robot, toexit))
+                || (angle == Angle.CounterClockwise && CanRotateCounterClockwise(robot, toexit)))
             {
+                MovedToExit(robot, toexit);
                 RotateAll(robot, angle);
                 if(angle==Angle.Clockwise)
                 {
@@ -496,34 +500,62 @@ namespace Model.Model
             }
         }
 
-        private bool CanRotateClockwise(Robot robot)
+        private bool CanRotateClockwise(Robot robot, List<XYcoordinates> toexit)
         {
             for (int i = 0; i < (robot.AllConnections()).Count(); i++)
             {
                 int newX = robot.X + robot.Y - (robot.AllConnections())[i].Y;
                 int newY = -robot.X + robot.Y + (robot.AllConnections())[i].X;
-                if(newX<0 || newY<0 || newX>=_board.Width || newY>=_board.Height || 
-                    !(_board.GetFieldValue(newX,newY) is Empty))
+                if(newX>=0 && newY>=0 && newX<_board.Width && newY<_board.Height)
+                {
+                    if(_board.GetFieldValue(newX,newY) is Empty)
+                    {
+                        continue;
+                    }
+                    else if(_board.GetFieldValue(newX, newY) is Exit)
+                    {
+                        toexit.Add(new XYcoordinates
+                            ((robot.AllConnections())[i].X, (robot.AllConnections())[i].Y));
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
                 {
                     return false;
                 }
-
             }
             return true;
         }
 
-        private bool CanRotateCounterClockwise(Robot robot)
+        private bool CanRotateCounterClockwise(Robot robot, List<XYcoordinates> toexit)
         {
             for (int i = 0; i < (robot.AllConnections()).Count(); i++)
             {
                 int newX = robot.X - robot.Y + (robot.AllConnections())[i].Y;
                 int newY = robot.X + robot.Y - (robot.AllConnections())[i].X;
-                if (newX < 0 || newY < 0 || newX >= _board.Width || newY >= _board.Height ||
-                    !(_board.GetFieldValue(newX, newY) is Empty))
+                if (newX >= 0 && newY >= 0 && newX < _board.Width && newY < _board.Height)
+                {
+                    if (_board.GetFieldValue(newX, newY) is Empty)
+                    {
+                        continue;
+                    }
+                    else if (_board.GetFieldValue(newX, newY) is Exit)
+                    {
+                        toexit.Add(new XYcoordinates
+                            ((robot.AllConnections())[i].X, (robot.AllConnections())[i].Y));
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
                 {
                     return false;
                 }
-
             }
             return true;
         }

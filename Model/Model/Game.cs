@@ -9,6 +9,8 @@ using System.Linq;
 using System.Diagnostics.Eventing.Reader;
 using static System.Net.Mime.MediaTypeNames;
 using System.Windows;
+using System.Windows.Controls.Ribbon;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Model.Model
 {
@@ -501,8 +503,10 @@ namespace Model.Model
                     OnUpdateFields(robot, Direction.WEST, Action.Turn, true);
                 }
             }
-
-
+            else
+            {
+                OnUpdateFields(robot, Direction.WEST, Action.Turn, false);
+            }
         }
 
         private void RotateAll(Robot robot, Angle angle)
@@ -622,8 +626,8 @@ namespace Model.Model
 
     #endregion
 
-    #region ConnectRobot
-        public void ConnectRobot(Robot robot, int cX, int cY)
+        #region ConnectRobot
+        public void ConnectRobot(Robot robot)
         {
             _actionDirection = robot.Direction;
             if (_actionDirection == null)
@@ -707,31 +711,29 @@ namespace Model.Model
             }
         }
 
-        public void ConnectToEast(Robot robot, int cX, int cY )
+        public void ConnectTo(Robot robot, int cX, int cY)
         {
-            if(_board.GetFieldValue(cX, cY) is Cube && !robot.IsConnected(new XYcoordinates(cX, cY)))
+            if((_board.GetFieldValue(cX, cY) is Cube) && !robot.IsConnected(new XYcoordinates(cX, cY)))
             {
-                if(cX==robot.X+1 && cY==robot.Y)
+                if((robot.X + 1 == cX && robot.Y == cY)
+                    || (robot.X - 1 == cX && robot.Y == cY)
+                    || (robot.X == cX && robot.Y - 1 == cY)
+                    || (robot.X == cX && robot.Y + 1 == cY)
+                    || robot.IsConnected(new XYcoordinates(cX - 1,cY))
+                    || robot.IsConnected(new XYcoordinates(cX + 1, cY))
+                    || robot.IsConnected(new XYcoordinates(cX, cY - 1))
+                    || robot.IsConnected(new XYcoordinates(cX, cY + 1)))
                 {
                     Cube cube = (Cube)_board.GetFieldValue(cX, cY);
                     robot.AddConnection(new XYcoordinates(cX, cY));
                     robot.addHealthColor(cube.Health, cube.Color);
+                    OnUpdateFields(robot, Direction.EAST, Action.ConnectRobot, true);
                 }
-                else if(robot.IsConnected(new XYcoordinates(robot.X+1, robot.Y)) &&
-                    ((cX==robot.X + 2 && cY==robot.Y) ||
-                    (cX == robot.X + 1 && cY == robot.Y - 1) ||
-                    (cX == robot.X + 1 && cY == robot.Y + 1)))
+                else
                 {
-                    Cube cube = (Cube)_board.GetFieldValue(cX, cY);
-                    robot.AddConnection(new XYcoordinates(cX, cY));
-                    robot.addHealthColor(cube.Health, cube.Color);
-                }
-                else if()
-                {
-
+                    OnUpdateFields(robot, Direction.EAST, Action.ConnectRobot, false);
                 }
             }
-            
         }
         #endregion
 
@@ -740,8 +742,6 @@ namespace Model.Model
         public void DisconnectRobot(Robot robot) {
             robot.clearConnections();
             OnUpdateFields(robot, Direction.WEST, Action.DisconnectRobot, true);
-
-           
         }
 
         #endregion
@@ -761,130 +761,63 @@ namespace Model.Model
         #region Clean
 
         public void Clean(Robot robot) {
-            if (robot.Direction == Direction.EAST)
+            if (robot.Direction == Direction.EAST && CleanDirection(robot, 1, 0))
             {
-                if(_board.GetFieldValue(robot.X+1, robot.Y) is Obstacle)
-                {
-                    Obstacle obs = (Obstacle)_board.GetFieldValue(robot.X + 1, robot.Y);
-                    obs.DecreaseHealth();
-                    if(obs.Health==0)
-                    {
-                        _board.SetValueNewField(new Empty(robot.X + 1, robot.Y));
-                    } 
-                    else
-                    {
-                        _board.SetValueNewField(obs);
-                    }
-                }
-                else if(_board.GetFieldValue(robot.X + 1, robot.Y) is Cube &&
-                    !robot.IsConnected(new XYcoordinates(robot.X + 1, robot.Y)))
-                {
-                    Cube cube = (Cube)_board.GetFieldValue(robot.X + 1, robot.Y);
-                    cube.DecreaseHealth();
-                    if (cube.Health == 0)
-                    {
-                        _board.SetValueNewField(new Empty(robot.X + 1, robot.Y));
-                    }
-                    else
-                    {
-                        _board.SetValueNewField(cube);
-                    }
-                }
+                OnUpdateFields(robot, robot.Direction, Action.Clean, true);
             }
-            else if (robot.Direction == Direction.WEST)
+            else if (robot.Direction == Direction.WEST &&  CleanDirection(robot, -1, 0))
             {
-                if (_board.GetFieldValue(robot.X - 1, robot.Y) is Obstacle)
-                {
-                    Obstacle obs = (Obstacle)_board.GetFieldValue(robot.X - 1, robot.Y);
-                    obs.DecreaseHealth();
-                    if (obs.Health == 0)
-                    {
-                        _board.SetValueNewField(new Empty(robot.X - 1, robot.Y));
-                    }
-                    else
-                    {
-                        _board.SetValueNewField(obs);
-                    }
-                }
-                else if (_board.GetFieldValue(robot.X - 1, robot.Y) is Cube &&
-                   !robot.IsConnected(new XYcoordinates(robot.X - 1, robot.Y)))
-                {
-                    Cube cube = (Cube)_board.GetFieldValue(robot.X - 1, robot.Y);
-                    cube.DecreaseHealth();
-                    if (cube.Health == 0)
-                    {
-                        _board.SetValueNewField(new Empty(robot.X - 1, robot.Y));
-                    }
-                    else
-                    {
-                        _board.SetValueNewField(cube);
-                    }
-                }
+                OnUpdateFields(robot, robot.Direction, Action.Clean, true);
             }
-            else if (robot.Direction == Direction.NORTH)
+            else if (robot.Direction == Direction.NORTH && CleanDirection(robot, 0, -1))
             {
-                if (_board.GetFieldValue(robot.X, robot.Y-1) is Obstacle)
-                {
-                    Obstacle obs = (Obstacle)_board.GetFieldValue(robot.X , robot.Y-1);
-                    obs.DecreaseHealth();
-                    if (obs.Health == 0)
-                    {
-                        _board.SetValueNewField(new Empty(robot.X, robot.Y-1));
-                    }
-                    else
-                    {
-                        _board.SetValueNewField(obs);
-                    }
-                }
-                else if (_board.GetFieldValue(robot.X, robot.Y-1) is Cube &&
-                   !robot.IsConnected(new XYcoordinates(robot.X, robot.Y-1)))
-                {
-                    Cube cube = (Cube)_board.GetFieldValue(robot.X, robot.Y-1);
-                    cube.DecreaseHealth();
-                    if (cube.Health == 0)
-                    {
-                        _board.SetValueNewField(new Empty(robot.X, robot.Y-1));
-                    }
-                    else
-                    {
-                        _board.SetValueNewField(cube);
-                    }
-                }
+                OnUpdateFields(robot, robot.Direction, Action.Clean, true);
             }
-            else if (robot.Direction == Direction.SOUTH)
+            else if (robot.Direction == Direction.SOUTH && CleanDirection(robot, 0, 1))
             {
-                if (_board.GetFieldValue(robot.X, robot.Y + 1) is Obstacle)
-                {
-                    Obstacle obs = (Obstacle)_board.GetFieldValue(robot.X, robot.Y + 1);
-                    obs.DecreaseHealth();
-                    if (obs.Health == 0)
-                    {
-                        _board.SetValueNewField(new Empty(robot.X, robot.Y + 1));
-                    }
-                    else
-                    {
-                        _board.SetValueNewField(obs);
-                    }
-                }
-                else if (_board.GetFieldValue(robot.X, robot.Y+1) is Cube &&
-                   !robot.IsConnected(new XYcoordinates(robot.X, robot.Y+1)))
-                {
-                    Cube cube = (Cube)_board.GetFieldValue(robot.X, robot.Y+1);
-                    cube.DecreaseHealth();
-                    if (cube.Health == 0)
-                    {
-                        _board.SetValueNewField(new Empty(robot.X, robot.Y+1));
-                    }
-                    else
-                    {
-                        _board.SetValueNewField(cube);
-                    }
-                }
+                OnUpdateFields(robot, robot.Direction, Action.Clean, true);
+            }
+            else
+            {
+                OnUpdateFields(robot, robot.Direction, Action.Clean, false);
+            }
+        }
 
+        private bool CleanDirection(Robot robot, int a, int b)
+        {
+            if (_board.GetFieldValue(robot.X + a, robot.Y + b) is Obstacle)
+            {
+                Obstacle obs = (Obstacle)_board.GetFieldValue(robot.X + a, robot.Y + b);
+                obs.DecreaseHealth();
+                if (obs.Health == 0)
+                {
+                    _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));
+                }
+                else
+                {
+                    _board.SetValueNewField(obs);
+                }
+                return true;
             }
-            OnUpdateFields(robot, robot.Direction, Action.Clean, true);
-
-        
+            else if (_board.GetFieldValue(robot.X + a, robot.Y + b) is Cube &&
+                !robot.IsConnected(new XYcoordinates(robot.X + a, robot.Y + b)))
+            {
+                Cube cube = (Cube)_board.GetFieldValue(robot.X + a, robot.Y + b);
+                cube.DecreaseHealth();
+                if (cube.Health == 0)
+                {
+                    _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));
+                }
+                else
+                {
+                    _board.SetValueNewField(cube);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         #endregion

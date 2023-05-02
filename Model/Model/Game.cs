@@ -623,7 +623,7 @@ namespace Model.Model
     #endregion
 
     #region ConnectRobot
-        public void ConnectRobot(Robot robot)
+        public void ConnectRobot(Robot robot, int cX, int cY)
         {
             _actionDirection = robot.Direction;
             if (_actionDirection == null)
@@ -705,6 +705,33 @@ namespace Model.Model
             {
                 return false;
             }
+        }
+
+        public void ConnectToEast(Robot robot, int cX, int cY )
+        {
+            if(_board.GetFieldValue(cX, cY) is Cube && !robot.IsConnected(new XYcoordinates(cX, cY)))
+            {
+                if(cX==robot.X+1 && cY==robot.Y)
+                {
+                    Cube cube = (Cube)_board.GetFieldValue(cX, cY);
+                    robot.AddConnection(new XYcoordinates(cX, cY));
+                    robot.addHealthColor(cube.Health, cube.Color);
+                }
+                else if(robot.IsConnected(new XYcoordinates(robot.X+1, robot.Y)) &&
+                    ((cX==robot.X + 2 && cY==robot.Y) ||
+                    (cX == robot.X + 1 && cY == robot.Y - 1) ||
+                    (cX == robot.X + 1 && cY == robot.Y + 1)))
+                {
+                    Cube cube = (Cube)_board.GetFieldValue(cX, cY);
+                    robot.AddConnection(new XYcoordinates(cX, cY));
+                    robot.addHealthColor(cube.Health, cube.Color);
+                }
+                else if()
+                {
+
+                }
+            }
+            
         }
         #endregion
 

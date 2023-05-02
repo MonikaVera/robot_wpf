@@ -429,16 +429,20 @@ namespace Model.Model
 
         private void MoveToDirection(Robot robot, Direction dir)
         {
-            _board.SetValueNewField(new Empty(robot.X, robot.Y));
+            if(IsOnEdge(robot.X, robot.Y)) 
+            {
+                _board.SetValueNewField(new Exit(robot.X, robot.Y));
+            }
+            else
+            {
+                _board.SetValueNewField(new Empty(robot.X, robot.Y));
+            }
+            
             List<XYcoordinates> connections = robot.AllConnections();
-            int[] HealthArr= new int[connections.Count];
-            Color[] ColorArr= new Color[connections.Count];
             for (int i = 0; i < connections.Count; i++)
             {
                 if(IsOnBoard(connections[i].X, connections[i].Y))
                 {
-                    HealthArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Health;
-                    ColorArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Color;
                     if (IsOnEdge(connections[i].X, connections[i].Y))
                     {
                         _board.SetValueNewField(new Exit(connections[i].X, connections[i].Y));
@@ -474,7 +478,7 @@ namespace Model.Model
                 if(IsOnBoard(connectionsNew[i].X, connectionsNew[i].Y))
                 {
                     _board.SetValueNewField( new Cube(connectionsNew[i].X, connectionsNew[i].Y,
-                        HealthArr[i], ColorArr[i]));
+                        robot.getHealthAt(i), robot.getColorAt(i)));
                 }
             }
         }
@@ -504,14 +508,10 @@ namespace Model.Model
         private void RotateAll(Robot robot, Angle angle)
         {
             List<XYcoordinates> connections = robot.AllConnections();
-            int[] HealthArr = new int[connections.Count];
-            Color[] ColorArr = new Color[connections.Count];
             for (int i = 0; i < connections.Count; i++)
             {
                 if(IsOnBoard(connections[i].X, connections[i].Y))
                 {
-                    HealthArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Health;
-                    ColorArr[i] = ((Cube)_board.GetFieldValue(connections[i].X, connections[i].Y)).Color;
                     if(IsOnEdge(connections[i].X, connections[i].Y))
                     {
                         _board.SetValueNewField(new Exit(connections[i].X, connections[i].Y));
@@ -565,7 +565,7 @@ namespace Model.Model
                 if(IsOnBoard(connectionsNew[i].X, connectionsNew[i].Y))
                 {
                      _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
-                        HealthArr[i], ColorArr[i]));
+                        robot.getHealthAt(i), robot.getColorAt(i)));
                 }
             }
         }
@@ -622,7 +622,7 @@ namespace Model.Model
 
     #endregion
 
-        #region ConnectRobot
+    #region ConnectRobot
         public void ConnectRobot(Robot robot)
         {
             _actionDirection = robot.Direction;
@@ -633,14 +633,8 @@ namespace Model.Model
 
             if (_actionDirection == Direction.EAST)
             {
-                int x = robot.X + 1;
-                while (robot.IsConnected(new XYcoordinates(x, robot.Y)))
+                if (ConnectDirection(robot,1,0))
                 {
-                    x = x + 1;
-                }
-                if (x < _board.Width && _board.GetFieldValue(x, robot.Y) is Cube)
-                {
-                    robot.AddConnection(new XYcoordinates(x, robot.Y));
                     OnUpdateFields(robot, Direction.EAST, Action.ConnectRobot, true);
                 }
                 else
@@ -650,14 +644,8 @@ namespace Model.Model
             }
             else if (_actionDirection == Direction.WEST)
             {
-                int x = robot.X - 1;
-                while (robot.IsConnected(new XYcoordinates(x, robot.Y)))
+                if (ConnectDirection(robot, -1, 0))
                 {
-                    x = x - 1;
-                }
-                if (x >= 0 && _board.GetFieldValue(x, robot.Y) is Cube)
-                {
-                    robot.AddConnection(new XYcoordinates(x, robot.Y));
                     OnUpdateFields(robot, Direction.WEST, Action.ConnectRobot, true);
                 }
                 else
@@ -667,14 +655,8 @@ namespace Model.Model
             }
             else if (_actionDirection == Direction.NORTH)
             {
-                int y = robot.Y - 1;
-                while (robot.IsConnected(new XYcoordinates(robot.X, y)))
+                if (ConnectDirection(robot, 0,-1))
                 {
-                    y = y - 1;
-                }
-                if (y >= 0 && _board.GetFieldValue(robot.X, y) is Cube)
-                {
-                    robot.AddConnection(new XYcoordinates(robot.X, y));
                     OnUpdateFields(robot, Direction.NORTH, Action.ConnectRobot, true);
                 }
                 else
@@ -684,14 +666,8 @@ namespace Model.Model
             }
             else if (_actionDirection == Direction.SOUTH)
             {
-                int y = robot.Y + 1;
-                while (robot.IsConnected(new XYcoordinates(robot.X, y)))
+                if (ConnectDirection(robot, 0, 1))
                 {
-                    y = y + 1;
-                }
-                if (y < _board.Height && _board.GetFieldValue(robot.X, y) is Cube)
-                {
-                    robot.AddConnection(new XYcoordinates(robot.X, y));
                     OnUpdateFields(robot, Direction.SOUTH, Action.ConnectRobot, true);
                 }
                 else
@@ -708,12 +684,34 @@ namespace Model.Model
 
 
         }
+
+        private bool ConnectDirection(Robot robot, int a, int b)
+        {
+            int x = robot.X + a;
+            int y = robot.Y + b;
+            while (robot.IsConnected(new XYcoordinates(x, y)))
+            {
+                x = x + a;
+                y = y + b;
+            }
+            if (IsOnBoard(x,y) && _board.GetFieldValue(x, y) is Cube)
+            {
+                Cube cube = (Cube)_board.GetFieldValue(x, y);
+                robot.AddConnection(new XYcoordinates(x, y));
+                robot.addHealthColor(cube.Health, cube.Color);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         #endregion
 
         #region DisconnectRobot
 
         public void DisconnectRobot(Robot robot) {
-            Robot.clearConnections();
+            robot.clearConnections();
             OnUpdateFields(robot, Direction.WEST, Action.DisconnectRobot, true);
 
            

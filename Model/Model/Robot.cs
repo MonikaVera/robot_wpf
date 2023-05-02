@@ -12,6 +12,8 @@ namespace Model.Model
         #region Fields
         private Direction _direction;
         private List<XYcoordinates> _connected;
+        private List<int> _healthConnected;
+        private List<Color> _colorConnected;
         private Team? _team;
         //private int _x;
         //private int _y;
@@ -24,6 +26,8 @@ namespace Model.Model
             _Y = y; 
             _direction = direction; 
             _connected = new List<XYcoordinates>();
+            _healthConnected= new List<int>();
+            _colorConnected= new List<Color>();
         }
         public Robot(int x, int y, Direction direction, List<XYcoordinates> connected) { 
             _X = x;
@@ -65,6 +69,8 @@ namespace Model.Model
         public void clearConnections()
         {
             _connected.Clear();
+            _healthConnected.Clear();
+            _colorConnected.Clear();
         }
 
 
@@ -138,6 +144,15 @@ namespace Model.Model
             _X = x;
             _Y = y;
         }
+
+        public void addHealthColor(int health, Color color)
+        {
+            _healthConnected.Add(health);
+            _colorConnected.Add(color);
+        }
+
+        public int getHealthAt(int i) { return _healthConnected[i]; }
+        public Color getColorAt(int i) { return _colorConnected[i];}
 
         #endregion
 

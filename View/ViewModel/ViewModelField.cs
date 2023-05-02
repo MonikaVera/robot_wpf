@@ -164,7 +164,7 @@ namespace View.ViewModel
             else if (field is Robot)
             {
                 Robot robot = (Robot)field;
-                if (robot.Direction == Direction.EAST)
+                if (robot.Direction == Direction.EAST) //&& robot.Team == 
                 {
                     _picture = "robot_right.jpg";
                 }

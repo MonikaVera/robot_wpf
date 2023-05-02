@@ -710,31 +710,6 @@ namespace Model.Model
                 return false;
             }
         }
-
-        public void ConnectTo(Robot robot, int cX, int cY)
-        {
-            if((_board.GetFieldValue(cX, cY) is Cube) && !robot.IsConnected(new XYcoordinates(cX, cY)))
-            {
-                if((robot.X + 1 == cX && robot.Y == cY)
-                    || (robot.X - 1 == cX && robot.Y == cY)
-                    || (robot.X == cX && robot.Y - 1 == cY)
-                    || (robot.X == cX && robot.Y + 1 == cY)
-                    || robot.IsConnected(new XYcoordinates(cX - 1,cY))
-                    || robot.IsConnected(new XYcoordinates(cX + 1, cY))
-                    || robot.IsConnected(new XYcoordinates(cX, cY - 1))
-                    || robot.IsConnected(new XYcoordinates(cX, cY + 1)))
-                {
-                    Cube cube = (Cube)_board.GetFieldValue(cX, cY);
-                    robot.AddConnection(new XYcoordinates(cX, cY));
-                    robot.addHealthColor(cube.Health, cube.Color);
-                    OnUpdateFields(robot, Direction.EAST, Action.ConnectRobot, true);
-                }
-                else
-                {
-                    OnUpdateFields(robot, Direction.EAST, Action.ConnectRobot, false);
-                }
-            }
-        }
         #endregion
 
         #region DisconnectRobot
@@ -748,7 +723,9 @@ namespace Model.Model
 
         #region ConnectCubes
 
-        public void ConnectCubes(Robot robot) { /*code*/ }
+        public void ConnectCubes(Robot robot, XYcoordinates coords1) {
+            
+        }
 
         #endregion
 

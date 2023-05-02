@@ -28,5 +28,17 @@ namespace Model.Model
         }
 
         public int NewPoints { get { return _points; } set { _points += value; } }
+
+        public bool IsInThisTeam(Robot robot)
+        {
+            foreach(Robot robot2 in _robots) 
+            { 
+                if(robot.X==robot2.X && robot.Y==robot2.Y)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }

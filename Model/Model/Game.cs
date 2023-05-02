@@ -723,8 +723,58 @@ namespace Model.Model
 
         #region ConnectCubes
 
-        public void ConnectCubes(Robot robot, XYcoordinates coords1) {
+        public void ConnectCubes(Robot robot, XYcoordinates ownCube, XYcoordinates wantsToConnect) {
+            if(_board.GetFieldValue(ownCube.X, ownCube.Y) is Cube &&
+                _board.GetFieldValue(wantsToConnect.X, wantsToConnect.Y) is Cube
+                && robot.IsConnected(ownCube) && !robot.IsConnected(wantsToConnect)
+                && NextToEachOther(ownCube, wantsToConnect))
+            {
+                foreach(Robot r in _team1.Robots)
+                {
+                    if((r.WantsToConnectTo).Equals(ownCube) && (r.OwnCube).Equals(wantsToConnect))
+                    {
+                        Cube cube1 = (Cube)_board.GetFieldValue(ownCube.X, ownCube.Y);
+                        r.AddConnection(ownCube);
+                        r.addHealthColor(cube1.Health, cube1.Color);
+                        Cube cube2 = (Cube)_board.GetFieldValue(wantsToConnect.X, wantsToConnect.Y);
+                        robot.AddConnection(wantsToConnect);
+                        r.addHealthColor(cube2.Health, cube2.Color);
+                        r.WantsToConnectTo = null;
+                        r.OwnCube = null;
+                        return;
+                    }
+                }
+                foreach (Robot r in _team2.Robots)
+                {
+                    if ((r.WantsToConnectTo).Equals(ownCube) && (r.OwnCube).Equals(wantsToConnect))
+                    {
+                        Cube cube1 = (Cube)_board.GetFieldValue(ownCube.X, ownCube.Y);
+                        r.AddConnection(ownCube);
+                        r.addHealthColor(cube1.Health, cube1.Color);
+                        Cube cube2 = (Cube)_board.GetFieldValue(wantsToConnect.X, wantsToConnect.Y);
+                        robot.AddConnection(wantsToConnect);
+                        r.addHealthColor(cube2.Health, cube2.Color);
+                        r.WantsToConnectTo = null;
+                        r.OwnCube = null;
+                        return;
+                    }
+                }
+                robot.WantsToConnectTo = wantsToConnect;
+                robot.OwnCube = ownCube;
+            }
             
+        }
+
+        private bool NextToEachOther(XYcoordinates ownCube, XYcoordinates wantsToConnect)
+        {
+            if((ownCube.X + 1 == wantsToConnect.X && ownCube.Y == wantsToConnect.Y)
+                || (ownCube.X - 1 == wantsToConnect.X && ownCube.Y == wantsToConnect.Y)
+                || (ownCube.X == wantsToConnect.X && ownCube.Y + 1 == wantsToConnect.Y)
+                || (ownCube.X == wantsToConnect.X && ownCube.Y - 1 == wantsToConnect.Y)) 
+            { 
+                return true;
+            }
+            return false;
         }
 
         #endregion

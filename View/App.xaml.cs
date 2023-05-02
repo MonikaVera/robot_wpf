@@ -126,10 +126,10 @@ namespace View
             _viewerMode.DataContext = _viewModel;
             _mainWindow.Content = _viewerMode;
         }
-        int i = 1;
+        int i;
         private void ViewModel_Diary(object? sender, EventArgs e)
         {
-
+            i = 1;
             _model.NewGame();
             //while (File.Exists("file" + i + ".txt"))
             if(File.Exists("file" + i + ".txt"))

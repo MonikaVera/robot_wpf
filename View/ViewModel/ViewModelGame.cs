@@ -178,7 +178,7 @@ namespace View.ViewModel
                         ++y;
                         Fields.Add(field);
                     }
-                    else
+                    else if(j >= 0 && i >= 0 && j < _model.Board.Height && i < _model.Board.Width)
                     {
                         ViewModelField field = new ViewModelField();
                         //field.SetText(_model.Board.GetFieldValue(0, 0));//Black
@@ -187,6 +187,10 @@ namespace View.ViewModel
                         field.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
                         ++y;
                         Fields.Add(field);
+                    }
+                    else
+                    {
+                        ++y;
                     }
                 ++x;
             }
@@ -216,6 +220,7 @@ namespace View.ViewModel
                         FieldsMap.Add(fieldMap);
                     }
             GenerateTableVM();
+            _model.SaveGameAsync("file" + 1 + ".txt");
 
         }
 
@@ -234,7 +239,6 @@ namespace View.ViewModel
 
                     FieldsMapView.Add(fieldMapView);
                 }
-            _model.SaveGameAsync("file" + 1 + ".txt");
         }
 
         public void GenerateTasks()

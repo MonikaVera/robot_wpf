@@ -58,6 +58,11 @@ namespace Model.Model
         }
     }
 
+    public class None : Field
+    {
+
+    }
+
     public enum Color
     {
         RED, GREEN, BLUE, YELLOW, PURPLE, ORANGE, PINK, GRAY

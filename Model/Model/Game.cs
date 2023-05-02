@@ -42,6 +42,11 @@ namespace Model.Model
         private Direction? _actionDirection;
         private int _team1points;
         private int _team2points;
+        private int _teamMembers;
+        private int _nextPlayerFromTeam1;
+        private int _nextPlayerFromTeam2;
+        private bool _nextTeam1;
+        private Robot _previousRobot;
 
         #endregion
 
@@ -107,14 +112,19 @@ namespace Model.Model
 
         public void NewGame()
         {
+            _teamMembers = 4;
             _board = new Board(_width, _height);
-            _robot = new Robot(1, 1, Direction.EAST);
-            _board.SetValue(1, 1, _robot);
+            _team1 = new Team(CreateTeam(_teamMembers), _teamMembers);
+            _team2 = new Team(CreateTeam(_teamMembers), _teamMembers);
+            _robot = _team1.GetRobot(0);
             _noticeBoard = new NoticeBoard();
             _gameTime = 30;
             _round = 1;
             _team1points = 0;
             _team2points = 0;
+            _nextPlayerFromTeam1 = 1;
+            _nextPlayerFromTeam2 = 0;
+            _nextTeam1 = false;
         }
 
         public void LoadGameAsync(string _filepath) {
@@ -143,6 +153,36 @@ namespace Model.Model
         #endregion
 
         #region Private Methods
+
+        private Robot[] CreateTeam(int number)
+        {
+            Robot[] robots = new Robot[number];
+            for (int i = 0; i < number; i++)
+            {
+                Robot robot = RandomRobot();
+                robots[i] = robot;
+            }
+            return robots;
+        }
+
+        private Robot RandomRobot()
+        {
+            Random rnd = new Random();
+            int x;
+            int y;
+            do
+            {
+                x = rnd.Next(1, _board.Width - 1);
+                y = rnd.Next(1, _board.Height - 1);
+            }
+            while (!(_board.GetFieldValue(x, y) is Empty));
+
+            Direction direction = (Direction)rnd.Next(0, 4);
+            Robot robot = new Robot(x, y, direction);
+            _board.SetValue(x, y, robot);
+
+            return robot;
+        }
 
         private Direction? CalculateDirection() 
         {
@@ -194,7 +234,11 @@ namespace Model.Model
 
         private void OnNewRound(Team team)
         {
-            _round++;
+            if (_nextPlayerFromTeam1==0 && _nextPlayerFromTeam2 == 0)
+            {
+                _round++;
+            }
+           
             _gameTime = 30;
             if (team == _team1)
             {
@@ -318,7 +362,8 @@ namespace Model.Model
                 OnGameOver(true, _team1);
                 return;
             }
-            OnNewRound(_team1);
+
+            
         }
 
         public bool IsOnBoard(int x, int y)
@@ -452,6 +497,8 @@ namespace Model.Model
                     OnUpdateFields(robot, Direction.WEST, Action.Turn, true);
                 }
             }
+
+
         }
 
         private void RotateAll(Robot robot, Angle angle)
@@ -658,9 +705,7 @@ namespace Model.Model
                 OnGameOver(true, _team1);
                 return;
             }
-               
 
-            OnNewRound(_team1);
 
         }
         #endregion
@@ -670,6 +715,8 @@ namespace Model.Model
         public void DisconnectRobot(Robot robot) {
             Robot.clearConnections();
             OnUpdateFields(robot, Direction.WEST, Action.DisconnectRobot, true);
+
+           
         }
 
         #endregion
@@ -811,15 +858,74 @@ namespace Model.Model
 
             }
             OnUpdateFields(robot, robot.Direction, Action.Clean, true);
+
+        
         }
 
         #endregion
 
         #region Wait
 
-        public void Wait(Robot robot) { /*code*/}
+        public void Wait(Robot robot) {
+            OnUpdateFields(robot, robot.Direction, Action.Wait, true);
+            
+        }
 
         #endregion
+
+        private void NextTeam()
+        {
+            if (_nextTeam1)
+            {
+                _nextTeam1 = false;
+                if (_nextPlayerFromTeam1 < _teamMembers - 1)
+                {
+                    _nextPlayerFromTeam1++;
+                }
+                else
+                {
+                    _nextPlayerFromTeam1 = 0;
+                }
+            }
+            else
+            {
+                _nextTeam1 = true;
+                if (_nextPlayerFromTeam2 < _teamMembers - 1)
+                {
+                    _nextPlayerFromTeam2++;
+                }
+                else
+                {
+                    _nextPlayerFromTeam2 = 0;
+                }
+            }
+        }
+
+        private Robot NextRobot()
+        {
+            if (_nextTeam1)
+            {
+                return _team1.GetRobot(_nextPlayerFromTeam1);
+            }
+            else
+            {
+                return _team2.GetRobot(_nextPlayerFromTeam2);
+            }
+        }
+
+        public void NextPlayer()
+        {
+            _robot = NextRobot();
+            if (_nextPlayerFromTeam1 == 0 && _nextPlayerFromTeam2 == 0)
+            {
+                _round++;
+            }
+            NextTeam();
+            _gameTime = 30;
+           
+           
+        }
+
     }
 
 

@@ -55,6 +55,9 @@ namespace View
             _viewModel.ExitClick += new EventHandler(ViewModel_Exit);
             _viewModel.LoadGame += new EventHandler(ViewModel_LoadGame); // kezeljük a nézetmodell eseményeit
             _viewModel.SaveGame += new EventHandler(ViewModel_SaveGame);
+            _viewModel.StartTimer += new EventHandler(ViewModel_StartTimer);
+            _viewModel.StopTimer += new EventHandler(ViewModel_StopTimer);
+
 
             _mainWindow = new MainWindow();
             _mainPage = new MainPage();
@@ -76,6 +79,17 @@ namespace View
         {
             _model.AdvanceTime();
         }
+
+        private void ViewModel_StopTimer(object sender, EventArgs e)
+        {
+            _timer.Stop();
+        }
+
+        private void ViewModel_StartTimer(object sender, EventArgs e)
+        {
+            _timer.Start();
+        }
+
 
         private void MainWindow_Closing(object? sender, CancelEventArgs e)
         {

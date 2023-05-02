@@ -220,6 +220,7 @@ namespace View.ViewModel
                         FieldsMap.Add(fieldMap);
                     }
             GenerateTableVM();
+            _model.SaveGameAsync("file" + 1 + ".txt");
 
         }
 
@@ -238,7 +239,6 @@ namespace View.ViewModel
 
                     FieldsMapView.Add(fieldMapView);
                 }
-            _model.SaveGameAsync("file" + 1 + ".txt");
         }
 
         public void GenerateTasks()

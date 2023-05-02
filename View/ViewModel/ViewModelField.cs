@@ -113,13 +113,27 @@ namespace View.ViewModel
                 {
                     _picture = "water.jpg";
                 } 
-                else
+                else if (((Obstacle)field).Health == 1)
                 {
-                    // _picture = "obstacle.jpg";
                     _picture = "cart1.jpg";
                 }
-                
-                
+                else if (((Obstacle)field).Health == 2)
+                {
+                    _picture = "cart2.jpg";
+                }
+                else if (((Obstacle)field).Health == 3)
+                {
+                    _picture = "cart3.jpg";
+                }
+                else if (((Obstacle)field).Health == 4)
+                {
+                    _picture = "cart4.jpg";
+                }
+                else if (((Obstacle)field).Health == 5)
+                {
+                    _picture = "cart5.jpg";
+                }
+
             }
             else if (field is Cube )
             {

@@ -575,7 +575,7 @@ namespace Model.Model
 
     #endregion
 
-        #region ConnectRobot
+    #region ConnectRobot
         public void ConnectRobot(Robot robot)
         {
             _actionDirection = robot.Direction;

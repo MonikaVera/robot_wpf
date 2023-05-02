@@ -155,7 +155,6 @@ namespace View.ViewModel
             //jatektabla letrehozasa
             Fields = new ObservableCollection<ViewModelField>();
             FieldsMap = new ObservableCollection<ViewModelField>();
-
             int x = 0, y = 0;
             for (int j = _model.Robot.Y - 3; j <= _model.Robot.Y + 3; j++)
             {
@@ -174,7 +173,7 @@ namespace View.ViewModel
                     else
                     {
                         ViewModelField field = new ViewModelField();
-                        // field.SetText(_model.Board.GetFieldValue(i, j));//Black
+                        //field.SetText(_model.Board.GetFieldValue(0, 0));//Black
                         field.IndX = x;
                         field.IndY = y;
                         field.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
@@ -279,7 +278,7 @@ namespace View.ViewModel
                     else
                     {
                         ViewModelField field = Fields[y];
-                        field.SetText(_model.Board.GetFieldValue(0, 0));
+                        field.SetPicture(new None());
                         ++y;
                     }
 

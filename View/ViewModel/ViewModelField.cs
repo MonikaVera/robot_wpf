@@ -99,7 +99,11 @@ namespace View.ViewModel
         public void SetPicture(Field field)
         {
             //_text = _number.ToString();
-            if (field is Empty)
+            if(field is None)
+            {
+                _picture = "";
+            }
+            else if (field is Empty)
             {
                 _picture = "empty.jpg";
             }

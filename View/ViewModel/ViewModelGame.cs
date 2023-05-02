@@ -18,6 +18,7 @@ namespace View.ViewModel
         public ObservableCollection<VMTasksFields> FieldsTasks { get; set; }
 
         private Game _model;
+        private bool _canMove;
 
         #region Commands
         public DelegateCommand PlayerModeCommand { get; private set; }
@@ -27,6 +28,7 @@ namespace View.ViewModel
         public DelegateCommand DiaryCommand { get; private set; }
         public DelegateCommand ExitCommand { get; private set; }
         public DelegateCommand KeyDownCommand { get; private set; }
+        public DelegateCommand NextPlayerCommand { get; private set; }
         public DelegateCommand ChooseActionFieldCommand { get; private set; }
 
         public DelegateCommand NewGameCommand { get; private set; }
@@ -44,7 +46,11 @@ namespace View.ViewModel
         public event EventHandler? ViewerModeNextClick;
         public event EventHandler? DiaryClick;
         public event EventHandler? ExitClick;
-        
+
+        public event EventHandler? StopTimer;
+        public event EventHandler? StartTimer;
+
+
 
         public event EventHandler ExitGame;
         public event EventHandler LoadGame;
@@ -110,6 +116,7 @@ namespace View.ViewModel
         {
             //jatek csatlakoztatasa
             _model = game;
+            _canMove = true;
             _model.GameAdvanced += new EventHandler<GameEventArgs>(Model_GameAdvanced);
             //_model.GameOver += new EventHandler<GameEventArgs>(Model_GameOver);
             _model.NewRound += new EventHandler<GameEventArgs>(Model_NewRound);
@@ -124,6 +131,7 @@ namespace View.ViewModel
             ViewerModeBack = new DelegateCommand(param => OnViewerModeBackClick());
             ViewerModeNext = new DelegateCommand(param => OnViewerModeNextClick());
             KeyDownCommand = new DelegateCommand(param => KeyDown(Convert.ToString(param)));
+            NextPlayerCommand = new DelegateCommand(param => NextPlayer());
 
             LoadGameCommand = new DelegateCommand(param => OnLoadGame());
             SaveGameCommand = new DelegateCommand(param => OnSaveGame());
@@ -332,7 +340,10 @@ namespace View.ViewModel
             // lekérdezzük, hogy hol helyezkedik épp a robot
             Int32 x = _model.Robot.X;
             Int32 y = _model.Robot.Y;
-
+            if (!_canMove)
+            {
+                return;
+            }
 
             if (action == "RIGHT" && (x + 1) < _model.Board.Width) // jobbra lépünk
             {
@@ -383,8 +394,26 @@ namespace View.ViewModel
                 _model.Wait(_model.Robot);
             }
 
-
+            _canMove = false;
             OnPropertyChanged(nameof(Round));
+            OnStopTimer();
+        }
+
+        private void NextPlayer()
+        {
+            if (_canMove)
+            {
+                return;
+            }
+            _model.NextPlayer();
+            RefreshTable();
+
+            OnPropertyChanged(nameof(GameTime));
+            OnPropertyChanged(nameof(Round));
+            OnPropertyChanged(nameof(Team1Points));
+            OnPropertyChanged(nameof(Team2Points));
+            OnStartTimer();
+            _canMove = true;
         }
 
         private void Model_GameAdvanced(object? sender, GameEventArgs e)
@@ -394,10 +423,20 @@ namespace View.ViewModel
 
         private void Model_NewRound(object? sender, GameEventArgs e)
         {
+            if (_canMove)
+            {
+                return;
+            }
+            _model.NextPlayer();
+            RefreshTable();
+
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Round));
             OnPropertyChanged(nameof(Team1Points));
             OnPropertyChanged(nameof(Team2Points));
+
+            _canMove = true;
+            OnStartTimer();
         }
 
         private void Model_UpdateFields(object obj, ActionEventArgs e)
@@ -551,6 +590,17 @@ namespace View.ViewModel
         {
 
         }
+
+        private void OnStartTimer()
+        {
+            StartTimer?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnStopTimer()
+        {
+            StopTimer?.Invoke(this, EventArgs.Empty);
+        }
+
 
 
         private void ReFresh() {/*code*/; }

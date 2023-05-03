@@ -414,7 +414,8 @@ namespace View.ViewModel
             {
                 if(firstCube!=null && lastCube!=null)
                 {
-                    _model.ConnectCubes(_model.Robot, firstCube, lastCube);
+                    //_model.ConnectCubes(_model.Robot, firstCube, lastCube);
+                    _model.ConnectCubes(_model.Robot);
                 }
                  
             }
@@ -435,7 +436,8 @@ namespace View.ViewModel
             {
                 if (firstCube != null && lastCube != null)
                 {
-                    _model.DisconnectCubes(_model.Robot, firstCube, lastCube);
+                    //_model.DisconnectCubes(_model.Robot, firstCube, lastCube);
+                    _model.DisconnectCubes(_model.Robot);
                 }
             }
             else if (action == "TURNEAST") // oramutatoval megegyezo iranyu forgas

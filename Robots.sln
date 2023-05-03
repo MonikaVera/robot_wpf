@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "View", "View\View.csproj", "{2A39353A-849B-4239-A7A9-3172BAFF944A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRobots", "TestRobots\TestRobots.csproj", "{CCC84EE8-562C-4941-B880-25A8EAFF0A53}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2A39353A-849B-4239-A7A9-3172BAFF944A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A39353A-849B-4239-A7A9-3172BAFF944A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A39353A-849B-4239-A7A9-3172BAFF944A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCC84EE8-562C-4941-B880-25A8EAFF0A53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCC84EE8-562C-4941-B880-25A8EAFF0A53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCC84EE8-562C-4941-B880-25A8EAFF0A53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCC84EE8-562C-4941-B880-25A8EAFF0A53}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -90,7 +90,7 @@
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <!--a gombokat egy rácsba fűzzük fel-->
-                    <UniformGrid Name="_unifGrid" Rows="7" Columns="7" Background="Black"/>
+                    <UniformGrid Name="_unifGrid" Rows="7" Columns="7" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
 
@@ -106,18 +106,14 @@
                             <Style TargetType="Button">
                                 <Style.Triggers>
 
-                                    <!-- <DataTrigger Binding="{Binding View}"  Value="No"> 
-                                        <Setter Property="Background" Value="Black" /> -->
-                                    <!--  </DataTrigger>
--->
-                                    <!-- <DataTrigger Binding="{Binding MovePlayer}"  Value="Up"/>
--->
-                                    <!-- <DataTrigger Binding="{Binding MovePlayer}"  Value="Left"/>
--->
-                                    <!--  <DataTrigger Binding="{Binding MovePlayer}"  Value="Right"/>
--->
-                                    <!-- <DataTrigger Binding="{Binding MovePlayer}"  Value="Down"/>
--->
+                                    <DataTrigger Binding="{Binding Connect}"  Value="yes"> 
+                                        <Setter Property="BorderThickness" Value="2.0"/>
+                                        <Setter Property="Background" Value="Red"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Connect}"  Value="no">
+                                        <Setter Property="BorderThickness" Value="0.0"/>
+                                    </DataTrigger>
+
                                 </Style.Triggers>
 
                             </Style>
@@ -151,54 +147,13 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                 <!--   <Button Command="{Binding TaskFieldChangeCommand}" CommandParameter="{Binding Number}" Content="{Binding Text}"> -->
-                        <Button Command="{Binding TaskFieldChangeCommand}" CommandParameter="{Binding Number}" >
-                            <Image Source="{Binding Image, TargetNullValue={x:Null}}" Stretch="Fill" />
-                            <Button.RenderTransform>
+                    <!--   <Button Command="{Binding TaskFieldChangeCommand}" CommandParameter="{Binding Number}" Content="{Binding Text}"> -->
+                    <Button Command="{Binding TaskFieldChangeCommand}" CommandParameter="{Binding Number}" >
+                        <Image Source="{Binding Image, TargetNullValue={x:Null}}" Stretch="Fill" />
+                        <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
                         </Button.RenderTransform>
-                        <Button.Style>
-                            <!-- gomb stílusa, ahol a színét megadjuk -->
-                            <Style TargetType="Button">
-                                <Style.Triggers>
-                                    <!-- a szín egy adatkötés hatására fog változni 
-                                    <DataTrigger Binding="{Binding Block}"  Value="Free">
-                                        <Setter Property="Background" Value="White" />
-                                    </DataTrigger> 
 
-                                    <DataTrigger Binding="{Binding Block}"  Value="Black">
-                                        <Setter Property="Background" Value="Black" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Red">
-                                        <Setter Property="Background" Value="Red" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Blue">
-                                        <Setter Property="Background" Value="Blue" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Green">
-                                        <Setter Property="Background" Value="Green" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Purple">
-                                        <Setter Property="Background" Value="Purple" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Purple">
-                                        <Setter Property="Background" Value="Yellow" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Pink">
-                                        <Setter Property="Background" Value="Pink" />
-                                    </DataTrigger> -->
-
-                                </Style.Triggers>
-
-
-                            </Style>
-                        </Button.Style>
                     </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
@@ -211,7 +166,6 @@
                 </Style>
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
-        <!--   </Grid> -->
 
         <!--map-->
         <ItemsControl Grid.Row="1" ItemsSource="{Binding FieldsMap}" HorizontalAlignment="Right" Height="240" VerticalAlignment="Center" Width="186" Background="Black">

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Model.Model;
 
 namespace View.ViewModel
@@ -199,6 +200,8 @@ namespace View.ViewModel
         /// Mezőváltoztató parancs lekérdezése, vagy beállítása.
         /// </summary>
         public DelegateCommand? ChooseActionFieldCommand { get; set; }
+        public Thickness BorderThickness { get; internal set; }
+        public System.Windows.Media.SolidColorBrush BorderBrush { get; internal set; }
 
         #endregion
     }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace View.ViewModel
@@ -20,7 +21,9 @@ namespace View.ViewModel
         private Game _model;
         private bool _canMove;
         private int round=1;
+        private string str = "no";
 
+        public string Connect { get { return str; } }
         #region Commands
         public DelegateCommand PlayerModeCommand { get; private set; }
         public DelegateCommand ViewerModeCommand { get; private set; }
@@ -109,8 +112,6 @@ namespace View.ViewModel
         public String GameTime { get { return TimeSpan.FromSeconds(_model.GameTime).ToString("g"); } }
       
 
-        //  public int LocX { get { return _model.LocX; } }
-        // public int LocY { get { return _model.LocY; } }
         #endregion
 
         public ViewModelGame(Game game)
@@ -281,6 +282,21 @@ namespace View.ViewModel
                         && j < _model.Board.Height && i < _model.Board.Width)
                     {
                         ViewModelField field = Fields[y]; //x,y
+
+                        //make Connections
+                        List<XYcoordinates> connect = _model.Robot.AllConnections();
+                        if( connect.Contains(new XYcoordinates(i, j)) )
+                        {
+                           /* Fields[y].BorderThickness = new Thickness(2.0);
+                            Fields[y].BorderBrush = Brushes.Red; */
+                            str = "yes";
+                        }
+                        else
+                        {
+                            str = "no";
+                           // Fields[y].BorderThickness = new Thickness(0.0);
+                        }
+                        
                         field.SetPicture(_model.Board.GetFieldValue(i, j));
                         ViewModelField fieldMap = FieldsMap[j * _model.Board.Width + i];
                         fieldMap.SetPicture(_model.Board.GetFieldValue(i, j));
@@ -302,6 +318,8 @@ namespace View.ViewModel
 
             // frissítjük a megszerzett kosarak számát és a játékidőt
             OnPropertyChanged(nameof(GameTime));
+            OnPropertyChanged(nameof(Connect));
+
         }
 
         private void OnPlayerModeClick()
@@ -418,6 +436,7 @@ namespace View.ViewModel
             _model.NextPlayer();
             RefreshTable();
 
+            OnPropertyChanged(nameof(Connect));
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Round));
             OnPropertyChanged(nameof(Team1Points));
@@ -429,6 +448,7 @@ namespace View.ViewModel
         private void Model_GameAdvanced(object? sender, GameEventArgs e)
         {
             OnPropertyChanged(nameof(GameTime));
+            OnPropertyChanged(nameof(Connect));
         }
 
         private void Model_NewRound(object? sender, GameEventArgs e)
@@ -440,6 +460,7 @@ namespace View.ViewModel
             _model.NextPlayer();
             RefreshTable();
 
+            OnPropertyChanged(nameof(Connect));
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Round));
             OnPropertyChanged(nameof(Team1Points));

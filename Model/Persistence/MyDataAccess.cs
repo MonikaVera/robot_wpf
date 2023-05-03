@@ -24,6 +24,8 @@ namespace Model.Persistence
                 // Read file line by line
                 using (StreamReader file = new StreamReader(path))
                 {
+                    if (file == null)
+                        throw new ArgumentNullException("file");
 
                     string ln;
                     for (int j = 0; j < height; j++)

@@ -755,6 +755,9 @@ namespace Model.Model
         ownCube.Y = ownCube.Y + robot.Y;
         wantsToConnect.X = wantsToConnect.X + robot.X;
         wantsToConnect.Y = wantsToConnect.Y + robot.Y;
+            MessageBox.Show((ownCube.X).ToString() + ' ' + (ownCube.Y).ToString());
+            MessageBox.Show((wantsToConnect.X).ToString() + ' ' + (wantsToConnect.Y).ToString());
+        
         if (_board.GetFieldValue(ownCube.X, ownCube.Y) is Cube &&
             _board.GetFieldValue(wantsToConnect.X, wantsToConnect.Y) is Cube
             && robot.IsConnected(ownCube) && !robot.IsConnected(wantsToConnect)

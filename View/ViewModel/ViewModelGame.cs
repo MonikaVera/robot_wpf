@@ -144,17 +144,20 @@ namespace View.ViewModel
 
         private XYcoordinates? firstCube=null;
         private XYcoordinates? lastCube=null;
+        private bool _round=true;
         public void Write(int param)
         {
-            if(firstCube == null)
+            if(_round)
             {
-                firstCube = new XYcoordinates(param / 7 - 3, param % 7 - 3);
+                firstCube = new XYcoordinates(param % 7 - 3, param / 7 - 3);
+                _round= false;
             }
             else
             {
-                lastCube = new XYcoordinates(param / 7 - 3, param % 7 - 3);
+                lastCube = new XYcoordinates(param % 7 - 3, param / 7 - 3);
+                _round = true;
             }
-            //MessageBox.Show(param.ToString() +' '+ (param/7-3).ToString() + ' ' + (param%7-3).ToString());
+            MessageBox.Show(param.ToString() +' '+ (param%7).ToString() + ' ' + (param/7).ToString());
         }
         #region Public Methods
         /*

@@ -141,25 +141,27 @@ namespace Model.Persistence
                             else if ("green5".Equals(ln))
                                 table.SetValue(i, j, new Cube(i, j, 5, Color.GREEN));*/
                             //robot_right
-                            else if ("robot_right".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.EAST, true));
-                            else if ("b_robot_right".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.EAST, false));
-                            //robot_lefy
-                            else if ("robot_left".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.WEST, true));
-                            else if ("b_robot_left".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.WEST, false));
-                            //robot_front
-                            else if ("robot_front".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.SOUTH, true));
-                            else if ("b_robot_front".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.SOUTH, false));
+                           
                             //robot_back
                             else if ("robot_back".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.NORTH, true));
+                                table.SetValue(i, j, new Robot(i, j, Direction.EAST, 0));
+                            else if ("b_robot_right".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.EAST, 1));
+                            //robot_lefy
+                            else if ("robot_left".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.WEST, 0));
+                            else if ("b_robot_left".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.WEST, 1));
+                            //robot_front
+                            else if ("robot_front".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.SOUTH, 0));
+                            else if ("b_robot_front".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.SOUTH, 1));
+                            //robot_back
+                            else if ("robot_back".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.NORTH, 0));
                             else if ("b_robot_back".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.NORTH, false));
+                                table.SetValue(i, j, new Robot(i, j, Direction.NORTH, 1));
                         }
 
                     file.Close();

@@ -16,7 +16,6 @@ namespace View.ViewModel
         private Color _color;
         private string? _picture;
         private string? _text;
-        private int _number;
         #endregion
 
         #region Properties
@@ -58,7 +57,7 @@ namespace View.ViewModel
                 }
             }
         }
-        public int Number { get { return _number; } set { _number = value; } }
+        public int Number { get { return IndY; } }
         public string? Text {
             get { return _text; }
             set

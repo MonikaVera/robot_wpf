@@ -15,22 +15,36 @@ namespace Model.Model
         private List<int> _healthConnected;
         private List<Color> _colorConnected;
         private Team? _team;
-        private bool player;
-        //private int _x;
-        //private int _y;
+        private int _robotNumber;
+        private int _connectedRobot;
+        private bool _player;
+        public XYcoordinates? WantsToConnectTo = null;
+        public XYcoordinates? OwnCube = null;
+        
         #endregion
+        public int RobotNumber { get { return _robotNumber; } set { _robotNumber = value; } }
+        public int ConnectedRobot { get { return _connectedRobot; } set { _connectedRobot = value; } }
+        public Robot(int x, int y, Direction direction, int robotNumber)
+        {
+            _X = x;
+            _Y = y;
+            _direction = direction;
+            _connected = new List<XYcoordinates>();
+            _healthConnected = new List<int>();
+            _colorConnected = new List<Color>();
+            _connectedRobot = -1;
+            _robotNumber = robotNumber;
+            if (_robotNumber<4)
+            {
+                _player = true;
+            }
+            else
+            {
+                _player= false;
+            }
+        }
 
        
-        public Robot(int x, int y, Direction direction, bool pl) 
-        { 
-            _X = x; 
-            _Y = y; 
-            _direction = direction; 
-            _connected = new List<XYcoordinates>();
-            _healthConnected= new List<int>();
-            _colorConnected= new List<Color>();
-            player = pl;
-        }
         public Robot(int x, int y, Direction direction, List<XYcoordinates> connected) { 
             _X = x;
             _Y = y;
@@ -40,7 +54,7 @@ namespace Model.Model
 
         #region Properties
         public Direction Direction { set { _direction = value; } get { return _direction; } }
-        public bool Player { set { player = value; } get { return player; } }
+        public bool Player { set { _player = value; } get { return _player; } }
         public void AddConnection(XYcoordinates tuple)
         {
             _connected.Add(tuple);
@@ -153,6 +167,9 @@ namespace Model.Model
             _healthConnected.Add(health);
             _colorConnected.Add(color);
         }
+
+        public List<int> AllHealth() { return _healthConnected; }
+        public List<Color> AllColor() { return _colorConnected;}
 
         public int getHealthAt(int i) { return _healthConnected[i]; }
         public Color getColorAt(int i) { return _colorConnected[i];}

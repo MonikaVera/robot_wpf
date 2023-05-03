@@ -140,7 +140,7 @@ namespace Model.Persistence
                                 table.SetValue(i, j, new Cube(i, j, 5, Color.GREEN));*/
                             //robot_right
                             else if ("robot_right".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.EAST), i*60+j);
+                                table.SetValue(i, j, new Robot(i, j, Direction.EAST, i*60+j));
                             //robot_lefy
                             else if ("robot_left".Equals(ln))
                                 table.SetValue(i, j, new Robot(i, j, Direction.WEST, i * 60 + j));

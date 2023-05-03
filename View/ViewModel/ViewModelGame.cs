@@ -133,17 +133,25 @@ namespace View.ViewModel
             ViewerModeNext = new DelegateCommand(param => OnViewerModeNextClick());
             KeyDownCommand = new DelegateCommand(param => KeyDown(Convert.ToString(param)));
             NextPlayerCommand = new DelegateCommand(param => NextPlayer());
-            ChooseActionFieldCommand = new DelegateCommand(param => Write(Convert.ToInt32(param)));
-
             LoadGameCommand = new DelegateCommand(param => OnLoadGame());
             SaveGameCommand = new DelegateCommand(param => OnSaveGame());
 
         }
-        
 
+
+        private XYcoordinates? firstCube=null;
+        private XYcoordinates? lastCube=null;
         public void Write(int param)
         {
-            MessageBox.Show(param.ToString());
+            if(firstCube == null)
+            {
+                firstCube = new XYcoordinates(param / 7 - 3, param % 7 - 3);
+            }
+            else
+            {
+                lastCube = new XYcoordinates(param / 7 - 3, param % 7 - 3);
+            }
+            //MessageBox.Show(param.ToString() +' '+ (param/7-3).ToString() + ' ' + (param%7-3).ToString());
         }
         #region Public Methods
         /*
@@ -228,7 +236,10 @@ namespace View.ViewModel
                     }
             GenerateTableVM();
             _model.SaveGameAsync("file" + 1 + ".txt");
-
+            foreach (ViewModelField field in Fields)
+            {
+                field.ChooseActionFieldCommand = new DelegateCommand(param => Write(Convert.ToInt32(param)));
+            }
         }
 
         public void GenerateTableVM()
@@ -341,7 +352,7 @@ namespace View.ViewModel
         private void ChooseActionField(int number)
         {
             ViewModelField field = Fields[number];
-
+            MessageBox.Show(number.ToString());
             _model.ChooseActionField(field.IndX, field.IndY);
         }
 
@@ -377,7 +388,11 @@ namespace View.ViewModel
             }
             else if (action == "MERGE") // osszekapcsolunk kockakat
             {
-                //_model.ConnectCubes(_model.Robot); 
+                if(firstCube!=null && lastCube!=null)
+                {
+                    _model.ConnectCubes(_model.Robot, firstCube, lastCube);
+                }
+                 
             }
             else if (action == "GET") // rakapcsolodunk egy kockara
             {
@@ -389,7 +404,10 @@ namespace View.ViewModel
             }
             else if (action == "SPLIT") // szetkapcsolunk kockakat
             {
-                //_model.DisconnectCubes(_model.Robot);
+                if (firstCube != null && lastCube != null)
+                {
+                    _model.DisconnectCubes(_model.Robot, firstCube, lastCube);
+                }
             }
             else if (action == "TURNEAST") // oramutatoval megegyezo iranyu forgas
             {

@@ -750,6 +750,10 @@ namespace Model.Model
         #region ConnectCubes
 
         public void ConnectCubes(Robot robot, XYcoordinates ownCube, XYcoordinates wantsToConnect) {
+            ownCube.X = ownCube.X + robot.X;
+            ownCube.Y = ownCube.Y + robot.Y;
+            wantsToConnect.X = wantsToConnect.X + robot.X;
+            wantsToConnect.Y = wantsToConnect.Y + robot.Y;
             if(_board.GetFieldValue(ownCube.X, ownCube.Y) is Cube &&
                 _board.GetFieldValue(wantsToConnect.X, wantsToConnect.Y) is Cube
                 && robot.IsConnected(ownCube) && !robot.IsConnected(wantsToConnect)
@@ -831,8 +835,12 @@ namespace Model.Model
 
         
 
-        public void DisconnectCubes(Robot robot, XYcoordinates ownCube_1, XYcoordinates ownCube_2) { 
-            if(IsConnectedToRobots(robot) && robot.IsConnected(ownCube_1) && robot.IsConnected(ownCube_2)
+        public void DisconnectCubes(Robot robot, XYcoordinates ownCube_1, XYcoordinates ownCube_2) {
+            ownCube_1.X = ownCube_1.X + robot.X;
+            ownCube_1.Y = ownCube_1.Y + robot.Y;
+            ownCube_2.X = ownCube_2.X + robot.X;
+            ownCube_2.Y = ownCube_2.Y + robot.Y;
+            if (IsConnectedToRobots(robot) && robot.IsConnected(ownCube_1) && robot.IsConnected(ownCube_2)
                 && NextToEachOther(ownCube_1, ownCube_2)) 
             {
                 if(_team1.GetRobotByNum(robot.ConnectedRobot)!=null )

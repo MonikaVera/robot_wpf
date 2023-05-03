@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using System.Windows.Documents;
 using Model.Persistence;
 using System.Linq;
 using System.Diagnostics.Eventing.Reader;
 using static System.Net.Mime.MediaTypeNames;
 using System.Windows;
-using System.Windows.Controls.Ribbon;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 
@@ -17,7 +15,7 @@ namespace Model.Model
 {
     public class Game
     {
-        public Game(MyDataAccess dataAccess)
+        public Game(IDataAccess dataAccess)
         {
             _dataAccess = dataAccess;
             _gameOverTurn = 50;
@@ -54,9 +52,13 @@ namespace Model.Model
         #endregion
 
         #region Properties
-        public Robot Robot { get { return _robot; } }
+        public Robot Robot { get { return _robot; } set { _robot = value; } }
 
-        public Board Board { get { return _board; } }
+        public Board Board { get { return _board; } set { _board = value; } }
+
+        public Team Team1 { get { return _team1; } set { _team1 = value; } }
+
+        public Team Team2 { get { return _team2; } set { _team2 = value; } }
 
         public NoticeBoard NoticeBoard { get { return _noticeBoard; } }
 
@@ -70,6 +72,12 @@ namespace Model.Model
         public bool IsGameOver { get { return _round == _gameOverTurn; } }
 
         public bool IsRoundOver { get { return _gameTime == 0; } }
+
+        public int NextPlayerFromTeam1 { get { return _nextPlayerFromTeam1; } }
+
+        public int NextPlayerFromTeam2 { get { return _nextPlayerFromTeam2; } }
+
+        public bool NextTeam1 { get { return _nextTeam1; } }
 
         #endregion
 

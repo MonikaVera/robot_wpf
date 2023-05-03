@@ -19,6 +19,7 @@ namespace View.ViewModel
 
         private Game _model;
         private bool _canMove;
+        private int round=1;
 
         #region Commands
         public DelegateCommand PlayerModeCommand { get; private set; }
@@ -178,7 +179,7 @@ namespace View.ViewModel
                         ++y;
                         Fields.Add(field);
                     }
-                    else if(j >= 0 && i >= 0 && j < _model.Board.Height && i < _model.Board.Width)
+                    else
                     {
                         ViewModelField field = new ViewModelField();
                         //field.SetText(_model.Board.GetFieldValue(0, 0));//Black
@@ -187,10 +188,6 @@ namespace View.ViewModel
                         field.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
                         ++y;
                         Fields.Add(field);
-                    }
-                    else
-                    {
-                        ++y;
                     }
                 ++x;
             }
@@ -270,6 +267,12 @@ namespace View.ViewModel
         private void RefreshTable()
         {
             int y = 0;
+            if(round < _model.Round)
+            {
+                ++round;
+                _model.SaveGameAsync("file" + (_model.Round ) + ".txt");
+            }
+
             for (int j = _model.Robot.Y - 3; j <= _model.Robot.Y + 3; j++)
             {
                 for (int i = _model.Robot.X - 3; i <= _model.Robot.X + 3; i++)
@@ -296,7 +299,6 @@ namespace View.ViewModel
 
                 }
             }
-            _model.SaveGameAsync("file" + (_model.Round+1)+".txt");
 
             // frissítjük a megszerzett kosarak számát és a játékidőt
             OnPropertyChanged(nameof(GameTime));

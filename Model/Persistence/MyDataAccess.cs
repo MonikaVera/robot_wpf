@@ -140,16 +140,24 @@ namespace Model.Persistence
                                 table.SetValue(i, j, new Cube(i, j, 5, Color.GREEN));*/
                             //robot_right
                             else if ("robot_right".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.EAST));
+                                table.SetValue(i, j, new Robot(i, j, Direction.EAST, true));
+                            else if ("b_robot_right".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.EAST, false));
                             //robot_lefy
                             else if ("robot_left".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.WEST));
+                                table.SetValue(i, j, new Robot(i, j, Direction.WEST, true));
+                            else if ("b_robot_left".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.WEST, false));
                             //robot_front
                             else if ("robot_front".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.SOUTH));
+                                table.SetValue(i, j, new Robot(i, j, Direction.SOUTH, true));
+                            else if ("b_robot_front".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.SOUTH, false));
                             //robot_back
                             else if ("robot_back".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.NORTH));
+                                table.SetValue(i, j, new Robot(i, j, Direction.NORTH, true));
+                            else if ("b_robot_back".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.NORTH, false));
                         }
 
                     file.Close();
@@ -220,19 +228,31 @@ namespace Model.Persistence
                                 Robot robot = (Robot)table.GetFieldValue(i, j);
                                 if (robot.Direction == Direction.EAST)
                                 {
-                                    await Task.Run(() => writer.WriteLine("robot_right"));
+                                    if(robot.Player==true)
+                                        await Task.Run(() => writer.WriteLine("robot_right"));
+                                    else
+                                        await Task.Run(() => writer.WriteLine("b_robot_right"));
                                 }
                                 else if (robot.Direction == Direction.WEST)
                                 {
-                                    await Task.Run(() => writer.WriteLine("robot_left"));
+                                    if (robot.Player == true)
+                                        await Task.Run(() => writer.WriteLine("robot_left"));
+                                    else
+                                        await Task.Run(() => writer.WriteLine("b_robot_left"));
                                 }
                                 else if (robot.Direction == Direction.SOUTH)
                                 {
-                                    await Task.Run(() => writer.WriteLine("robot_front"));
+                                    if (robot.Player == true)
+                                        await Task.Run(() => writer.WriteLine("robot_front"));
+                                    else
+                                        await Task.Run(() => writer.WriteLine("b_robot_front"));
                                 }
                                 else if (robot.Direction == Direction.NORTH)
                                 {
-                                    await Task.Run(() => writer.WriteLine("robot_back"));
+                                    if (robot.Player == true)
+                                        await Task.Run(() => writer.WriteLine("robot_back"));
+                                    else
+                                        await Task.Run(() => writer.WriteLine("b_robot_back"));
                                 }
                             }
                         }

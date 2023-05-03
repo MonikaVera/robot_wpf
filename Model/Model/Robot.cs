@@ -15,12 +15,13 @@ namespace Model.Model
         private List<int> _healthConnected;
         private List<Color> _colorConnected;
         private Team? _team;
+        private bool player;
         //private int _x;
         //private int _y;
         #endregion
 
        
-        public Robot(int x, int y, Direction direction) 
+        public Robot(int x, int y, Direction direction, bool pl) 
         { 
             _X = x; 
             _Y = y; 
@@ -28,6 +29,7 @@ namespace Model.Model
             _connected = new List<XYcoordinates>();
             _healthConnected= new List<int>();
             _colorConnected= new List<Color>();
+            player = pl;
         }
         public Robot(int x, int y, Direction direction, List<XYcoordinates> connected) { 
             _X = x;
@@ -38,6 +40,7 @@ namespace Model.Model
 
         #region Properties
         public Direction Direction { set { _direction = value; } get { return _direction; } }
+        public bool Player { set { player = value; } get { return player; } }
         public void AddConnection(XYcoordinates tuple)
         {
             _connected.Add(tuple);

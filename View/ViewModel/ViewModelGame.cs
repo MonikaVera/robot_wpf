@@ -376,6 +376,11 @@ namespace View.ViewModel
             }
             else if (action == "GET") // rakapcsolodunk egy kockara
             {
+              /* if( _model.IsConected(new XYcoordinates(_model.Robot.X+1, _model.Robot.Y)) )
+                {
+                   // ViewModelField fieldMap = FieldsMap[ (_model.Robot.X + 1) + _model.Robot.Y ]; 
+                    //!!!!
+                }*/
                 _model.ConnectRobot(_model.Robot); 
             }
             else if (action == "PUTDOWN") // lekapcsolodunk egy kockarol

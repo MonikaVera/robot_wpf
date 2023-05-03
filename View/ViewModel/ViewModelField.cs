@@ -164,21 +164,33 @@ namespace View.ViewModel
             else if (field is Robot)
             {
                 Robot robot = (Robot)field;
-                if (robot.Direction == Direction.EAST) //&& robot.Team == 
+                if (robot.Direction == Direction.EAST) 
                 {
-                    _picture = "robot_right.jpg";
+                    if (robot.Player == true)
+                        _picture = "robot_right.jpg";
+                    else
+                        _picture = "blue_robot_right.jpg";
                 }
                 else if (robot.Direction == Direction.WEST)
                 {
-                    _picture = "robot_left.jpg";
+                    if (robot.Player == true)
+                        _picture = "robot_left.jpg";
+                    else
+                        _picture = "blue_robot_left.jpg";
                 }
                 else if (robot.Direction == Direction.SOUTH)
                 {
-                    _picture = "robot_front.jpg";
+                    if (robot.Player == true)
+                        _picture = "robot_front.jpg";
+                    else
+                        _picture = "blue_fobot_front.jpg";
                 }
                 else if (robot.Direction == Direction.NORTH)
                 {
-                    _picture = "robot_back.jpg";
+                    if (robot.Player == true)
+                        _picture = "robot_back.jpg";
+                    else
+                        _picture = "blue_robot_back.jpg";
                 }
             }
             OnPropertyChanged(nameof(Picture));

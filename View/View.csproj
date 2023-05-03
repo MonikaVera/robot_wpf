@@ -10,6 +10,10 @@
   <ItemGroup>
     <None Remove="blue.jpg" />
     <None Remove="blue.png" />
+    <None Remove="blue_fobot_front.jpg" />
+    <None Remove="blue_robot_back.jpg" />
+    <None Remove="blue_robot_left.jpg" />
+    <None Remove="blue_robot_right.jpg" />
     <None Remove="brown.jpg" />
     <None Remove="brown.png" />
     <None Remove="cart1.jpg" />
@@ -51,6 +55,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="blue_fobot_front.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="blue_robot_back.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="blue_robot_left.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="blue_robot_right.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="cart1.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -11,12 +11,27 @@ namespace Model.Model
         private int _points;
         private Robot[] _robots;
         private int _numberOfRobots;
+        private int _teamNumber;
+        public int TeamNumber { get { return _teamNumber; } set { _teamNumber = value; } }
 
-        public Team(Robot[] robots, int number) { 
+        public Team(Robot[] robots, int number, int teamNumber) { 
             _robots = robots; 
             _numberOfRobots = number;
+            _teamNumber= teamNumber;
         }
         public Robot[] Robots { get { return _robots; } }
+
+        public Robot? GetRobotByNum(int num)
+        {
+            foreach(Robot r in _robots)
+            {
+                if(r.RobotNumber==num)
+                {
+                    return r;
+                }
+            }
+            return null;
+        }
 
         public Robot GetRobot(int index)
         {

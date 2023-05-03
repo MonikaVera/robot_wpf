@@ -11,6 +11,7 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Windows;
 using System.Windows.Controls.Ribbon;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography;
 
 namespace Model.Model
 {
@@ -116,8 +117,8 @@ namespace Model.Model
         {
             _teamMembers = 4;
             _board = new Board(_width, _height);
-            _team1 = new Team(CreateTeam(_teamMembers), _teamMembers);
-            _team2 = new Team(CreateTeam(_teamMembers), _teamMembers);
+            _team1 = new Team(CreateTeam(_teamMembers,0), _teamMembers, 0);
+            _team2 = new Team(CreateTeam(_teamMembers,1), _teamMembers, 1);
             _robot = _team1.GetRobot(0);
             _noticeBoard = new NoticeBoard();
             _gameTime = 30;
@@ -156,18 +157,18 @@ namespace Model.Model
 
         #region Private Methods
 
-        private Robot[] CreateTeam(int number)
+        private Robot[] CreateTeam(int number, int teamNum)
         {
             Robot[] robots = new Robot[number];
             for (int i = 0; i < number; i++)
             {
-                Robot robot = RandomRobot();
+                Robot robot = RandomRobot(i+number*teamNum);
                 robots[i] = robot;
             }
             return robots;
         }
 
-        private Robot RandomRobot()
+        private Robot RandomRobot(int i)
         {
             Random rnd = new Random();
             int x;
@@ -180,7 +181,7 @@ namespace Model.Model
             while (!(_board.GetFieldValue(x, y) is Empty));
 
             Direction direction = (Direction)rnd.Next(0, 4);
-            Robot robot = new Robot(x, y, direction);
+            Robot robot = new Robot(x, y, direction,i);
             _board.SetValue(x, y, robot);
 
             return robot;
@@ -301,8 +302,26 @@ namespace Model.Model
         #endregion
 
         #region Move
+
+        private bool IsConnectedToRobots(Robot robot)
+        {
+            if(robot.ConnectedRobot==-1)
+            {
+                return false;
+            }
+            else
+            {
+
+                return true;
+            }
+        }
         public void MoveRobot(Robot robot, Direction dir)
         {
+            if(IsConnectedToRobots(robot))
+            {
+                OnUpdateFields(robot, robot.Direction, Action.Move, false);
+                return;
+            }
             if (dir == Direction.EAST)
             {
                 if (CanMoveToDirection(robot,1,0))
@@ -379,7 +398,7 @@ namespace Model.Model
 
         private bool IsOnEdge(int x, int y)
         {
-            if(x==0 || y==0 || x==_board.Width-1 || y==_board.Height)
+            if(x==0 || y==0 || x==_board.Width-1 || y==_board.Height-1)
             {
                 return true;
             }
@@ -490,6 +509,11 @@ namespace Model.Model
         #region Rotate
 
         public void RotateRobot(Robot robot, Angle angle) {
+            if (IsConnectedToRobots(robot))
+            {
+                OnUpdateFields(robot, robot.Direction, Action.Turn, false);
+                return;
+            }
             if ((angle == Angle.Clockwise && CanRotateClockwise(robot))
                 || (angle == Angle.CounterClockwise && CanRotateCounterClockwise(robot)))
             {
@@ -627,6 +651,7 @@ namespace Model.Model
     #endregion
 
         #region ConnectRobot
+        
         public void ConnectRobot(Robot robot)
         {
             _actionDirection = robot.Direction;
@@ -693,10 +718,11 @@ namespace Model.Model
         {
             int x = robot.X + a;
             int y = robot.Y + b;
-            while (robot.IsConnected(new XYcoordinates(x, y)))
+            if (robot.IsConnected(new XYcoordinates(x, y)))
             {
-                x = x + a;
-                y = y + b;
+                /*x = x + a;
+                y = y + b;*/
+                return false;
             }
             if (IsOnBoard(x,y) && _board.GetFieldValue(x, y) is Cube)
             {
@@ -729,40 +755,62 @@ namespace Model.Model
                 && robot.IsConnected(ownCube) && !robot.IsConnected(wantsToConnect)
                 && NextToEachOther(ownCube, wantsToConnect))
             {
-                foreach(Robot r in _team1.Robots)
+                if(robot.RobotNumber<4)
                 {
-                    if((r.WantsToConnectTo).Equals(ownCube) && (r.OwnCube).Equals(wantsToConnect))
+                    foreach(Robot r in _team1.Robots)
                     {
-                        Cube cube1 = (Cube)_board.GetFieldValue(ownCube.X, ownCube.Y);
-                        r.AddConnection(ownCube);
-                        r.addHealthColor(cube1.Health, cube1.Color);
-                        Cube cube2 = (Cube)_board.GetFieldValue(wantsToConnect.X, wantsToConnect.Y);
-                        robot.AddConnection(wantsToConnect);
-                        r.addHealthColor(cube2.Health, cube2.Color);
-                        r.WantsToConnectTo = null;
-                        r.OwnCube = null;
-                        return;
+                        if((r.WantsToConnectTo).Equals(ownCube) && (r.OwnCube).Equals(wantsToConnect))
+                        {
+                            UnionRobotConnections(r, robot);
+                            r.WantsToConnectTo = null;
+                            r.OwnCube = null;
+                            r.ConnectedRobot=robot.RobotNumber;
+                            robot.ConnectedRobot=r.RobotNumber;
+                            return;
+                        }
                     }
-                }
-                foreach (Robot r in _team2.Robots)
+                } 
+                else
                 {
-                    if ((r.WantsToConnectTo).Equals(ownCube) && (r.OwnCube).Equals(wantsToConnect))
+                    foreach (Robot r in _team2.Robots)
                     {
-                        Cube cube1 = (Cube)_board.GetFieldValue(ownCube.X, ownCube.Y);
-                        r.AddConnection(ownCube);
-                        r.addHealthColor(cube1.Health, cube1.Color);
-                        Cube cube2 = (Cube)_board.GetFieldValue(wantsToConnect.X, wantsToConnect.Y);
-                        robot.AddConnection(wantsToConnect);
-                        r.addHealthColor(cube2.Health, cube2.Color);
-                        r.WantsToConnectTo = null;
-                        r.OwnCube = null;
-                        return;
+                        if ((r.WantsToConnectTo).Equals(ownCube) && (r.OwnCube).Equals(wantsToConnect))
+                        {
+                            UnionRobotConnections(r, robot);
+                            r.WantsToConnectTo = null;
+                            r.OwnCube = null;
+                            r.ConnectedRobot = robot.RobotNumber;
+                            robot.ConnectedRobot = r.RobotNumber;
+                            return;
+                        }
                     }
+                    robot.WantsToConnectTo = wantsToConnect;
+                    robot.OwnCube = ownCube;
                 }
-                robot.WantsToConnectTo = wantsToConnect;
-                robot.OwnCube = ownCube;
             }
+                
+                
             
+        }
+
+        private void UnionRobotConnections(Robot r1, Robot r2)
+        {
+            for(int i=0; i<r1.AllConnections().Count; i++)
+            {
+                if (!r2.IsConnected(r1.AllConnections()[i]))
+                {
+                    r2.AddConnection(r1.AllConnections()[i]);
+                    r2.addHealthColor(r1.getHealthAt(i), r1.getColorAt(i));
+                }
+            }
+            for (int i = 0; i < r2.AllConnections().Count; i++)
+            {
+                if (!r1.IsConnected(r2.AllConnections()[i]))
+                {
+                    r1.AddConnection(r2.AllConnections()[i]);
+                    r1.addHealthColor(r2.getHealthAt(i), r2.getColorAt(i));
+                }
+            }
         }
 
         private bool NextToEachOther(XYcoordinates ownCube, XYcoordinates wantsToConnect)
@@ -781,7 +829,116 @@ namespace Model.Model
 
         #region DisconnectCubes
 
-        public void DisconnectCubes(Robot robot) { /*code*/ }
+        
+
+        public void DisconnectCubes(Robot robot, XYcoordinates ownCube_1, XYcoordinates ownCube_2) { 
+            if(IsConnectedToRobots(robot) && robot.IsConnected(ownCube_1) && robot.IsConnected(ownCube_2)
+                && NextToEachOther(ownCube_1, ownCube_2)) 
+            {
+                if(_team1.GetRobotByNum(robot.ConnectedRobot)!=null )
+                {
+                    Robot r = _team1.GetRobotByNum(robot.ConnectedRobot);
+
+                }
+                if (_team2.GetRobotByNum(robot.ConnectedRobot) != null)
+                {
+                    Robot r = _team2.GetRobotByNum(robot.ConnectedRobot);
+
+                }
+            }
+        }
+
+        private void SeparateRobotConnections(Robot r1, Robot r2, XYcoordinates ownCube_1, XYcoordinates ownCube_2)
+        {
+            List<XYcoordinates> connections = r1.AllConnections();
+            List<int> healths = r1.AllHealth();
+            List<Color> colors = r1.AllColor();
+            r1.clearConnections();
+            r2.clearConnections();
+            if (ownCube_1.X==ownCube_2.X)
+            {
+                if(ownCube_1.Y>ownCube_2.Y)
+                {
+                    XYcoordinates temp = ownCube_1;
+                    ownCube_1 = ownCube_2;
+                    ownCube_2 = temp;
+                }
+                if (r1.Y < r2.Y)
+                {
+                    for (int i = 0; i < connections.Count; i++)
+                    {
+                        if (connections[i].Y <= ownCube_1.Y)
+                        {
+                            r1.AllConnections().Add(connections[i]);
+                            r1.addHealthColor(healths[i], colors[i]);
+                        }
+                        else
+                        {
+                            r2.AllConnections().Add(connections[i]);
+                            r2.addHealthColor(healths[i], colors[i]);
+                        }
+                    }
+                }
+                else if (r1.Y >= r2.Y)
+                {
+                    for (int i = 0; i < connections.Count; i++)
+                    {
+                        if (connections[i].Y <= ownCube_1.Y)
+                        {
+                            r2.AllConnections().Add(connections[i]);
+                            r2.addHealthColor(healths[i], colors[i]);
+                        }
+                        else
+                        {
+                            r1.AllConnections().Add(connections[i]);
+                            r1.addHealthColor(healths[i], colors[i]);
+                        }
+                    }
+                }
+
+            }
+            if(ownCube_1.Y == ownCube_2.Y)
+            {
+                if (ownCube_1.X > ownCube_2.X)
+                {
+                    XYcoordinates temp = ownCube_1;
+                    ownCube_1 = ownCube_2;
+                    ownCube_2 = temp;
+                }
+                if (r1.X<r2.X)
+                {
+                    for (int i = 0; i < connections.Count; i++)
+                    {
+                        if (connections[i].X <= ownCube_1.X)
+                        {
+                            r1.AllConnections().Add(connections[i]);
+                            r1.addHealthColor(healths[i], colors[i]);
+                        }
+                        else
+                        {
+                            r2.AllConnections().Add(connections[i]);
+                            r2.addHealthColor(healths[i], colors[i]);
+                        }
+                    }
+                }
+                else if(r1.X>=r2.X)
+                {
+                    for (int i = 0; i < connections.Count; i++)
+                    {
+                        if (connections[i].X <= ownCube_1.X)
+                        {
+                            r2.AllConnections().Add(connections[i]);
+                            r2.addHealthColor(healths[i], colors[i]);
+                        }
+                        else
+                        {
+                            r1.AllConnections().Add(connections[i]);
+                            r1.addHealthColor(healths[i], colors[i]);
+                        }
+                    }
+                }
+            }
+        }
 
         #endregion
 

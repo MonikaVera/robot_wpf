@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace View.ViewModel
@@ -132,12 +133,18 @@ namespace View.ViewModel
             ViewerModeNext = new DelegateCommand(param => OnViewerModeNextClick());
             KeyDownCommand = new DelegateCommand(param => KeyDown(Convert.ToString(param)));
             NextPlayerCommand = new DelegateCommand(param => NextPlayer());
+            ChooseActionFieldCommand = new DelegateCommand(param => Write(Convert.ToInt32(param)));
 
             LoadGameCommand = new DelegateCommand(param => OnLoadGame());
             SaveGameCommand = new DelegateCommand(param => OnSaveGame());
 
         }
+        
 
+        public void Write(int param)
+        {
+            MessageBox.Show(param.ToString());
+        }
         #region Public Methods
         /*
         public void GenerateTable()
@@ -370,7 +377,7 @@ namespace View.ViewModel
             }
             else if (action == "MERGE") // osszekapcsolunk kockakat
             {
-                _model.ConnectCubes(_model.Robot); 
+                //_model.ConnectCubes(_model.Robot); 
             }
             else if (action == "GET") // rakapcsolodunk egy kockara
             {
@@ -382,7 +389,7 @@ namespace View.ViewModel
             }
             else if (action == "SPLIT") // szetkapcsolunk kockakat
             {
-                _model.DisconnectCubes(_model.Robot);
+                //_model.DisconnectCubes(_model.Robot);
             }
             else if (action == "TURNEAST") // oramutatoval megegyezo iranyu forgas
             {

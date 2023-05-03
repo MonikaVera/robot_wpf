@@ -140,16 +140,16 @@ namespace Model.Persistence
                                 table.SetValue(i, j, new Cube(i, j, 5, Color.GREEN));*/
                             //robot_right
                             else if ("robot_right".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.EAST));
+                                table.SetValue(i, j, new Robot(i, j, Direction.EAST), i*60+j);
                             //robot_lefy
                             else if ("robot_left".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.WEST));
+                                table.SetValue(i, j, new Robot(i, j, Direction.WEST, i * 60 + j));
                             //robot_front
                             else if ("robot_front".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.SOUTH));
+                                table.SetValue(i, j, new Robot(i, j, Direction.SOUTH, i * 60 + j));
                             //robot_back
                             else if ("robot_back".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.NORTH));
+                                table.SetValue(i, j, new Robot(i, j, Direction.NORTH, i * 60 + j));
                         }
 
                     file.Close();

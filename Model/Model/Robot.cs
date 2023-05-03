@@ -15,14 +15,17 @@ namespace Model.Model
         private List<int> _healthConnected;
         private List<Color> _colorConnected;
         private Team? _team;
+        private int _robotNumber;
+        private int _connectedRobot;
         //private int _x;
         //private int _y;
-        public XYcoordinates WantsToConnectTo;
-        public XYcoordinates OwnCube;
+        public XYcoordinates? WantsToConnectTo = null;
+        public XYcoordinates? OwnCube = null;
+        
         #endregion
-
-       
-        public Robot(int x, int y, Direction direction) 
+        public int RobotNumber { get { return _robotNumber; } set { _robotNumber = value; } }
+        public int ConnectedRobot { get { return _connectedRobot; } set { _connectedRobot = value; } }
+        public Robot(int x, int y, Direction direction, int robotNumber) 
         { 
             _X = x; 
             _Y = y; 
@@ -30,6 +33,8 @@ namespace Model.Model
             _connected = new List<XYcoordinates>();
             _healthConnected= new List<int>();
             _colorConnected= new List<Color>();
+            _connectedRobot = -1;
+            _robotNumber = robotNumber;
         }
         public Robot(int x, int y, Direction direction, List<XYcoordinates> connected) { 
             _X = x;
@@ -152,6 +157,9 @@ namespace Model.Model
             _healthConnected.Add(health);
             _colorConnected.Add(color);
         }
+
+        public List<int> AllHealth() { return _healthConnected; }
+        public List<Color> AllColor() { return _colorConnected;}
 
         public int getHealthAt(int i) { return _healthConnected[i]; }
         public Color getColorAt(int i) { return _colorConnected[i];}

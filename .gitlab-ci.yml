@@ -10,7 +10,7 @@ before_script:
 # Build
 build_project:
   stage: build
-  image: mcr.microsoft.com/dotnet/framework/sdk:4.8
+  image: mcr.microsoft.com/dotnet/framework/sdk:6.0
   tags: [windows]
   script:
     - dotnet build Robots.sln

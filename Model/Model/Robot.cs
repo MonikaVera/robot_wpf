@@ -17,25 +17,34 @@ namespace Model.Model
         private Team? _team;
         private int _robotNumber;
         private int _connectedRobot;
-        //private int _x;
-        //private int _y;
+        private bool _player;
         public XYcoordinates? WantsToConnectTo = null;
         public XYcoordinates? OwnCube = null;
         
         #endregion
         public int RobotNumber { get { return _robotNumber; } set { _robotNumber = value; } }
         public int ConnectedRobot { get { return _connectedRobot; } set { _connectedRobot = value; } }
-        public Robot(int x, int y, Direction direction, int robotNumber) 
-        { 
-            _X = x; 
-            _Y = y; 
-            _direction = direction; 
+        public Robot(int x, int y, Direction direction, int robotNumber)
+        {
+            _X = x;
+            _Y = y;
+            _direction = direction;
             _connected = new List<XYcoordinates>();
-            _healthConnected= new List<int>();
-            _colorConnected= new List<Color>();
+            _healthConnected = new List<int>();
+            _colorConnected = new List<Color>();
             _connectedRobot = -1;
             _robotNumber = robotNumber;
+            if (_robotNumber<4)
+            {
+                _player = true;
+            }
+            else
+            {
+                _player= false;
+            }
         }
+
+       
         public Robot(int x, int y, Direction direction, List<XYcoordinates> connected) { 
             _X = x;
             _Y = y;
@@ -45,6 +54,7 @@ namespace Model.Model
 
         #region Properties
         public Direction Direction { set { _direction = value; } get { return _direction; } }
+        public bool Player { set { _player = value; } get { return _player; } }
         public void AddConnection(XYcoordinates tuple)
         {
             _connected.Add(tuple);

@@ -24,6 +24,8 @@ namespace Model.Persistence
                 // Read file line by line
                 using (StreamReader file = new StreamReader(path))
                 {
+                    if (file == null)
+                        throw new ArgumentNullException("file");
 
                     string ln;
                     for (int j = 0; j < height; j++)
@@ -139,17 +141,27 @@ namespace Model.Persistence
                             else if ("green5".Equals(ln))
                                 table.SetValue(i, j, new Cube(i, j, 5, Color.GREEN));*/
                             //robot_right
-                            else if ("robot_right".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.EAST, i*60+j));
-                            //robot_lefy
-                            else if ("robot_left".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.WEST, i * 60 + j));
-                            //robot_front
-                            else if ("robot_front".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.SOUTH, i * 60 + j));
+                           
                             //robot_back
                             else if ("robot_back".Equals(ln))
-                                table.SetValue(i, j, new Robot(i, j, Direction.NORTH, i * 60 + j));
+                                table.SetValue(i, j, new Robot(i, j, Direction.EAST, 0));
+                            else if ("b_robot_right".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.EAST, 1));
+                            //robot_lefy
+                            else if ("robot_left".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.WEST, 0));
+                            else if ("b_robot_left".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.WEST, 1));
+                            //robot_front
+                            else if ("robot_front".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.SOUTH, 0));
+                            else if ("b_robot_front".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.SOUTH, 1));
+                            //robot_back
+                            else if ("robot_back".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.NORTH, 0));
+                            else if ("b_robot_back".Equals(ln))
+                                table.SetValue(i, j, new Robot(i, j, Direction.NORTH, 1));
                         }
 
                     file.Close();
@@ -220,19 +232,31 @@ namespace Model.Persistence
                                 Robot robot = (Robot)table.GetFieldValue(i, j);
                                 if (robot.Direction == Direction.EAST)
                                 {
-                                    await Task.Run(() => writer.WriteLine("robot_right"));
+                                    if(robot.Player==true)
+                                        await Task.Run(() => writer.WriteLine("robot_right"));
+                                    else
+                                        await Task.Run(() => writer.WriteLine("b_robot_right"));
                                 }
                                 else if (robot.Direction == Direction.WEST)
                                 {
-                                    await Task.Run(() => writer.WriteLine("robot_left"));
+                                    if (robot.Player == true)
+                                        await Task.Run(() => writer.WriteLine("robot_left"));
+                                    else
+                                        await Task.Run(() => writer.WriteLine("b_robot_left"));
                                 }
                                 else if (robot.Direction == Direction.SOUTH)
                                 {
-                                    await Task.Run(() => writer.WriteLine("robot_front"));
+                                    if (robot.Player == true)
+                                        await Task.Run(() => writer.WriteLine("robot_front"));
+                                    else
+                                        await Task.Run(() => writer.WriteLine("b_robot_front"));
                                 }
                                 else if (robot.Direction == Direction.NORTH)
                                 {
-                                    await Task.Run(() => writer.WriteLine("robot_back"));
+                                    if (robot.Player == true)
+                                        await Task.Run(() => writer.WriteLine("robot_back"));
+                                    else
+                                        await Task.Run(() => writer.WriteLine("b_robot_back"));
                                 }
                             }
                         }

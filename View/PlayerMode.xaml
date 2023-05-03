@@ -96,7 +96,7 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding ChooseActionFieldCommand}" CommandParameter="{Binding Number}" Padding="0,0,0,0" BorderThickness="0"  Background="Black">
+                    <Button Command="{Binding ChooseActionFieldCommand}" CommandParameter="{Binding Number}" Padding="0,0,0,0" BorderThickness="{Binding Size}"  Background="Black">
                         <Image Source="{Binding Picture, TargetNullValue={x:Null}}" Stretch="Fill" />
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />

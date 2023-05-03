@@ -22,8 +22,9 @@ namespace View.ViewModel
         private bool _canMove;
         private int round=1;
         private string str = "no";
-
-        public string Connect { get { return str; } }
+        private int size = 0;
+        public string Connect { get { return str; } set { OnPropertyChanged(nameof(str)); } }
+        public int Size { get { return size; } set { OnPropertyChanged(nameof(size)); } }
         #region Commands
         public DelegateCommand PlayerModeCommand { get; private set; }
         public DelegateCommand ViewerModeCommand { get; private set; }
@@ -282,6 +283,7 @@ namespace View.ViewModel
                         && j < _model.Board.Height && i < _model.Board.Width)
                     {
                         ViewModelField field = Fields[y]; //x,y
+                        field.SetPicture(_model.Board.GetFieldValue(i, j));
 
                         //make Connections
                         List<XYcoordinates> connect = _model.Robot.AllConnections();
@@ -289,15 +291,17 @@ namespace View.ViewModel
                         {
                            /* Fields[y].BorderThickness = new Thickness(2.0);
                             Fields[y].BorderBrush = Brushes.Red; */
+                            field.BorderThickness = new Thickness(2.0);
                             str = "yes";
+                            size = 2;
                         }
                         else
                         {
                             str = "no";
+                            size = 0;
                            // Fields[y].BorderThickness = new Thickness(0.0);
                         }
                         
-                        field.SetPicture(_model.Board.GetFieldValue(i, j));
                         ViewModelField fieldMap = FieldsMap[j * _model.Board.Width + i];
                         fieldMap.SetPicture(_model.Board.GetFieldValue(i, j));
 
@@ -319,7 +323,7 @@ namespace View.ViewModel
             // frissítjük a megszerzett kosarak számát és a játékidőt
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Connect));
-
+            OnPropertyChanged(nameof(Size));
         }
 
         private void OnPlayerModeClick()
@@ -437,6 +441,8 @@ namespace View.ViewModel
             RefreshTable();
 
             OnPropertyChanged(nameof(Connect));
+            OnPropertyChanged(nameof(Size));
+
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Round));
             OnPropertyChanged(nameof(Team1Points));
@@ -449,6 +455,7 @@ namespace View.ViewModel
         {
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Connect));
+            OnPropertyChanged(nameof(Size));
         }
 
         private void Model_NewRound(object? sender, GameEventArgs e)
@@ -461,6 +468,8 @@ namespace View.ViewModel
             RefreshTable();
 
             OnPropertyChanged(nameof(Connect));
+            OnPropertyChanged(nameof(Size));
+
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Round));
             OnPropertyChanged(nameof(Team1Points));

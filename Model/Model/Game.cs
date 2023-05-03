@@ -161,13 +161,22 @@ namespace Model.Model
             Robot[] robots = new Robot[number];
             for (int i = 0; i < number; i++)
             {
-                Robot robot = RandomRobot();
-                robots[i] = robot;
+                if (i % 2 == 0)
+                { 
+                    Robot robot = RandomRobot(true);
+                    robots[i] = robot;
+                }
+                else
+                { 
+                    Robot robot = RandomRobot(false);
+                    robots[i] = robot;
+                }
+                    
             }
             return robots;
         }
 
-        private Robot RandomRobot()
+        private Robot RandomRobot(bool pl)
         {
             Random rnd = new Random();
             int x;
@@ -180,7 +189,7 @@ namespace Model.Model
             while (!(_board.GetFieldValue(x, y) is Empty));
 
             Direction direction = (Direction)rnd.Next(0, 4);
-            Robot robot = new Robot(x, y, direction);
+            Robot robot = new Robot(x, y, direction, pl);
             _board.SetValue(x, y, robot);
 
             return robot;

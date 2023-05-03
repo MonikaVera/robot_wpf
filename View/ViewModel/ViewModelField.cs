@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Model.Model;
 
 namespace View.ViewModel
@@ -164,21 +165,33 @@ namespace View.ViewModel
             else if (field is Robot)
             {
                 Robot robot = (Robot)field;
-                if (robot.Direction == Direction.EAST)
+                if (robot.Direction == Direction.EAST) 
                 {
-                    _picture = "robot_right.jpg";
+                    if (robot.Player == true)
+                        _picture = "robot_right.jpg";
+                    else
+                        _picture = "blue_robot_right.jpg";
                 }
                 else if (robot.Direction == Direction.WEST)
                 {
-                    _picture = "robot_left.jpg";
+                    if (robot.Player == true)
+                        _picture = "robot_left.jpg";
+                    else
+                        _picture = "blue_robot_left.jpg";
                 }
                 else if (robot.Direction == Direction.SOUTH)
                 {
-                    _picture = "robot_front.jpg";
+                    if (robot.Player == true)
+                        _picture = "robot_front.jpg";
+                    else
+                        _picture = "blue_fobot_front.jpg";
                 }
                 else if (robot.Direction == Direction.NORTH)
                 {
-                    _picture = "robot_back.jpg";
+                    if (robot.Player == true)
+                        _picture = "robot_back.jpg";
+                    else
+                        _picture = "blue_robot_back.jpg";
                 }
             }
             OnPropertyChanged(nameof(Picture));
@@ -187,6 +200,8 @@ namespace View.ViewModel
         /// Mezőváltoztató parancs lekérdezése, vagy beállítása.
         /// </summary>
         public DelegateCommand? ChooseActionFieldCommand { get; set; }
+        public Thickness BorderThickness { get; internal set; }
+        public System.Windows.Media.SolidColorBrush BorderBrush { get; internal set; }
 
         #endregion
     }

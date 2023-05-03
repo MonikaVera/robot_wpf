@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace View.ViewModel
@@ -19,7 +20,11 @@ namespace View.ViewModel
 
         private Game _model;
         private bool _canMove;
-
+        private int round=1;
+        private string str = "no";
+        private int size = 0;
+        public string Connect { get { return str; } set { OnPropertyChanged(nameof(str)); } }
+        public int Size { get { return size; } set { OnPropertyChanged(nameof(size)); } }
         #region Commands
         public DelegateCommand PlayerModeCommand { get; private set; }
         public DelegateCommand ViewerModeCommand { get; private set; }
@@ -108,8 +113,6 @@ namespace View.ViewModel
         public String GameTime { get { return TimeSpan.FromSeconds(_model.GameTime).ToString("g"); } }
       
 
-        //  public int LocX { get { return _model.LocX; } }
-        // public int LocY { get { return _model.LocY; } }
         #endregion
 
         public ViewModelGame(Game game)
@@ -178,7 +181,7 @@ namespace View.ViewModel
                         ++y;
                         Fields.Add(field);
                     }
-                    else if(j >= 0 && i >= 0 && j < _model.Board.Height && i < _model.Board.Width)
+                    else
                     {
                         ViewModelField field = new ViewModelField();
                         //field.SetText(_model.Board.GetFieldValue(0, 0));//Black
@@ -187,10 +190,6 @@ namespace View.ViewModel
                         field.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
                         ++y;
                         Fields.Add(field);
-                    }
-                    else
-                    {
-                        ++y;
                     }
                 ++x;
             }
@@ -270,6 +269,12 @@ namespace View.ViewModel
         private void RefreshTable()
         {
             int y = 0;
+            if(round < _model.Round)
+            {
+                ++round;
+                _model.SaveGameAsync("file" + (_model.Round ) + ".txt");
+            }
+
             for (int j = _model.Robot.Y - 3; j <= _model.Robot.Y + 3; j++)
             {
                 for (int i = _model.Robot.X - 3; i <= _model.Robot.X + 3; i++)
@@ -279,6 +284,24 @@ namespace View.ViewModel
                     {
                         ViewModelField field = Fields[y]; //x,y
                         field.SetPicture(_model.Board.GetFieldValue(i, j));
+
+                        //make Connections
+                        List<XYcoordinates> connect = _model.Robot.AllConnections();
+                        if( connect.Contains(new XYcoordinates(i, j)) )
+                        {
+                           /* Fields[y].BorderThickness = new Thickness(2.0);
+                            Fields[y].BorderBrush = Brushes.Red; */
+                            field.BorderThickness = new Thickness(2.0);
+                            str = "yes";
+                            size = 2;
+                        }
+                        else
+                        {
+                            str = "no";
+                            size = 0;
+                           // Fields[y].BorderThickness = new Thickness(0.0);
+                        }
+                        
                         ViewModelField fieldMap = FieldsMap[j * _model.Board.Width + i];
                         fieldMap.SetPicture(_model.Board.GetFieldValue(i, j));
 
@@ -296,10 +319,11 @@ namespace View.ViewModel
 
                 }
             }
-            _model.SaveGameAsync("file" + (_model.Round+1)+".txt");
 
             // frissítjük a megszerzett kosarak számát és a játékidőt
             OnPropertyChanged(nameof(GameTime));
+            OnPropertyChanged(nameof(Connect));
+            OnPropertyChanged(nameof(Size));
         }
 
         private void OnPlayerModeClick()
@@ -374,6 +398,11 @@ namespace View.ViewModel
             }
             else if (action == "GET") // rakapcsolodunk egy kockara
             {
+              /* if( _model.IsConected(new XYcoordinates(_model.Robot.X+1, _model.Robot.Y)) )
+                {
+                   // ViewModelField fieldMap = FieldsMap[ (_model.Robot.X + 1) + _model.Robot.Y ]; 
+                    //!!!!
+                }*/
                 _model.ConnectRobot(_model.Robot); 
             }
             else if (action == "PUTDOWN") // lekapcsolodunk egy kockarol
@@ -411,6 +440,9 @@ namespace View.ViewModel
             _model.NextPlayer();
             RefreshTable();
 
+            OnPropertyChanged(nameof(Connect));
+            OnPropertyChanged(nameof(Size));
+
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Round));
             OnPropertyChanged(nameof(Team1Points));
@@ -422,6 +454,8 @@ namespace View.ViewModel
         private void Model_GameAdvanced(object? sender, GameEventArgs e)
         {
             OnPropertyChanged(nameof(GameTime));
+            OnPropertyChanged(nameof(Connect));
+            OnPropertyChanged(nameof(Size));
         }
 
         private void Model_NewRound(object? sender, GameEventArgs e)
@@ -432,6 +466,9 @@ namespace View.ViewModel
             }
             _model.NextPlayer();
             RefreshTable();
+
+            OnPropertyChanged(nameof(Connect));
+            OnPropertyChanged(nameof(Size));
 
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Round));

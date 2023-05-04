@@ -144,17 +144,20 @@ namespace View.ViewModel
 
         private XYcoordinates? firstCube=null;
         private XYcoordinates? lastCube=null;
-        public void Write(int param)
+        private bool _round=true;
+        public void OnClickField(int param)
         {
-            if(firstCube == null)
+            if(_round)
             {
-                firstCube = new XYcoordinates(param / 7 - 3, param % 7 - 3);
+                firstCube = new XYcoordinates(param % 7 - 3, param / 7 - 3);
+                _round= false;
             }
             else
             {
-                lastCube = new XYcoordinates(param / 7 - 3, param % 7 - 3);
+                lastCube = new XYcoordinates(param % 7 - 3, param / 7 - 3);
+                _round = true;
             }
-            //MessageBox.Show(param.ToString() +' '+ (param/7-3).ToString() + ' ' + (param%7-3).ToString());
+            /*MessageBox.Show(param.ToString() +' '+ (param%7).ToString() + ' ' + (param/7).ToString());*/
         }
         #region Public Methods
         /*
@@ -237,7 +240,7 @@ namespace View.ViewModel
             _model.SaveGameAsync("file" + 1 + ".txt");
             foreach (ViewModelField field in Fields)
             {
-                field.ChooseActionFieldCommand = new DelegateCommand(param => Write(Convert.ToInt32(param)));
+                field.ChooseActionFieldCommand = new DelegateCommand(param => OnClickField(Convert.ToInt32(param)));
             }
         }
 

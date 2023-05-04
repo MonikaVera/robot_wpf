@@ -751,6 +751,21 @@ namespace Model.Model
 
     public void DisconnectRobot(Robot robot) {
         robot.clearConnections();
+            foreach(Robot r in _team1.Robots)
+            {
+                if((robot.ConnectedRobot).Equals(r.RobotNumber))
+                {
+                    r.ConnectedRobot = -1;
+                }
+            }
+            foreach (Robot r in _team1.Robots)
+            {
+                if ((robot.ConnectedRobot).Equals(r.RobotNumber))
+                {
+                    r.ConnectedRobot = -1;
+                }
+            }
+            robot.ConnectedRobot = -1;
         OnUpdateFields(robot, Direction.WEST, Action.DisconnectRobot, true);
     }
 
@@ -763,6 +778,9 @@ namespace Model.Model
         ownCube.Y = ownCube.Y + robot.Y;
         wantsToConnect.X = wantsToConnect.X + robot.X;
         wantsToConnect.Y = wantsToConnect.Y + robot.Y;
+            /*MessageBox.Show((ownCube.X).ToString() + ' ' + (ownCube.Y).ToString());
+            MessageBox.Show((wantsToConnect.X).ToString() + ' ' + (wantsToConnect.Y).ToString());*/
+        
         if (_board.GetFieldValue(ownCube.X, ownCube.Y) is Cube &&
             _board.GetFieldValue(wantsToConnect.X, wantsToConnect.Y) is Cube
             && robot.IsConnected(ownCube) && !robot.IsConnected(wantsToConnect)
@@ -772,13 +790,15 @@ namespace Model.Model
             {
                 foreach (Robot r in _team1.Robots)
                 {
-                    if ((r.WantsToConnectTo).Equals(ownCube) && (r.OwnCube).Equals(wantsToConnect))
+                    if (r.WantsToConnectTo!=null && r.OwnCube!=null &&
+                        (r.WantsToConnectTo).Equals(ownCube) && (r.OwnCube).Equals(wantsToConnect))
                     {
                         UnionRobotConnections(r, robot);
                         r.WantsToConnectTo = null;
                         r.OwnCube = null;
                         r.ConnectedRobot = robot.RobotNumber;
                         robot.ConnectedRobot = r.RobotNumber;
+                        OnUpdateFields(robot, robot.Direction, Action.ConnectCubes, true);
                         return;
                     }
                 }
@@ -787,19 +807,21 @@ namespace Model.Model
             {
                 foreach (Robot r in _team2.Robots)
                 {
-                    if ((r.WantsToConnectTo).Equals(ownCube) && (r.OwnCube).Equals(wantsToConnect))
+                    if (r.WantsToConnectTo != null && r.OwnCube != null &&
+                        (r.WantsToConnectTo).Equals(ownCube) && (r.OwnCube).Equals(wantsToConnect))
                     {
                         UnionRobotConnections(r, robot);
                         r.WantsToConnectTo = null;
                         r.OwnCube = null;
                         r.ConnectedRobot = robot.RobotNumber;
                         robot.ConnectedRobot = r.RobotNumber;
+                        OnUpdateFields(robot, robot.Direction, Action.ConnectCubes, true);
                         return;
                     }
                 }
-                robot.WantsToConnectTo = wantsToConnect;
-                robot.OwnCube = ownCube;
             }
+            robot.WantsToConnectTo = wantsToConnect;
+            robot.OwnCube = ownCube;
         }
 
 
@@ -852,16 +874,22 @@ namespace Model.Model
         if (IsConnectedToRobots(robot) && robot.IsConnected(ownCube_1) && robot.IsConnected(ownCube_2)
             && NextToEachOther(ownCube_1, ownCube_2))
         {
-            if (_team1.GetRobotByNum(robot.ConnectedRobot) != null)
+            if(robot!=null)
             {
-                Robot r = _team1.GetRobotByNum(robot.ConnectedRobot);
+                if (_team1.GetRobotByNum(robot.ConnectedRobot) != null)
+                {
+                    Robot r = _team1.GetRobotByNum(robot.ConnectedRobot);
+                        SeparateRobotConnections(r, robot, ownCube_1, ownCube_2);
 
-            }
-            if (_team2.GetRobotByNum(robot.ConnectedRobot) != null)
-            {
-                Robot r = _team2.GetRobotByNum(robot.ConnectedRobot);
+                }
+                if (_team2.GetRobotByNum(robot.ConnectedRobot) != null)
+                {
+                    Robot r = _team2.GetRobotByNum(robot.ConnectedRobot);
+                        SeparateRobotConnections(r, robot, ownCube_1, ownCube_2);
 
+                }
             }
+            
         }
     }
 

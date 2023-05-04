@@ -743,6 +743,21 @@ namespace Model.Model
 
     public void DisconnectRobot(Robot robot) {
         robot.clearConnections();
+            foreach(Robot r in _team1.Robots)
+            {
+                if((robot.ConnectedRobot).Equals(r.RobotNumber))
+                {
+                    r.ConnectedRobot = -1;
+                }
+            }
+            foreach (Robot r in _team1.Robots)
+            {
+                if ((robot.ConnectedRobot).Equals(r.RobotNumber))
+                {
+                    r.ConnectedRobot = -1;
+                }
+            }
+            robot.ConnectedRobot = -1;
         OnUpdateFields(robot, Direction.WEST, Action.DisconnectRobot, true);
     }
 
@@ -755,8 +770,8 @@ namespace Model.Model
         ownCube.Y = ownCube.Y + robot.Y;
         wantsToConnect.X = wantsToConnect.X + robot.X;
         wantsToConnect.Y = wantsToConnect.Y + robot.Y;
-            MessageBox.Show((ownCube.X).ToString() + ' ' + (ownCube.Y).ToString());
-            MessageBox.Show((wantsToConnect.X).ToString() + ' ' + (wantsToConnect.Y).ToString());
+            /*MessageBox.Show((ownCube.X).ToString() + ' ' + (ownCube.Y).ToString());
+            MessageBox.Show((wantsToConnect.X).ToString() + ' ' + (wantsToConnect.Y).ToString());*/
         
         if (_board.GetFieldValue(ownCube.X, ownCube.Y) is Cube &&
             _board.GetFieldValue(wantsToConnect.X, wantsToConnect.Y) is Cube

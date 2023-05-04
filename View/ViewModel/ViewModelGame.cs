@@ -145,7 +145,7 @@ namespace View.ViewModel
         private XYcoordinates? firstCube=null;
         private XYcoordinates? lastCube=null;
         private bool _round=true;
-        public void Write(int param)
+        public void OnClickField(int param)
         {
             if(_round)
             {
@@ -157,7 +157,7 @@ namespace View.ViewModel
                 lastCube = new XYcoordinates(param % 7 - 3, param / 7 - 3);
                 _round = true;
             }
-            MessageBox.Show(param.ToString() +' '+ (param%7).ToString() + ' ' + (param/7).ToString());
+            /*MessageBox.Show(param.ToString() +' '+ (param%7).ToString() + ' ' + (param/7).ToString());*/
         }
         #region Public Methods
         /*
@@ -240,7 +240,7 @@ namespace View.ViewModel
             _model.SaveGameAsync("file" + 1 + ".txt");
             foreach (ViewModelField field in Fields)
             {
-                field.ChooseActionFieldCommand = new DelegateCommand(param => Write(Convert.ToInt32(param)));
+                field.ChooseActionFieldCommand = new DelegateCommand(param => OnClickField(Convert.ToInt32(param)));
             }
         }
 

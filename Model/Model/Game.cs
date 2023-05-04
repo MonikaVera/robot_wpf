@@ -750,7 +750,7 @@ namespace Model.Model
                     r.ConnectedRobot = -1;
                 }
             }
-            foreach (Robot r in _team1.Robots)
+            foreach (Robot r in _team2.Robots)
             {
                 if ((robot.ConnectedRobot).Equals(r.RobotNumber))
                 {

@@ -85,17 +85,17 @@ namespace Model.Model
                 field2 = new Cube(1, 0, 1, (Color)(col % 8));
                 fields[1, 0] = field2;
 
-                deadline = 1;
+                deadline = 15;
                 taskName = "Hard";
             }
             if(cubeNr == 3)
             {
-                deadline = 1;
+                deadline = 9;
                 taskName = "Easy";
             }
             if (cubeNr == 4)
             {
-                deadline = 1;
+                deadline = 12;
                 taskName = "Hard";
             }
 

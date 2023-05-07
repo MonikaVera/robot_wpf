@@ -22,6 +22,7 @@ namespace View.ViewModel
         private Game _model;
         private bool _canMove;
         private int round=1;
+        private int roundTask = 1;
         private string str = "no";
         private int size = 0;
         public string Connect { get { return str; } set { OnPropertyChanged(nameof(str)); } }
@@ -112,7 +113,34 @@ namespace View.ViewModel
         public Game Game { get; set; }
 
         public String GameTime { get { return TimeSpan.FromSeconds(_model.GameTime).ToString("g"); } }
-      
+
+
+        public string TaskName
+        {
+            get { return _model.NoticeBoard.TaskName; }
+            set
+            {
+                OnPropertyChanged(nameof(TaskName));
+            }
+        }
+
+        public string TaskReward
+        {
+            get { return _model.NoticeBoard.TaskReward + " points"; }
+            set
+            {
+                OnPropertyChanged(nameof(TaskReward));
+            }
+        }
+
+        public String TaskDeadline
+        {
+            get { return _model.NoticeBoard.Deadline+" rounds"; }
+            set
+            {
+                OnPropertyChanged(nameof(TaskDeadline));
+            }
+        }
 
         #endregion
 
@@ -296,6 +324,20 @@ namespace View.ViewModel
                 _model.SaveGameAsync("file" + (_model.Round ) + ".txt");
             }
 
+            if  ( (_model.NoticeBoard.Deadline + roundTask) == round )
+            {
+                roundTask = round;
+                _model.NoticeBoard.GenerateTasks(3,3);
+                for (int j = 0; j < 3; j++)
+                    for (int i = 0; i < 3; i++)
+                    {
+                        VMTasksFields taskfield = FieldsTasks[j * 3 + i];
+                        taskfield.SetImage(_model.NoticeBoard.Fields[i, j]);
+                    }
+
+            }
+
+
             for (int j = _model.Robot.Y - 3; j <= _model.Robot.Y + 3; j++)
             {
                 for (int i = _model.Robot.X - 3; i <= _model.Robot.X + 3; i++)
@@ -345,6 +387,9 @@ namespace View.ViewModel
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Connect));
             OnPropertyChanged(nameof(Size));
+            OnPropertyChanged(nameof(TaskDeadline));
+            OnPropertyChanged(nameof(TaskName));
+            OnPropertyChanged(nameof(TaskReward));
         }
 
         private void OnPlayerModeClick()

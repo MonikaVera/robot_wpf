@@ -42,11 +42,12 @@ namespace Model.Model
            public class ExtraTask
            {*/
 
-        private string taskName = "task1";
+
+        private string taskName = "";
         private int deadline;
 
         public int Deadline { get { return deadline; } set { deadline = value; } }
-        public string TaskNaem { get { return taskName; } set { taskName = value; } }
+        public string TaskName { get { return taskName; } set { taskName = value; } }
 
         public NoticeBoard() { GenerateTasks(3, 3); }
 
@@ -67,7 +68,7 @@ namespace Model.Model
                     fields[i, j] = field;
                 }
 
-            int cubeNr = rand.Next(3, 5);
+            int cubeNr = rand.Next(3, 6);
             points = cubeNr;
 
             int generCubeNr = 0;
@@ -77,6 +78,26 @@ namespace Model.Model
             Field field2 = new Cube(1, 1, 1, (Color)(col % 8));
             fields[1, 1] = field2;
             generCubeNr++;
+            if(cubeNr > 4)
+            {
+                generCubeNr++;
+                col = rand.Next(0, 8);
+                field2 = new Cube(1, 0, 1, (Color)(col % 8));
+                fields[1, 0] = field2;
+
+                deadline = 15;
+                taskName = "Hard";
+            }
+            if(cubeNr == 3)
+            {
+                deadline = 9;
+                taskName = "Easy";
+            }
+            if (cubeNr == 4)
+            {
+                deadline = 12;
+                taskName = "Hard";
+            }
 
             while (generCubeNr < cubeNr)
             {

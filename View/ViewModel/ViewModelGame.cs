@@ -25,6 +25,7 @@ namespace View.ViewModel
         private int roundTask = 1;
         private string str = "no";
         private int size = 0;
+        private string _chatText;
         public string Connect { get { return str; } set { OnPropertyChanged(nameof(str)); } }
         public int Size { get { return size; } set { OnPropertyChanged(nameof(size)); } }
         #region Commands
@@ -43,7 +44,15 @@ namespace View.ViewModel
         public DelegateCommand LoadGameCommand { get; private set; }
         public DelegateCommand ExitGameCommand { get; private set; }
         public DelegateCommand NewExtraTask { get; private set; }
-        
+
+        public DelegateCommand ConnectChatButtonCommand { get; private set; }
+        public DelegateCommand DisconnectChatButtonCommand { get; private set; }
+        public DelegateCommand ExitChatButtonCommand { get; private set; }
+        public DelegateCommand FollowChatButtonCommand { get; private set; }
+        public DelegateCommand HelloChatButtonCommand { get; private set; }
+        public DelegateCommand PraiseChatButtonCommand { get; private set; }
+       
+
         #endregion
 
         #region Events
@@ -108,6 +117,19 @@ namespace View.ViewModel
             }
         }
 
+        public string ChatText
+        {
+            get { return _chatText; }
+            set
+            {
+                if (_chatText != value)
+                {
+                    _chatText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
 
 
         public Game Game { get; set; }
@@ -166,6 +188,12 @@ namespace View.ViewModel
             NextPlayerCommand = new DelegateCommand(param => NextPlayer());
             LoadGameCommand = new DelegateCommand(param => OnLoadGame());
             SaveGameCommand = new DelegateCommand(param => OnSaveGame());
+            ConnectChatButtonCommand = new DelegateCommand(param => SetChat(Convert.ToString(param)));
+            DisconnectChatButtonCommand = new DelegateCommand(param => SetChat(Convert.ToString(param)));
+            ExitChatButtonCommand = new DelegateCommand(param => SetChat(Convert.ToString(param)));
+            FollowChatButtonCommand = new DelegateCommand(param => SetChat(Convert.ToString(param)));
+            HelloChatButtonCommand = new DelegateCommand(param => SetChat(Convert.ToString(param)));
+            PraiseChatButtonCommand = new DelegateCommand(param => SetChat(Convert.ToString(param)));
 
         }
 
@@ -515,6 +543,15 @@ namespace View.ViewModel
             _model.NextPlayer();
             RefreshTable();
 
+            if (_model.NextTeam1)
+            {
+                ChatText = _model.ChatTeam2;
+            }
+            else
+            {
+                ChatText = _model.ChatTeam1;
+            }
+
             OnPropertyChanged(nameof(Connect));
             OnPropertyChanged(nameof(Size));
 
@@ -524,6 +561,20 @@ namespace View.ViewModel
             OnPropertyChanged(nameof(Team2Points));
             OnStartTimer();
             _canMove = true;
+        }
+
+        private void SetChat(string? key)
+        {
+            if (_model.NextTeam1)
+            {
+                _model.ChatTeam2 += " Player" + (_model.Robot.RobotNumber - 3) + ": " + key + "\n";
+                ChatText = _model.ChatTeam2;
+            }
+            else
+            {
+                _model.ChatTeam1 += " Player" + (_model.Robot.RobotNumber + 1) + ": " + key + "\n";
+                ChatText = _model.ChatTeam1;
+            }
         }
 
         private void Model_GameAdvanced(object? sender, GameEventArgs e)

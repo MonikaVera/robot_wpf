@@ -168,7 +168,7 @@
         </ItemsControl>
 
         <!--map-->
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding FieldsMap}" HorizontalAlignment="Right" Height="240" VerticalAlignment="Center" Width="186" Background="Black">
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding FieldsMap}" HorizontalAlignment="Right" Height="150" VerticalAlignment="Center" Width="186" Background="Black">
             <!--az mezőket tároló vezérlő-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -221,7 +221,25 @@
         </ItemsControl>
 
         <!--chat -->
-        <Button Grid.Row="1" HorizontalAlignment="Right" Height="30"  Content="Next player" VerticalAlignment="Bottom" Width="100" Margin="0,0,50,50" Command="{Binding NextPlayerCommand}"/>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Right" Height="150" VerticalAlignment="Bottom" Width="185" Margin="0,0,0,10">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <TextBox x:Name="ChatTextBox" IsReadOnly="True" Height="60" Text="{Binding ChatText}"/>
+            </ScrollViewer>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Button Content="CONNECT" Command="{Binding ConnectChatButtonCommand}" CommandParameter="connect to the cube!" Margin="2" />
+                <Button Content="DISCONNECT" Command="{Binding DisconnectChatButtonCommand}" CommandParameter="disconnect from the cube!" Margin="2" />
+                <Button Content="EXIT" Command="{Binding ExitChatButtonCommand}" CommandParameter="bring the cubes to the exit!" Margin="2" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Button Content="FOLLOW" Command="{Binding FollowChatButtonCommand}" CommandParameter="follow me!" Margin="2" />
+                <Button Content="HELLO" Command="{Binding HelloChatButtonCommand}" CommandParameter="hello, everyone!" Margin="2" />
+                <Button Content="PRAISE" Command="{Binding PraiseChatButtonCommand}" CommandParameter="well played!" Margin="2" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Height="30"  Content="Next player" VerticalAlignment="Bottom" Width="100" Margin="10,5,50,50" Command="{Binding NextPlayerCommand}"/>
+            </StackPanel>
+        </StackPanel>
+       
 
 
         <StatusBar Grid.Row="2" >

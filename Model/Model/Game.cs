@@ -48,6 +48,8 @@ namespace Model.Model
         private int _nextPlayerFromTeam2;
         private bool _nextTeam1;
         private Robot _previousRobot;
+        private string _chatTeam1;
+        private string _chatTeam2;
 
         #endregion
 
@@ -78,6 +80,8 @@ namespace Model.Model
         public int NextPlayerFromTeam2 { get { return _nextPlayerFromTeam2; } }
 
         public bool NextTeam1 { get { return _nextTeam1; } }
+        public string ChatTeam1 { get { return _chatTeam1; } set { _chatTeam1 = value; } }
+        public string ChatTeam2 { get { return _chatTeam2; } set { _chatTeam2 = value; } }
 
         #endregion
 

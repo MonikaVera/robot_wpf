@@ -118,6 +118,27 @@ namespace Model.Model
 
         }
 
+        public void GenerateNewCubes(int number)
+        {
+            Random rnd = new Random();
+            for (int i = 0; i < number; i++)
+            {
+                int x;
+                int y;
+
+                do
+                {
+                    x = rnd.Next(1, _width - 1);
+                    y = rnd.Next(1, _height - 1);
+                } while (!(GetFieldValue(x, y) is Empty));
+
+
+                Field field1 = new Cube(x, y, rnd.Next(1, 6), (Color)(_cubes % 8));
+                this.SetValue(x, y, field1);
+                _cubes++;
+            }
+        }
+
         private void GenerateTable(int width, int height)
         {
             for (int i = 1; i < width - 1; i++) // minden mezőt üresnek inicializál
@@ -190,7 +211,7 @@ namespace Model.Model
                 {
                     x = rnd.Next(1, width - 1);
                     y = rnd.Next(1, height - 1);
-                } while ((x != 1 || y != 1) && !(GetFieldValue(x, y) is Empty));
+                } while (!(GetFieldValue(x, y) is Empty));
 
 
                 Field field1 = new Obstacle(x, y, rnd.Next(1, 6));
@@ -207,7 +228,7 @@ namespace Model.Model
                 {
                     x = rnd.Next(1, width - 1);
                     y = rnd.Next(1, height - 1);
-                } while ((x != 1 || y != 1) && !(GetFieldValue(x, y) is Empty));
+                } while (!(GetFieldValue(x, y) is Empty));
 
 
                 Field field1 = new Cube(x, y, rnd.Next(1, 6), (Color)(_cubes % 8));

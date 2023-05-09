@@ -26,7 +26,7 @@ namespace Model.Model
 
         #region Fields
 
-        private Robot _robot= null!;
+        private Robot _robot = null!;
         private Board _board = null!;
         private NoticeBoard _noticeBoard = null!;
         private int _gameOverTurn;
@@ -48,6 +48,7 @@ namespace Model.Model
         private bool _nextTeam1;
         private string _chatTeam1 = null!;
         private string _chatTeam2 = null!;
+        private List<Board> _robotsMap = new List<Board>();
 
         #endregion
 
@@ -63,6 +64,7 @@ namespace Model.Model
         public NoticeBoard NoticeBoard { get { return _noticeBoard; } }
 
         public int Round { get { return _round; } set { _round = value; } }
+        public List<Board> RobotsMap { get { return _robotsMap; } }
 
         public int Team1Points { get { return _team1points; } set { _team1points = value; } }
         public int Team2Points { get { return _team2points; } set { _team2points = value; } }
@@ -138,6 +140,7 @@ namespace Model.Model
             _chatTeam1 = "";
             _chatTeam2 = "";
             _nextTeam1 = true;
+
         }
 
         public void LoadGameAsync(string _filepath)
@@ -196,8 +199,40 @@ namespace Model.Model
             Direction direction = (Direction)rnd.Next(0, 4);
             Robot robot = new Robot(x, y, direction, i);
             _board.SetValue(x, y, robot);
+            for (int a = 0; a < i; a++)
+                if (_robotsMap[a].GetFieldValue(x, y) is not None)
+                {
+                    _robotsMap[a].SetValue(x, y, robot);
+
+                }
+
+            createMap(i, x, y);
 
             return robot;
+        }
+
+        private void createMap(int i, int x, int y)
+        {
+            //robot map
+            Board robotsMap = new Board(_board.Width, _board.Height);
+            for (int j = 0; j < _board.Height; j++)
+                for (int l = 0; l < _board.Width; l++)
+                {
+                    robotsMap.SetValue(l, j, new None());
+                }
+
+            for (int j = y - 3; j <= y + 3; j++)
+            {
+                for (int l = x - 3; l <= x + 3; l++)
+                {
+                    if (j >= 0 && l >= 0 && (Math.Abs(j - y) + Math.Abs(l - x)) <= 3
+                        && j < _board.Height && l < _board.Width)
+                    {
+                        robotsMap.SetValue(l, j, _board.GetFieldValue(l, j));
+                    }
+                }
+            }
+            _robotsMap.Add(robotsMap);
         }
 
         private Direction? CalculateDirection()
@@ -1068,7 +1103,7 @@ namespace Model.Model
                         _team1.RemoveRobotFromTeam(cleanRobot);
                         if (_team1.IsEmptyTeam())
                         {
-                            OnGameOver(true,_team2);
+                            OnGameOver(true, _team2);
                         }
                         if (_nextPlayerFromTeam1 > _team1.Robots.Length - 1)
                         {
@@ -1161,7 +1196,7 @@ namespace Model.Model
         public void NextPlayer()
         {
             _robot = NextRobot();
-            if (_nextPlayerFromTeam1 == 0 && _nextPlayerFromTeam2 == 0 && _nextTeam1)
+            if (_nextPlayerFromTeam1 == 0 && _nextPlayerFromTeam2 == 0 && _nextTeam1 )
             {
                 _round++;
             }

@@ -1453,9 +1453,9 @@ namespace TestRobots
             _model.Team1 = _team1;
             _model.Team2 = _team2;
 
-            Assert.IsTrue("Hard" == _model.NoticeBoard.TaskName || "Easy" == _model.NoticeBoard.TaskName);
+            Assert.IsTrue("Hard" == _model.NoticeBoard.TaskName || "Easy" == _model.NoticeBoard.TaskName || "Medium" == _model.NoticeBoard.TaskName);
 
-            Assert.IsTrue(1 == _model.NoticeBoard.Deadline);
+            Assert.IsTrue(9 <= _model.NoticeBoard.Deadline);
 
             Assert.IsTrue(3 <= _model.NoticeBoard.TaskReward && 5 >= _model.NoticeBoard.TaskReward);
 

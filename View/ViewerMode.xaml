@@ -134,12 +134,13 @@
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
 
+        <TextBlock Text ="Chat" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Center" Width="185" Grid.Row="1"/>
         <!--
         <Button Grid.Row="0" Content="Back to menu" Width="185" Height="20" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding ViewerModeBack}"  RenderTransformOrigin="0.442,-0.104"/>
         -->
 
         <!--TextBox Grid.Row="1" HorizontalAlignment="Right" Height="250" VerticalAlignment="Bottom" TextWrapping="Wrap" Text="Chat" Width="185" Margin="0,0,0,10"/> -->
-        <StackPanel Grid.Row="1" HorizontalAlignment="Right" Height="250" VerticalAlignment="Bottom" Width="185" Margin="0,0,0,10">
+        <StackPanel Grid.Row="1" HorizontalAlignment="Right" Height="230" VerticalAlignment="Bottom" Width="185" Margin="0,0,0,10">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <TextBox x:Name="ChatTextBox" IsReadOnly="True" Height="250" Text="{Binding ChatText}"/>
             </ScrollViewer>

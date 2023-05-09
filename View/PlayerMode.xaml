@@ -7,7 +7,6 @@
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="1200"
       Title="PlayerMode">
-
     <!--key binding-->
     <Page.InputBindings>
         <KeyBinding 
@@ -409,5 +408,6 @@
         </StackPanel>
     </Grid>
 </Page>
+
 
 

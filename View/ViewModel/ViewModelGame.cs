@@ -21,7 +21,7 @@ namespace View.ViewModel
 
         private Game _model;
         private bool _canMove;
-        private int round=1;
+        private int round = 1;
         private int roundTask = 1;
         private string str = "no";
         private int size = 0;
@@ -51,7 +51,7 @@ namespace View.ViewModel
         public DelegateCommand FollowChatButtonCommand { get; private set; }
         public DelegateCommand HelloChatButtonCommand { get; private set; }
         public DelegateCommand PraiseChatButtonCommand { get; private set; }
-       
+
 
         #endregion
 
@@ -66,12 +66,17 @@ namespace View.ViewModel
         public event EventHandler? StopTimer;
         public event EventHandler? StartTimer;
 
+
+
+        public event EventHandler? ExitGame;
         public event EventHandler? LoadGame;
         public event EventHandler? SaveGame;
         #endregion
 
         #region Properties
-        public int Height { get { return _model.Board.Height; }
+        public int Height
+        {
+            get { return _model.Board.Height; }
             set
             {
                 OnPropertyChanged(nameof(Height));
@@ -116,8 +121,10 @@ namespace View.ViewModel
 
         public int Health
         {
-            get { 
-                return _model.Robot.Health; }
+            get
+            {
+                return _model.Robot.Health;
+            }
             set
             {
                 OnPropertyChanged(nameof(Health));
@@ -137,6 +144,7 @@ namespace View.ViewModel
                     return (_model.Robot.RobotNumber - 3);
                 }
             }
+
             set
             {
                 OnPropertyChanged(nameof(Number));
@@ -183,7 +191,7 @@ namespace View.ViewModel
 
         public String TaskDeadline
         {
-            get { return _model.NoticeBoard.Deadline+" rounds"; }
+            get { return _model.NoticeBoard.Deadline + " rounds"; }
             set
             {
                 OnPropertyChanged(nameof(TaskDeadline));
@@ -224,15 +232,15 @@ namespace View.ViewModel
         }
 
 
-        private XYcoordinates? firstCube=null;
-        private XYcoordinates? lastCube=null;
-        private bool _round=true;
+        private XYcoordinates? firstCube = null;
+        private XYcoordinates? lastCube = null;
+        private bool _round = true;
         public void OnClickField(int param)
         {
-            if(_round)
+            if (_round)
             {
                 firstCube = new XYcoordinates(param % 7 - 3, param / 7 - 3);
-                _round= false;
+                _round = false;
             }
             else
             {
@@ -266,6 +274,7 @@ namespace View.ViewModel
             //jatektabla letrehozasa
             Fields = new ObservableCollection<ViewModelField>();
             FieldsMap = new ObservableCollection<ViewModelField>();
+
             int x = 0, y = 0;
             for (int j = _model.Robot.Y - 3; j <= _model.Robot.Y + 3; j++)
             {
@@ -296,11 +305,11 @@ namespace View.ViewModel
 
             for (int j = 0; j < _model.Board.Height; j++)
                 for (int i = 0; i < _model.Board.Width; i++)
-                    if ( (Math.Abs(j - _model.Robot.Y) + Math.Abs(i - _model.Robot.X)) <= 3)
+                    if ((Math.Abs(j - _model.Robot.Y) + Math.Abs(i - _model.Robot.X)) <= 3)
                     {
                         ViewModelField fieldMap = new ViewModelField();
                         // fieldMap.Number = j * _model.Board.Width + i;
-                        fieldMap.SetPicture(_model.Board.GetFieldValue(i, j));
+                        fieldMap.SetPicture(_model.RobotsMap[_model.Robot.RobotNumber].GetFieldValue(i, j));
                         fieldMap.IndX = i;
                         fieldMap.IndY = j;
                         fieldMap.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
@@ -311,7 +320,7 @@ namespace View.ViewModel
                     {
                         ViewModelField fieldMap = new ViewModelField();
                         // fieldMap.Number = j * _model.Board.Width + i;
-                        fieldMap.SetText(_model.Board.GetFieldValue(i, j));
+                        fieldMap.SetText(_model.RobotsMap[_model.Robot.RobotNumber].GetFieldValue(i, j));
                         fieldMap.IndX = i;
                         fieldMap.IndY = j;
                         fieldMap.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
@@ -372,16 +381,16 @@ namespace View.ViewModel
         private async void RefreshTable()
         {
             int y = 0;
-            if(round < _model.Round)
+            if (round < _model.Round)
             {
                 ++round;
-                await _model.SaveGameAsync("file" + (_model.Round ) + ".txt");
+                await _model.SaveGameAsync("file" + (_model.Round) + ".txt");
             }
 
-            if  ( (_model.NoticeBoard.Deadline + roundTask) == round )
+            if ((_model.NoticeBoard.Deadline + roundTask) == round)
             {
                 roundTask = round;
-                _model.NoticeBoard.GenerateTasks(3,3);
+                _model.NoticeBoard.GenerateTasks(3, 3);
                 for (int j = 0; j < 3; j++)
                     for (int i = 0; i < 3; i++)
                     {
@@ -391,6 +400,13 @@ namespace View.ViewModel
 
             }
 
+
+            for (int j = 0; j < _model.Board.Height; j++)
+                for (int i = 0; i < _model.Board.Width; i++)
+                {
+                    ViewModelField fieldMap = FieldsMap[j * _model.RobotsMap[_model.Robot.RobotNumber].Width + i];
+                    fieldMap.SetPicture(_model.RobotsMap[_model.Robot.RobotNumber].GetFieldValue(i, j));
+                }
 
             for (int j = _model.Robot.Y - 3; j <= _model.Robot.Y + 3; j++)
             {
@@ -404,10 +420,10 @@ namespace View.ViewModel
 
                         //make Connections
                         List<XYcoordinates> connect = _model.Robot.AllConnections();
-                        if( connect.Contains(new XYcoordinates(i, j)) )
+                        if (connect.Contains(new XYcoordinates(i, j)))
                         {
-                           /* Fields[y].BorderThickness = new Thickness(2.0);
-                            Fields[y].BorderBrush = Brushes.Red; */
+                            /* Fields[y].BorderThickness = new Thickness(2.0);
+                             Fields[y].BorderBrush = Brushes.Red; */
                             field.BorderThickness = new Thickness(2.0);
                             str = "yes";
                             size = 2;
@@ -416,11 +432,35 @@ namespace View.ViewModel
                         {
                             str = "no";
                             size = 0;
-                           // Fields[y].BorderThickness = new Thickness(0.0);
+                            // Fields[y].BorderThickness = new Thickness(0.0);
                         }
-                        
+
                         ViewModelField fieldMap = FieldsMap[j * _model.Board.Width + i];
-                        fieldMap.SetPicture(_model.Board.GetFieldValue(i, j));
+                        _model.RobotsMap[_model.Robot.RobotNumber].SetValue(i, j, _model.Board.GetFieldValue(i, j));
+                        fieldMap.SetPicture(_model.RobotsMap[_model.Robot.RobotNumber].GetFieldValue(i, j));
+
+                        //synchronized map
+                        if (_model.Board.GetFieldValue(i, j) is Robot)
+                        {
+                            Robot rob2 = (Robot)_model.Board.GetFieldValue(i, j);
+                            if ((_model.Robot.RobotNumber < 4 && rob2.RobotNumber < 4) || (_model.Robot.RobotNumber > 3 && rob2.RobotNumber > 3)) //(_model.Robot.Team == rob2.Team)
+                            {
+                                for (int b = 0; b < _model.Board.Height; b++)
+                                    for (int a = 0; a < _model.Board.Width; a++)
+                                    {
+                                        if (_model.RobotsMap[_model.Robot.RobotNumber].GetFieldValue(a, b) is not None)
+                                        {
+                                            _model.RobotsMap[rob2.RobotNumber].SetValue(a, b, _model.RobotsMap[_model.Robot.RobotNumber].GetFieldValue(a, b));
+                                        }
+                                        if (_model.RobotsMap[rob2.RobotNumber].GetFieldValue(a, b) is not None)
+                                        {
+                                            fieldMap = FieldsMap[b * _model.Board.Width + a];
+                                            _model.RobotsMap[_model.Robot.RobotNumber].SetValue(a, b, _model.RobotsMap[rob2.RobotNumber].GetFieldValue(a, b));
+                                            fieldMap.SetPicture(_model.RobotsMap[_model.Robot.RobotNumber].GetFieldValue(a, b));
+                                        }
+                                    }
+                            }
+                        }
 
                         //viewer mode table refresh
                         ViewModelField fieldMapView = FieldsMapView[j * _model.Board.Width + i];
@@ -496,41 +536,36 @@ namespace View.ViewModel
 
             if (action == "RIGHT" && (x + 1) < _model.Board.Width) // jobbra lépünk
             {
-                _model.MoveRobot(_model.Robot, Direction.EAST); 
+                _model.MoveRobot(_model.Robot, Direction.EAST);
             }
             else if (action == "LEFT" && (x - 1) >= 0) // balra lépünk
             {
-                _model.MoveRobot(_model.Robot, Direction.WEST); 
+                _model.MoveRobot(_model.Robot, Direction.WEST);
             }
             else if (action == "UP" && (y - 1) >= 0) // felfele lépünk
             {
-                _model.MoveRobot(_model.Robot,Direction.NORTH); 
+                _model.MoveRobot(_model.Robot, Direction.NORTH);
             }
             else if (action == "DOWN" && (y + 1) < _model.Board.Height) // lefele lépünk
             {
-                _model.MoveRobot(_model.Robot,Direction.SOUTH); 
+                _model.MoveRobot(_model.Robot, Direction.SOUTH);
             }
             else if (action == "CLEAN") // tisztitunk
             {
-                _model.Clean(_model.Robot); 
+                _model.Clean(_model.Robot);
             }
             else if (action == "MERGE") // osszekapcsolunk kockakat
             {
-                if(firstCube!=null && lastCube!=null)
+                if (firstCube != null && lastCube != null)
                 {
                     _model.ConnectCubes(_model.Robot, firstCube, lastCube);
-                   // _model.ConnectCubes(_model.Robot);
+                    // _model.ConnectCubes(_model.Robot);
                 }
-                 
+
             }
             else if (action == "GET") // rakapcsolodunk egy kockara
             {
-              /* if( _model.IsConected(new XYcoordinates(_model.Robot.X+1, _model.Robot.Y)) )
-                {
-                   // ViewModelField fieldMap = FieldsMap[ (_model.Robot.X + 1) + _model.Robot.Y ]; 
-                    //!!!!
-                }*/
-                _model.ConnectRobot(_model.Robot); 
+                _model.ConnectRobot(_model.Robot);
             }
             else if (action == "PUTDOWN") // lekapcsolodunk egy kockarol
             {
@@ -639,7 +674,7 @@ namespace View.ViewModel
             OnStartTimer();
         }
 
-        private void Model_UpdateFields(object? obj, ActionEventArgs e)
+        private void Model_UpdateFields(object obj, ActionEventArgs e)
         {
             if (e.CanExecute == false)
             {
@@ -784,7 +819,7 @@ namespace View.ViewModel
             {
 
             }*/
-          //  RefreshTable();
+            //  RefreshTable();
         }
         private void Model_UpdateTasks(object obj, ActionEventArgs e)
         {

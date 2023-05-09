@@ -7,16 +7,10 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="AdminLobby.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Diary.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="MainPage.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="PlayerLobby.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="PlayerMode.xaml.cs">
@@ -30,9 +24,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="AdminLobby.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Diary.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -40,9 +31,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="PlayerLobby.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="PlayerMode.xaml">

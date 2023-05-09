@@ -85,18 +85,18 @@ namespace Model.Model
                 field2 = new Cube(1, 0, 1, (Color)(col % 8));
                 _fields[1, 0] = field2;
 
-                _deadline = 1;
+                _deadline = 15;
                 _taskName = "Hard";
             }
             if(cubeNr == 3)
             {
-                _deadline = 1;
+                _deadline = 9;
                 _taskName = "Easy";
             }
             if (cubeNr == 4)
             {
-                _deadline = 1;
-                _taskName = "Hard";
+                _deadline = 12;
+                _taskName = "Medium";
             }
 
             while (generCubeNr < cubeNr)

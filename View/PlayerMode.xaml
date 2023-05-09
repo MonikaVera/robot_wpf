@@ -85,7 +85,7 @@
         </Grid.RowDefinitions>
 
         <!--player area-->
-        <ItemsControl ItemsSource="{Binding Fields}" Grid.RowSpan="2" Margin="105,10,189,10">
+        <ItemsControl ItemsSource="{Binding Fields}" Grid.RowSpan="2" Margin="105,40,189,10">
             <!--az mezőket tároló vezérlő-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -335,7 +335,17 @@
         </StackPanel>
 
 
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Width="300">
+            <WrapPanel>
+                <TextBlock Text="Robot Number: " HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Width="100"/>
+                <TextBlock Text="{Binding Number}" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="49"/>
+            </WrapPanel>
+            <WrapPanel>
+                <TextBlock Text="Health: " HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" Width="100"/>
+                <TextBlock Text="{Binding Health}" HorizontalAlignment="Right" VerticalAlignment="Center" Height="20" Width="49"/>
+            </WrapPanel>
 
+        </StackPanel>
 
         <TextBlock Background="White" HorizontalAlignment="Left" Text="Keyboard usage" FontWeight="Bold" VerticalAlignment="Center" Width="95" Margin="5,0,0,0"/>
 

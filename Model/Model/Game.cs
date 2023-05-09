@@ -26,15 +26,14 @@ namespace Model.Model
 
         #region Fields
 
-        private Robot _robot;
-        private Board _board;
-        private NoticeBoard _noticeBoard;
+        private Robot _robot = null!;
+        private Board _board = null!;
+        private NoticeBoard _noticeBoard = null!;
         private int _gameOverTurn;
         private int _gameTime;
         private IDataAccess _dataAccess;
-        private string _filepath;
-        private Team _team1;
-        private Team _team2;
+        private Team _team1 = null!;
+        private Team _team2 = null!;
         private int _round;
         private int _width;
         private int _height;
@@ -47,9 +46,8 @@ namespace Model.Model
         private int _nextPlayerFromTeam1;
         private int _nextPlayerFromTeam2;
         private bool _nextTeam1;
-        private Robot _previousRobot;
-        private string _chatTeam1;
-        private string _chatTeam2;
+        private string _chatTeam1 = null!;
+        private string _chatTeam2 = null!;
         private List<Board> _robotsMap = new List<Board>();
 
         #endregion
@@ -89,15 +87,13 @@ namespace Model.Model
 
         #region Events 
 
-        public event EventHandler<GameEventArgs> GameAdvanced;
+        public event EventHandler<GameEventArgs>? GameAdvanced;
 
-        public event EventHandler<GameEventArgs> GameOver;
+        public event EventHandler<GameEventArgs>? GameOver;
 
-        public event EventHandler<RobotEventArgs> RobotAction;
+        public event EventHandler<GameEventArgs>? NewRound;
 
-        public event EventHandler<GameEventArgs> NewRound;
-
-        public event EventHandler<ActionEventArgs> UpdateFields;
+        public event EventHandler<ActionEventArgs>? UpdateFields;
 
         /*public event EventHandler<RobotEventArgs> MoveRobot_;
         public event EventHandler<RobotEventArgs> RotateRobot_;
@@ -929,13 +925,13 @@ namespace Model.Model
                 {
                     if (_team1.GetRobotByNum(robot.ConnectedRobot) != null)
                     {
-                        Robot r = _team1.GetRobotByNum(robot.ConnectedRobot);
+                        Robot r = _team1.GetRobotByNum(robot.ConnectedRobot)!;
                         SeparateRobotConnections(r, robot, ownCube_1, ownCube_2);
 
                     }
                     if (_team2.GetRobotByNum(robot.ConnectedRobot) != null)
                     {
-                        Robot r = _team2.GetRobotByNum(robot.ConnectedRobot);
+                        Robot r = _team2.GetRobotByNum(robot.ConnectedRobot)!;
                         SeparateRobotConnections(r, robot, ownCube_1, ownCube_2);
 
                     }
@@ -1200,7 +1196,7 @@ namespace Model.Model
         public void NextPlayer()
         {
             _robot = NextRobot();
-            if (_nextPlayerFromTeam1 == 0 && _nextPlayerFromTeam2 == 0)
+            if (_nextPlayerFromTeam1 == 0 && _nextPlayerFromTeam2 == 0 && _nextTeam1 )
             {
                 _round++;
             }

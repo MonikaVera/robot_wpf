@@ -12,9 +12,9 @@ namespace Model.Model
         #region Fields
         private Direction _direction;
         private List<XYcoordinates> _connected;
-        private List<int> _healthConnected;
-        private List<Color> _colorConnected;
-        private Team? _team;
+        private List<int> _healthConnected = null!;
+        private List<Color> _colorConnected = null!;
+        private Team? _team = null!;
         private int _robotNumber;
         private int _connectedRobot;
         private bool _player;
@@ -164,7 +164,7 @@ namespace Model.Model
 
         //public int X { set { _x = value; } get { return _x; } }
         //public int Y { set { _y = value; } get { return _y; } }
-        public Team Team { set { _team = value; } get { return _team; } }
+        public Team Team { set { _team = value; } get { return _team!; } }
         public void SetXY(int x, int y)
         {
             if (x < 0 || y < 0)

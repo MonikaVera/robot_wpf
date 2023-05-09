@@ -30,6 +30,7 @@ namespace View
         private Diary _diary = null!;
         private MainPage _mainPage = null!;
         private MainWindow _mainWindow = null!;
+        private Window1 _window1 = null!;
         MyDataAccess _dataAccess = null!;
         private DispatcherTimer _timer = null!;
         private OpenFileDialog? _openFileDialog;
@@ -108,6 +109,16 @@ namespace View
             _playerMode = new PlayerMode();
             _playerMode.DataContext = _viewModel;
             _mainWindow.Content = _playerMode;
+
+            //window for ViewerMode
+            _window1 = new Window1();
+            _window1.Closing += new System.ComponentModel.CancelEventHandler(MainWindow_Closing);
+            _viewModel.GenerateTableVM();
+            _viewerMode = new ViewerMode();
+            _viewerMode.DataContext = _viewModel;
+            _window1.Content = _viewerMode;
+            _window1.Show();
+
             _timer.Start();
         }
 

@@ -55,5 +55,15 @@ namespace Model.Model
             }
             return false;
         }
+
+        public void RemoveRobotFromTeam(Robot robot)
+        {
+            _robots = _robots.Where(val => val != robot).ToArray();
+        }
+
+        public bool IsEmptyTeam()
+        {
+            return !_robots.Any();
+        }
     }
 }

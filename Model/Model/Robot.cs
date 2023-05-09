@@ -20,10 +20,12 @@ namespace Model.Model
         private bool _player;
         public XYcoordinates? WantsToConnectTo = null;
         public XYcoordinates? OwnCube = null;
+        private int _health;
         
         #endregion
         public int RobotNumber { get { return _robotNumber; } set { _robotNumber = value; } }
         public int ConnectedRobot { get { return _connectedRobot; } set { _connectedRobot = value; } }
+        public int Health { get { return _health; } set { _health = value; } }
         public Robot(int x, int y, Direction direction, int robotNumber)
         {
             _X = x;
@@ -33,6 +35,7 @@ namespace Model.Model
             _healthConnected = new List<int>();
             _colorConnected = new List<Color>();
             _connectedRobot = -1;
+            _health = 3;
             _robotNumber = robotNumber;
             if (_robotNumber<4)
             {
@@ -69,6 +72,15 @@ namespace Model.Model
                     _connected.RemoveAt(i);
                 }
             }
+        }
+
+        public void DecreaseHealth()
+        {
+            if (_health <= 0)
+            {
+                throw new ArgumentOutOfRangeException("The health can't be less than 0.");
+            }
+            _health -= 1;
         }
 
         public bool IsConnected(XYcoordinates tuple)

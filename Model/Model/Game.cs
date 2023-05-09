@@ -139,7 +139,9 @@ namespace Model.Model
             _team2points = 0;
             _nextPlayerFromTeam1 = 1;
             _nextPlayerFromTeam2 = 0;
-            _nextTeam1 = false;
+            _chatTeam1 = "";
+            _chatTeam2 = "";
+            _nextTeam1 = true;
         }
 
         public void LoadGameAsync(string _filepath)
@@ -1058,6 +1060,40 @@ namespace Model.Model
                 }
                 return true;
             }
+            else if (_board.GetFieldValue(robot.X + a, robot.Y + b) is Robot)
+            {
+                Robot cleanRobot = (Robot)_board.GetFieldValue(robot.X + a, robot.Y + b);
+                cleanRobot.DecreaseHealth();
+                if (cleanRobot.Health == 0)
+                {
+                    _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));
+                    if (cleanRobot.Player)
+                    {
+                        _team1.RemoveRobotFromTeam(cleanRobot);
+                        if (_team1.IsEmptyTeam())
+                        {
+                            OnGameOver(true,_team2);
+                        }
+                        if (_nextPlayerFromTeam1 > _team1.Robots.Length - 1)
+                        {
+                            _nextPlayerFromTeam1 = 0;
+                        }
+                    }
+                    else
+                    {
+                        _team2.RemoveRobotFromTeam(cleanRobot);
+                        if (_team2.IsEmptyTeam())
+                        {
+                            OnGameOver(true, _team1);
+                        }
+                        if (_nextPlayerFromTeam2 > _team2.Robots.Length - 1)
+                        {
+                            _nextPlayerFromTeam2 = 0;
+                        }
+                    }
+                }
+                return true;
+            }
             else
             {
                 return false;
@@ -1080,8 +1116,12 @@ namespace Model.Model
         {
             if (_nextTeam1)
             {
-                _nextTeam1 = false;
-                if (_nextPlayerFromTeam1 < _teamMembers - 1)
+                if (_nextPlayerFromTeam1 == _team1.Robots.Length - 1)
+                {
+                    _nextTeam1 = false;
+                }
+
+                if (_nextPlayerFromTeam1 < _team1.Robots.Length - 1)
                 {
                     _nextPlayerFromTeam1++;
                 }
@@ -1089,11 +1129,16 @@ namespace Model.Model
                 {
                     _nextPlayerFromTeam1 = 0;
                 }
+
             }
             else
             {
-                _nextTeam1 = true;
-                if (_nextPlayerFromTeam2 < _teamMembers - 1)
+                if (_nextPlayerFromTeam2 == _team2.Robots.Length - 1)
+                {
+                    _nextTeam1 = true;
+                }
+
+                if (_nextPlayerFromTeam2 < _team2.Robots.Length - 1)
                 {
                     _nextPlayerFromTeam2++;
                 }
@@ -1101,6 +1146,7 @@ namespace Model.Model
                 {
                     _nextPlayerFromTeam2 = 0;
                 }
+
             }
         }
 

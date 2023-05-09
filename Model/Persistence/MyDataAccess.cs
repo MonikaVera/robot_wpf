@@ -30,7 +30,7 @@ namespace Model.Persistence
                     for (int j = 0; j < height; j++)
                         for (int i = 0; i < width; i++)
                         {
-                            ln = file.ReadLine();
+                            ln = file.ReadLine()!;
                             if(ln == null ) continue;
                             //empty
                             if ("empty".Equals(ln))

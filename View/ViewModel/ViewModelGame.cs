@@ -14,10 +14,10 @@ namespace View.ViewModel
 {
     public class ViewModelGame : ViewModelBase
     {
-        public ObservableCollection<ViewModelField> Fields { get; set; }
-        public ObservableCollection<ViewModelField> FieldsMap { get; set; }
-        public ObservableCollection<ViewModelField> FieldsMapView { get; set; }
-        public ObservableCollection<VMTasksFields> FieldsTasks { get; set; }
+        public ObservableCollection<ViewModelField> Fields { get; set; } = null!;
+        public ObservableCollection<ViewModelField> FieldsMap { get; set; } = null!;
+        public ObservableCollection<ViewModelField> FieldsMapView { get; set; } = null!;
+        public ObservableCollection<VMTasksFields> FieldsTasks { get; set; } = null!;
 
         private Game _model;
         private bool _canMove;
@@ -25,7 +25,7 @@ namespace View.ViewModel
         private int roundTask = 1;
         private string str = "no";
         private int size = 0;
-        private string _chatText;
+        private string _chatText = null!;
         public string Connect { get { return str; } set { OnPropertyChanged(nameof(str)); } }
         public int Size { get { return size; } set { OnPropertyChanged(nameof(size)); } }
         #region Commands
@@ -37,13 +37,13 @@ namespace View.ViewModel
         public DelegateCommand ExitCommand { get; private set; }
         public DelegateCommand KeyDownCommand { get; private set; }
         public DelegateCommand NextPlayerCommand { get; private set; }
-        public DelegateCommand ChooseActionFieldCommand { get; private set; }
+        public DelegateCommand? ChooseActionFieldCommand { get; private set; }
 
-        public DelegateCommand NewGameCommand { get; private set; }
+        public DelegateCommand? NewGameCommand { get; private set; }
         public DelegateCommand SaveGameCommand { get; private set; }
         public DelegateCommand LoadGameCommand { get; private set; }
-        public DelegateCommand ExitGameCommand { get; private set; }
-        public DelegateCommand NewExtraTask { get; private set; }
+        public DelegateCommand? ExitGameCommand { get; private set; }
+        public DelegateCommand? NewExtraTask { get; private set; }
 
         public DelegateCommand ConnectChatButtonCommand { get; private set; }
         public DelegateCommand DisconnectChatButtonCommand { get; private set; }
@@ -66,11 +66,8 @@ namespace View.ViewModel
         public event EventHandler? StopTimer;
         public event EventHandler? StartTimer;
 
-
-
-        public event EventHandler ExitGame;
-        public event EventHandler LoadGame;
-        public event EventHandler SaveGame;
+        public event EventHandler? LoadGame;
+        public event EventHandler? SaveGame;
         #endregion
 
         #region Properties
@@ -119,8 +116,8 @@ namespace View.ViewModel
 
         public int Health
         {
-            get { //return _model.Robot.getHealthAt(_model.Robot.RobotNumber);
-                return 1; }
+            get { 
+                return _model.Robot.Health; }
             set
             {
                 OnPropertyChanged(nameof(Health));
@@ -130,7 +127,16 @@ namespace View.ViewModel
         public int Number
         {
             get
-            { return (_model.Robot.RobotNumber+1);}
+            {
+                if (_model.Robot.Player)
+                {
+                    return (_model.Robot.RobotNumber + 1);
+                }
+                else
+                {
+                    return (_model.Robot.RobotNumber - 3);
+                }
+            }
             set
             {
                 OnPropertyChanged(nameof(Number));
@@ -152,7 +158,7 @@ namespace View.ViewModel
 
 
 
-        public Game Game { get; set; }
+        public Game Game { get; set; } = null!;
 
         public String GameTime { get { return TimeSpan.FromSeconds(_model.GameTime).ToString("g"); } }
 
@@ -255,7 +261,7 @@ namespace View.ViewModel
                     Fields.Add(field);
                 }
         } */
-        public void GenerateTable()
+        public async void GenerateTable()
         {
             //jatektabla letrehozasa
             Fields = new ObservableCollection<ViewModelField>();
@@ -313,7 +319,7 @@ namespace View.ViewModel
                         FieldsMap.Add(fieldMap);
                     }
             GenerateTableVM();
-            _model.SaveGameAsync("file" + 1 + ".txt");
+            await _model.SaveGameAsync("file" + 1 + ".txt");
             foreach (ViewModelField field in Fields)
             {
                 field.ChooseActionFieldCommand = new DelegateCommand(param => OnClickField(Convert.ToInt32(param)));
@@ -363,13 +369,13 @@ namespace View.ViewModel
         /// <summary>
         /// Tábla frissítése.
         /// </summary>
-        private void RefreshTable()
+        private async void RefreshTable()
         {
             int y = 0;
             if(round < _model.Round)
             {
                 ++round;
-                _model.SaveGameAsync("file" + (_model.Round ) + ".txt");
+                await _model.SaveGameAsync("file" + (_model.Round ) + ".txt");
             }
 
             if  ( (_model.NoticeBoard.Deadline + roundTask) == round )
@@ -633,7 +639,7 @@ namespace View.ViewModel
             OnStartTimer();
         }
 
-        private void Model_UpdateFields(object obj, ActionEventArgs e)
+        private void Model_UpdateFields(object? obj, ActionEventArgs e)
         {
             if (e.CanExecute == false)
             {

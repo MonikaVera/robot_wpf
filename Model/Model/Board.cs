@@ -246,12 +246,6 @@ namespace Model.Model
 
     }
 
-    public struct RelDistance
-    {
-        int x;
-        int y;
-    }
-
     public enum Angle
     {
         Clockwise, CounterClockwise

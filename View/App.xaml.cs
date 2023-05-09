@@ -23,7 +23,6 @@ namespace View
     public partial class App : Application
     {
         private Game _model = null!;
-        private NoticeBoard _board = null!;
         private ViewModelGame _viewModel = null!;
         private PlayerMode _playerMode = null!;
         private ViewerMode _viewerMode = null!;
@@ -76,17 +75,17 @@ namespace View
 
         }
 
-        private void Timer_Tick(object sender, EventArgs e) 
+        private void Timer_Tick(object? sender, EventArgs e) 
         {
             _model.AdvanceTime();
         }
 
-        private void ViewModel_StopTimer(object sender, EventArgs e)
+        private void ViewModel_StopTimer(object? sender, EventArgs e)
         {
             _timer.Stop();
         }
 
-        private void ViewModel_StartTimer(object sender, EventArgs e)
+        private void ViewModel_StartTimer(object? sender, EventArgs e)
         {
             _timer.Start();
         }
@@ -175,7 +174,7 @@ namespace View
         }
 
 
-        private void Model_GameOver(object sender, GameEventArgs e) 
+        private void Model_GameOver(object? sender, GameEventArgs e) 
         {
             _timer.Stop();
             
@@ -203,7 +202,7 @@ namespace View
         }
 
 
-        private void Model_UpdateFields(object sender, ActionEventArgs e)
+        private void Model_UpdateFields(object? sender, ActionEventArgs e)
         {
             _timer.Stop();
            
@@ -277,7 +276,7 @@ namespace View
             _timer.Start();
         }
 
-        private void Model_NewRound(object sender, GameEventArgs e)
+        private void Model_NewRound(object? sender, GameEventArgs e)
         {
             /*MessageBox.Show("Új kör kezdődött.", "CyberChallenge játék", MessageBoxButton.OK,
                                MessageBoxImage.Asterisk);*/

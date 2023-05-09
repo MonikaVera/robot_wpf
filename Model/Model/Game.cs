@@ -760,7 +760,7 @@ namespace Model.Model
 
         public void DisconnectRobot(Robot robot)
         {
-            robot.clearConnections();
+            robot.ClearConnections();
             foreach (Robot r in _team1.Robots)
             {
                 if ((robot.ConnectedRobot).Equals(r.RobotNumber))
@@ -910,8 +910,8 @@ namespace Model.Model
             List<XYcoordinates> connections = r1.AllConnections();
             List<int> healths = r1.AllHealth();
             List<Color> colors = r1.AllColor();
-            r1.clearConnections();
-            r2.clearConnections();
+            r1.ClearConnections();
+            r2.ClearConnections();
             if (ownCube_1.X == ownCube_2.X)
             {
                 if (ownCube_1.Y > ownCube_2.Y)

@@ -865,6 +865,93 @@ namespace TestRobots
             Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(5, 2).GetType());
         }
 
+        [TestMethod]
+        public void GameCleanRobotTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(2, 2).GetType());
+            Assert.AreEqual(3, ((Robot)_model.Board.GetFieldValue(2, 2)).Health);
+
+            _model.RotateRobot(_model.Robot, Angle.Clockwise);
+            _model.RotateRobot(_model.Robot, Angle.Clockwise);
+
+            Assert.AreEqual(Direction.EAST, _model.Robot.Direction);
+
+
+            _model.Clean(_model.Robot); // akadályt tisztitunk jobbra
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(2, 2).GetType());
+            Assert.AreEqual(2, ((Robot)_model.Board.GetFieldValue(2, 2)).Health);
+
+            _model.Clean(_model.Robot); // akadályt tisztitunk jobbra
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(2, 2).GetType());
+            Assert.AreEqual(1, ((Robot)_model.Board.GetFieldValue(2, 2)).Health);
+
+        }
+
+        [TestMethod]
+        public void GameCleanRobotUntilNoHealthTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(2, 2).GetType());
+            Assert.AreEqual(3, ((Robot)_model.Board.GetFieldValue(2, 2)).Health);
+
+            _model.RotateRobot(_model.Robot, Angle.Clockwise);
+            _model.RotateRobot(_model.Robot, Angle.Clockwise);
+
+            Assert.AreEqual(Direction.EAST, _model.Robot.Direction);
+
+
+            _model.Clean(_model.Robot); // akadályt tisztitunk jobbra
+            _model.Clean(_model.Robot); // akadályt tisztitunk jobbra
+            _model.Clean(_model.Robot); // akadályt tisztitunk jobbra
+
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(2, 2).GetType());
+
+            Assert.AreEqual(3, _model.Team1.Robots.Length);
+
+        }
+
+        [TestMethod]
+        public void GameConnectCubesVerticallyTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+            _model.RotateRobot(_model.Robot, Angle.CounterClockwise);
+            Assert.AreEqual(Direction.SOUTH, _model.Robot.Direction);
+
+            _model.ConnectRobot(_model.Robot);
+
+            _model.Board.SetValue(1, 5, new Robot(1, 5, Direction.NORTH, 1));
+            _model.Robot = (Robot)_model.Board.GetFieldValue(1, 5);
+            _model.ConnectRobot(_model.Robot);
+
+
+            _model.ConnectCubes(_team1.GetRobot(0), new XYcoordinates(1, 3), new XYcoordinates(1, 4));
+            _model.ConnectCubes(_model.Robot, new XYcoordinates(1, 4), new XYcoordinates(1, 3));
+          
+
+            //Assert.AreEqual(2, _team1.GetRobot(0).AllConnections().Count);
+
+        }
+
 
         [TestMethod]
         public void GameWaitTest()
@@ -888,6 +975,87 @@ namespace TestRobots
             Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(1, 3).GetType());
             Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(2, 2).GetType());
             Assert.AreEqual(typeof(Obstacle), _model.Board.GetFieldValue(1, 1).GetType());
+
+        }
+
+        [TestMethod]
+        public void GameNextPlayerTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+
+            Assert.AreEqual(1,_model.NextPlayerFromTeam1);
+            Assert.AreEqual(0, _model.NextPlayerFromTeam2);
+            Assert.IsTrue(_model.NextTeam1);
+
+            _model.NextPlayer();
+
+            Assert.AreEqual(2, _model.NextPlayerFromTeam1);
+            Assert.AreEqual(0, _model.NextPlayerFromTeam2);
+            Assert.IsTrue(_model.NextTeam1);
+
+
+        }
+
+
+        [TestMethod]
+        public void GameNextPlayerUntilNextTeamTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+
+            Assert.AreEqual(1, _model.NextPlayerFromTeam1);
+            Assert.AreEqual(0, _model.NextPlayerFromTeam2);
+            Assert.IsTrue(_model.NextTeam1);
+
+            _model.NextPlayer();
+            _model.NextPlayer();
+            _model.NextPlayer();
+
+
+            Assert.AreEqual(0, _model.NextPlayerFromTeam1);
+            Assert.AreEqual(0, _model.NextPlayerFromTeam2);
+            Assert.IsFalse(_model.NextTeam1);
+
+
+        }
+
+        [TestMethod]
+        public void GameNextPlayerUntilNextRoundTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+
+            Assert.AreEqual(1, _model.NextPlayerFromTeam1);
+            Assert.AreEqual(0, _model.NextPlayerFromTeam2);
+            Assert.IsTrue(_model.NextTeam1);
+
+            _model.NextPlayer();
+            _model.NextPlayer();
+            _model.NextPlayer();
+            _model.NextPlayer();
+            _model.NextPlayer();
+            _model.NextPlayer();
+            _model.NextPlayer();
+            _model.NextPlayer();
+
+
+            Assert.AreEqual(1, _model.NextPlayerFromTeam1);
+            Assert.AreEqual(0, _model.NextPlayerFromTeam2);
+            Assert.IsTrue(_model.NextTeam1);
+            Assert.AreEqual(2, _model.Round);
 
         }
 
@@ -923,6 +1091,375 @@ namespace TestRobots
             _model.AdvanceTime();
 
             Assert.AreEqual(30, _model.GameTime);
+
+        }
+
+
+        [TestMethod]
+        public void RobotModelAddConnectionTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+
+           _model.Robot.AddConnection(new XYcoordinates(1, 3));
+
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void RobotModelAddMoreConnectionsTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+
+            _model.Robot.AddConnection(new XYcoordinates(1, 3));
+            _model.Robot.AddConnection(new XYcoordinates(1, 1));
+            _model.Robot.AddConnection(new XYcoordinates(2, 2));
+
+            Assert.AreEqual(3, _model.Robot.AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void RobotModelDeleteConnectionTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+
+            _model.Robot.AddConnection(new XYcoordinates(1, 3));
+            _model.Robot.AddConnection(new XYcoordinates(1, 1));
+            _model.Robot.AddConnection(new XYcoordinates(2, 2));
+
+            Assert.AreEqual(3, _model.Robot.AllConnections().Count);
+
+            _model.Robot.DeleteConnection(new XYcoordinates(1, 3));
+
+            Assert.AreEqual(2, _model.Robot.AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void RobotModelFailedDeleteConnectionTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+
+            _model.Robot.AddConnection(new XYcoordinates(1, 3));
+            _model.Robot.AddConnection(new XYcoordinates(1, 1));
+            _model.Robot.AddConnection(new XYcoordinates(2, 2));
+
+            Assert.AreEqual(3, _model.Robot.AllConnections().Count);
+
+            _model.Robot.DeleteConnection(new XYcoordinates(2, 3));
+
+            Assert.AreEqual(3, _model.Robot.AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void RobotModelClearConnectionsTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+
+            _model.Robot.AddConnection(new XYcoordinates(1, 3));
+            _model.Robot.AddConnection(new XYcoordinates(1, 1));
+            _model.Robot.AddConnection(new XYcoordinates(2, 2));
+
+            Assert.AreEqual(3, _model.Robot.AllConnections().Count);
+
+            _model.Robot.ClearConnections();
+
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void RobotModelIsConnectedTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+
+            _model.Robot.AddConnection(new XYcoordinates(1, 3));
+            _model.Robot.AddConnection(new XYcoordinates(1, 1));
+            _model.Robot.AddConnection(new XYcoordinates(2, 2));
+
+            Assert.AreEqual(3, _model.Robot.AllConnections().Count);
+
+            Assert.IsTrue(_model.Robot.IsConnected(new XYcoordinates(1, 3)));
+            Assert.IsTrue(_model.Robot.IsConnected(new XYcoordinates(1, 1)));
+            Assert.IsTrue(_model.Robot.IsConnected(new XYcoordinates(2, 2)));
+
+        }
+
+
+        [TestMethod]
+        public void RobotModelIsNotConnectedTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+
+            _model.Robot.AddConnection(new XYcoordinates(1, 3));
+            _model.Robot.AddConnection(new XYcoordinates(1, 1));
+            _model.Robot.AddConnection(new XYcoordinates(2, 2));
+
+            Assert.AreEqual(3, _model.Robot.AllConnections().Count);
+
+            Assert.IsFalse(_model.Robot.IsConnected(new XYcoordinates(2, 3)));
+            Assert.IsFalse(_model.Robot.IsConnected(new XYcoordinates(0, 1)));
+            Assert.IsFalse(_model.Robot.IsConnected(new XYcoordinates(0, 2)));
+
+        }
+
+        [TestMethod]
+        public void RobotModelDecreaseHealthTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+            Assert.AreEqual(3, _model.Robot.Health);
+
+            _model.Robot.DecreaseHealth();
+
+            Assert.AreEqual(2, _model.Robot.Health);
+
+            _model.Robot.DecreaseHealth();
+
+            Assert.AreEqual(1, _model.Robot.Health);
+
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException),
+        "The health can't be less than 0.")]
+        public void RobotModelInvalidDecreaseHealthTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+            Assert.AreEqual(3, _model.Robot.Health);
+
+            _model.Robot.DecreaseHealth();
+
+            Assert.AreEqual(2, _model.Robot.Health);
+
+            _model.Robot.DecreaseHealth();
+
+            Assert.AreEqual(1, _model.Robot.Health);
+
+            _model.Robot.DecreaseHealth();
+
+            Assert.AreEqual(0, _model.Robot.Health);
+
+            _model.Robot.DecreaseHealth();
+
+        }
+
+        [TestMethod]
+        public void TeamModelGetRobotByNumTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.Robot = _team1.GetRobotByNum(2)!;
+
+            Assert.AreEqual(_model.Team1.GetRobot(2), _model.Robot);
+
+            _model.Robot = _team2.GetRobotByNum(7)!;
+
+            Assert.AreEqual(_model.Team2.GetRobot(3), _model.Robot);
+
+        }
+
+        [TestMethod]
+        public void TeamModelInvalidGetRobotByNumTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.Robot = _team1.GetRobotByNum(8)!;
+
+            Assert.AreEqual(null, _model.Robot);
+
+        }
+
+        [TestMethod]
+        public void TeamModelIsInThisTeamTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.Robot = _team1.GetRobot(0);
+
+            Assert.IsTrue(_team1.IsInThisTeam(_model.Robot));
+
+        }
+
+        [TestMethod]
+        public void TeamModelFalseIsInThisTeamTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.Robot = _team1.GetRobot(0);
+
+            Assert.IsFalse(_team2.IsInThisTeam(_model.Robot));
+
+        }
+
+        [TestMethod]
+        public void TeamModelRemoveRobotFromTeamTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.Robot = _team1.GetRobot(0);
+
+            Assert.AreEqual(4,_model.Team1.Robots.Length);
+
+            _model.Team1.RemoveRobotFromTeam(_model.Robot);
+
+            Assert.AreEqual(3, _model.Team1.Robots.Length);
+
+        }
+
+        [TestMethod]
+        public void TeamModelInvalidRemoveRobotFromTeamTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.Robot = _team1.GetRobot(0);
+
+            Assert.AreEqual(4, _model.Team2.Robots.Length);
+
+            _model.Team2.RemoveRobotFromTeam(_model.Robot);
+
+            Assert.AreEqual(4, _model.Team2.Robots.Length);
+
+        }
+
+        [TestMethod]
+        public void TeamModelFalseIsEmptyTeamTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            Assert.AreEqual(4, _model.Team1.Robots.Length);
+
+            _model.Team1.RemoveRobotFromTeam(_team1.GetRobot(0));
+
+            Assert.AreEqual(3, _model.Team1.Robots.Length);
+
+            _model.Team1.RemoveRobotFromTeam(_team1.GetRobot(0));
+
+            Assert.AreEqual(2, _model.Team1.Robots.Length);
+
+            Assert.IsFalse(_model.Team1.IsEmptyTeam());
+
+        }
+
+        [TestMethod]
+        public void TeamModelIsEmptyTeamTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            Assert.AreEqual(4, _model.Team1.Robots.Length);
+
+            _model.Team1.RemoveRobotFromTeam(_team1.GetRobot(0));
+
+            Assert.AreEqual(3, _model.Team1.Robots.Length);
+
+            _model.Team1.RemoveRobotFromTeam(_team1.GetRobot(0));
+
+            Assert.AreEqual(2, _model.Team1.Robots.Length);
+
+            _model.Team1.RemoveRobotFromTeam(_team1.GetRobot(0));
+
+            Assert.AreEqual(1, _model.Team1.Robots.Length);
+
+            _model.Team1.RemoveRobotFromTeam(_team1.GetRobot(0));
+
+            Assert.AreEqual(0, _model.Team1.Robots.Length);
+
+            Assert.IsTrue(_model.Team1.IsEmptyTeam());
+
+        }
+
+        [TestMethod]
+        public void NoticeBoardModelGenerateTasksTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            Assert.IsTrue("Hard" == _model.NoticeBoard.TaskName || "Easy" == _model.NoticeBoard.TaskName);
+
+            Assert.IsTrue(1 == _model.NoticeBoard.Deadline);
+
+            Assert.IsTrue(3 <= _model.NoticeBoard.TaskReward && 5 >= _model.NoticeBoard.TaskReward);
+
+            Assert.IsTrue(9 == _model.NoticeBoard.Fields.Length);
 
         }
 

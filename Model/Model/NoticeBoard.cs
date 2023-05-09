@@ -43,18 +43,18 @@ namespace Model.Model
            {*/
 
 
-        private string taskName = "";
-        private int deadline;
+        private string _taskName = "";
+        private int _deadline;
 
-        public int Deadline { get { return deadline; } set { deadline = value; } }
-        public string TaskName { get { return taskName; } set { taskName = value; } }
+        public int Deadline { get { return _deadline; } set { _deadline = value; } }
+        public string TaskName { get { return _taskName; } set { _taskName = value; } }
 
         public NoticeBoard() { GenerateTasks(3, 3); }
 
-        private int points;
-        private Field[,] fields = new Field[3, 3];
-        public int TaskReward { get { return points; } set { points = value; } }
-        public Field[,] Fields { get { return fields; } set { fields = value; } }
+        private int _points;
+        private Field[,] _fields = new Field[3, 3];
+        public int TaskReward { get { return _points; } set { _points = value; } }
+        public Field[,] Fields { get { return _fields; } set { _fields = value; } }
 
         private readonly Random rand = new Random();
 
@@ -65,38 +65,38 @@ namespace Model.Model
                 for (int j = 0; j < height; j++)
                 {
                     Field field = new Empty(i, j);
-                    fields[i, j] = field;
+                    _fields[i, j] = field;
                 }
 
             int cubeNr = rand.Next(3, 6);
-            points = cubeNr;
+            _points = cubeNr;
 
             int generCubeNr = 0;
 
             //color
             int col = rand.Next(0, 8);
             Field field2 = new Cube(1, 1, 1, (Color)(col % 8));
-            fields[1, 1] = field2;
+            _fields[1, 1] = field2;
             generCubeNr++;
             if(cubeNr > 4)
             {
                 generCubeNr++;
                 col = rand.Next(0, 8);
                 field2 = new Cube(1, 0, 1, (Color)(col % 8));
-                fields[1, 0] = field2;
+                _fields[1, 0] = field2;
 
-                deadline = 1;
-                taskName = "Hard";
+                _deadline = 1;
+                _taskName = "Hard";
             }
             if(cubeNr == 3)
             {
-                deadline = 1;
-                taskName = "Easy";
+                _deadline = 1;
+                _taskName = "Easy";
             }
             if (cubeNr == 4)
             {
-                deadline = 1;
-                taskName = "Hard";
+                _deadline = 1;
+                _taskName = "Hard";
             }
 
             while (generCubeNr < cubeNr)
@@ -104,15 +104,15 @@ namespace Model.Model
                 int x = ( rand.Next(0, 6) ) % 3;
                 int y = ( rand.Next(0, 6) ) % 3;
 
-                if (fields[x, y] is Empty)
-                    if ((x > 0 && fields[x - 1, y] is Cube)
-                        || (x < 2 && fields[x + 1, y] is Cube)
-                        || (y > 0 && fields[x, y - 1] is Cube)
-                        || (y < 0 && fields[x, y + 1] is Cube))
+                if (_fields[x, y] is Empty)
+                    if ((x > 0 && _fields[x - 1, y] is Cube)
+                        || (x < 2 && _fields[x + 1, y] is Cube)
+                        || (y > 0 && _fields[x, y - 1] is Cube)
+                        || (y < 0 && _fields[x, y + 1] is Cube))
                     {
                         col = rand.Next(0, 8);
                         field2 = new Cube(x, y, 1, (Color)(col % 8));
-                        fields[x, y] = field2;
+                        _fields[x, y] = field2;
                         generCubeNr++;
                     }
 

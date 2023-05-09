@@ -543,7 +543,7 @@ namespace View.ViewModel
             _model.NextPlayer();
             RefreshTable();
 
-            if (_model.NextTeam1)
+            if (!_model.Robot.Player)
             {
                 ChatText = _model.ChatTeam2;
             }
@@ -565,7 +565,7 @@ namespace View.ViewModel
 
         private void SetChat(string? key)
         {
-            if (_model.NextTeam1)
+            if (!_model.Robot.Player)
             {
                 _model.ChatTeam2 += " Player" + (_model.Robot.RobotNumber - 3) + ": " + key + "\n";
                 ChatText = _model.ChatTeam2;

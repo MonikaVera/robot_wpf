@@ -96,7 +96,7 @@ namespace Model.Model
             return false;
         }
 
-        public void clearConnections()
+        public void ClearConnections()
         {
             _connected.Clear();
             _healthConnected.Clear();

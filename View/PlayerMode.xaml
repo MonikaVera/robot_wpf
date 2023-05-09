@@ -85,7 +85,7 @@
         </Grid.RowDefinitions>
 
         <!--player area-->
-        <ItemsControl ItemsSource="{Binding Fields}" Grid.RowSpan="2" Margin="142,10,189,10">
+        <ItemsControl ItemsSource="{Binding Fields}" Grid.RowSpan="2" Margin="105,10,189,10">
             <!--az mezőket tároló vezérlő-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -291,16 +291,18 @@
             </WrapPanel>
         </StackPanel>
 
-        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Width="120" Grid.Row="1">
-            <WrapPanel>
+        <TextBlock Background="White" HorizontalAlignment="Left" Text="Keyboard usage" FontWeight="Bold" VerticalAlignment="Center" Width="100"/>
+
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Grid.Row="1">
+            <WrapPanel Background="LightBlue">
                 <TextBlock Text="Go north(up): " HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Width="100"/>
                 <TextBlock Text="Press W" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="49"/>
             </WrapPanel>
-            <WrapPanel>
+            <WrapPanel >
                 <TextBlock Text="Go south(down): " HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" Width="100"/>
                 <TextBlock Text="Press S" HorizontalAlignment="Right" VerticalAlignment="Center" Height="20" Width="49"/>
             </WrapPanel>
-            <WrapPanel>
+            <WrapPanel Background="LightBlue">
                 <TextBlock Text="Go east(right): " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
                 <TextBlock Text="Press D" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
             </WrapPanel>
@@ -308,8 +310,8 @@
                 <TextBlock Text="Go west(left): " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
                 <TextBlock Text="Press A" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
             </WrapPanel>
-            
-            <WrapPanel>
+
+            <WrapPanel Background="LightBlue">
                 <TextBlock Text="Clean: " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
                 <TextBlock Text="Press C" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
             </WrapPanel>
@@ -319,7 +321,7 @@
                 <TextBlock Text="Press V" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
             </WrapPanel>
 
-            <WrapPanel>
+            <WrapPanel Background="LightBlue">
                 <TextBlock Text="Merge: " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
                 <TextBlock Text="Press M" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
             </WrapPanel>
@@ -329,7 +331,7 @@
                 <TextBlock Text="Press N" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
             </WrapPanel>
 
-            <WrapPanel>
+            <WrapPanel Background="LightBlue">
                 <TextBlock Text="Split: " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
                 <TextBlock Text="Press B" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
             </WrapPanel>
@@ -338,8 +340,8 @@
                 <TextBlock Text="Put down: " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
                 <TextBlock Text="Press X" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
             </WrapPanel>
-            
-            <WrapPanel>
+
+            <WrapPanel Background="LightBlue">
                 <TextBlock Text="Turn east: " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
                 <TextBlock Text="Press E" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
             </WrapPanel>

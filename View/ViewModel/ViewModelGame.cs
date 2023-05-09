@@ -439,6 +439,7 @@ namespace View.ViewModel
             OnPropertyChanged(nameof(TaskName));
             OnPropertyChanged(nameof(TaskReward));
             OnPropertyChanged(nameof(Health));
+            OnPropertyChanged(nameof(Number));
         }
 
         private void OnPlayerModeClick()
@@ -580,6 +581,8 @@ namespace View.ViewModel
             OnPropertyChanged(nameof(Round));
             OnPropertyChanged(nameof(Team1Points));
             OnPropertyChanged(nameof(Team2Points));
+            OnPropertyChanged(nameof(Number));
+            OnPropertyChanged(nameof(Health));
             OnStartTimer();
             _canMove = true;
         }
@@ -604,6 +607,7 @@ namespace View.ViewModel
             OnPropertyChanged(nameof(Connect));
             OnPropertyChanged(nameof(Size));
             OnPropertyChanged(nameof(Health));
+            OnPropertyChanged(nameof(Number));
         }
 
         private void Model_NewRound(object? sender, GameEventArgs e)
@@ -618,6 +622,7 @@ namespace View.ViewModel
             OnPropertyChanged(nameof(Connect));
             OnPropertyChanged(nameof(Size));
             OnPropertyChanged(nameof(Health));
+            OnPropertyChanged(nameof(Number));
 
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Round));

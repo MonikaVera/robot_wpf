@@ -27,32 +27,40 @@ namespace Model.Model
 
     public class Obstacle : Field
     {
-        private int health;
-        public int Health { get { return health; } }
-        public Obstacle(int x, int y, int _health) { _X = x; _Y = y; health = _health; }
+        private int _health;
+        public int Health { get { return _health; } }
+        public Obstacle(int x, int y, int health) { _X = x; _Y = y; _health = health; }
         public void DecreaseHealth() {
-            health -= 1;
+            if (_health <= 0)
+            {
+                throw new ArgumentOutOfRangeException("The health can't be less than 0.");
+            }
+            _health -= 1;
         }
     }
 
     public class Cube : Field
     {
-        private Color color;
-        private int health;
-        public Color CubeColor { get { return color; } }
-        public Cube(int x, int y, int _health, Color _color)
+        private Color _color;
+        private int _health;
+        public Color CubeColor { get { return _color; } }
+        public Cube(int x, int y, int health, Color color)
         {
             _X = x;
             _Y = y;
-            health = _health;
-            color = _color;
+            _health = health;
+            _color = color;
         }
-        public int Health { get { return health; } }
-        public Color Color { get { return color; } }
+        public int Health { get { return _health; } }
+        public Color Color { get { return _color; } }
 
         public void DecreaseHealth()
         {
-            health -= 1;
+            if (_health <= 0)
+            {
+                throw new ArgumentOutOfRangeException("The health can't be less than 0.");
+            }
+            _health -= 1;
         }
     }
 

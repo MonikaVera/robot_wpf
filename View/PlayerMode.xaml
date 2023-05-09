@@ -85,7 +85,7 @@
         </Grid.RowDefinitions>
 
         <!--player area-->
-        <ItemsControl ItemsSource="{Binding Fields}" Grid.RowSpan="2" Margin="10,10,189,10">
+        <ItemsControl ItemsSource="{Binding Fields}" Grid.RowSpan="2" Margin="105,10,189,10">
             <!--az mezőket tároló vezérlő-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -101,12 +101,12 @@
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
                         </Button.RenderTransform>
-                        
+
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Style.Triggers>
 
-                                    <DataTrigger Binding="{Binding Connect}"  Value="yes"> 
+                                    <DataTrigger Binding="{Binding Connect}"  Value="yes">
                                         <Setter Property="BorderThickness" Value="2.0"/>
                                         <Setter Property="Background" Value="Red"/>
                                     </DataTrigger>
@@ -118,7 +118,7 @@
 
                             </Style>
                         </Button.Style>
-                        
+
                     </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
@@ -136,7 +136,7 @@
 
         <!--tasks-->
 
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding FieldsTasks}" HorizontalAlignment="Right" Height="115" VerticalAlignment="Top" Width="186" Background="White">
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding FieldsTasks}" HorizontalAlignment="Right" Height="135" VerticalAlignment="Top" Width="186" Background="White">
             <!--az mezőket tároló vezérlő-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -168,7 +168,7 @@
         </ItemsControl>
 
         <!--map-->
-        <ItemsControl Grid.Row="1" ItemsSource="{Binding FieldsMap}" HorizontalAlignment="Right" Height="150" VerticalAlignment="Center" Width="186" Background="Black">
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding FieldsMap}" HorizontalAlignment="Right" Height="160" VerticalAlignment="Center" Width="186" Background="Black">
             <!--az mezőket tároló vezérlő-->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -225,7 +225,7 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <TextBox x:Name="ChatTextBox" IsReadOnly="True" Height="60" Text="{Binding ChatText}"/>
             </ScrollViewer>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <!--   <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <Button Content="CONNECT" Command="{Binding ConnectChatButtonCommand}" CommandParameter="connect to the cube!" Margin="2" />
                 <Button Content="DISCONNECT" Command="{Binding DisconnectChatButtonCommand}" CommandParameter="disconnect from the cube!" Margin="2" />
                 <Button Content="EXIT" Command="{Binding ExitChatButtonCommand}" CommandParameter="bring the cubes to the exit!" Margin="2" />
@@ -234,12 +234,55 @@
                 <Button Content="FOLLOW" Command="{Binding FollowChatButtonCommand}" CommandParameter="follow me!" Margin="2" />
                 <Button Content="HELLO" Command="{Binding HelloChatButtonCommand}" CommandParameter="hello, everyone!" Margin="2" />
                 <Button Content="PRAISE" Command="{Binding PraiseChatButtonCommand}" CommandParameter="well played!" Margin="2" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Height="30"  Content="Next player" VerticalAlignment="Bottom" Width="100" Margin="10,5,50,50" Command="{Binding NextPlayerCommand}"/>
+            </StackPanel> -->
+            <ListBox Height="60" Name="lstBox"
+
+                 ScrollViewer.CanContentScroll="True" Width="185"
+
+                 ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Center">
+
+                <ListBoxItem>
+
+                    <Button Content="CONNECT" Width="150" Command="{Binding ConnectChatButtonCommand}" CommandParameter="connect to the cube!" Margin="2" />
+
+                </ListBoxItem>
+
+                <ListBoxItem>
+
+                    <Button Content="DISCONNECT" Width="150" Command="{Binding DisconnectChatButtonCommand}" CommandParameter="disconnect from the cube!" Margin="2" />
+
+                </ListBoxItem>
+
+                <ListBoxItem>
+
+                    <Button Content="EXIT" Width="150" Command="{Binding ExitChatButtonCommand}" CommandParameter="bring the cubes to the exit!" Margin="2" />
+
+                </ListBoxItem>
+
+                <ListBoxItem>
+
+                    <Button Content="FOLLOW" Width="150" Command="{Binding FollowChatButtonCommand}" CommandParameter="follow me!" Margin="2" />
+
+                </ListBoxItem>
+
+                <ListBoxItem>
+
+                    <Button Content="HELLO" Width="150" Command="{Binding HelloChatButtonCommand}" CommandParameter="hello, everyone!" Margin="2" />
+
+                </ListBoxItem>
+
+                <ListBoxItem>
+
+                    <Button Content="PRAISE" Width="150" Command="{Binding PraiseChatButtonCommand}" CommandParameter="well played!" Margin="2" />
+
+                </ListBoxItem>
+
+            </ListBox>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                <Button Height="30"  Content="Next player" VerticalAlignment="Bottom" Width="100" Command="{Binding NextPlayerCommand}"/>
             </StackPanel>
         </StackPanel>
-       
+
 
 
         <StatusBar Grid.Row="2" >
@@ -291,6 +334,69 @@
             </WrapPanel>
         </StackPanel>
 
+
+
+
+        <TextBlock Background="White" HorizontalAlignment="Left" Text="Keyboard usage" FontWeight="Bold" VerticalAlignment="Center" Width="95" Margin="5,0,0,0"/>
+
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Width="95" Grid.Row="1" Margin="5,0,0,0">
+            <WrapPanel Background="LightBlue">
+                <TextBlock Text="Go north(up): " HorizontalAlignment="Left" VerticalAlignment="Top" Height="20" Width="100"/>
+                <TextBlock Text="Press W" HorizontalAlignment="Right" VerticalAlignment="Top" Height="20" Width="49"/>
+            </WrapPanel>
+            <WrapPanel >
+                <TextBlock Text="Go south(down): " HorizontalAlignment="Left" VerticalAlignment="Center" Height="20" Width="100"/>
+                <TextBlock Text="Press S" HorizontalAlignment="Right" VerticalAlignment="Center" Height="20" Width="49"/>
+            </WrapPanel>
+            <WrapPanel Background="LightBlue">
+                <TextBlock Text="Go east(right): " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
+                <TextBlock Text="Press D" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
+            </WrapPanel>
+            <WrapPanel>
+                <TextBlock Text="Go west(left): " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
+                <TextBlock Text="Press A" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
+            </WrapPanel>
+
+            <WrapPanel Background="LightBlue">
+                <TextBlock Text="Clean: " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
+                <TextBlock Text="Press C" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
+            </WrapPanel>
+
+            <WrapPanel>
+                <TextBlock Text="Wait: " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
+                <TextBlock Text="Press V" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
+            </WrapPanel>
+
+            <WrapPanel Background="LightBlue">
+                <TextBlock Text="Merge: " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
+                <TextBlock Text="Press M" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
+            </WrapPanel>
+
+            <WrapPanel>
+                <TextBlock Text="Get: " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
+                <TextBlock Text="Press N" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
+            </WrapPanel>
+
+            <WrapPanel Background="LightBlue">
+                <TextBlock Text="Split: " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
+                <TextBlock Text="Press B" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
+            </WrapPanel>
+
+            <WrapPanel>
+                <TextBlock Text="Put down: " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
+                <TextBlock Text="Press X" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
+            </WrapPanel>
+
+            <WrapPanel Background="LightBlue">
+                <TextBlock Text="Turn east: " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
+                <TextBlock Text="Press E" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
+            </WrapPanel>
+
+            <WrapPanel>
+                <TextBlock Text="Turn west: " HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="100"/>
+                <TextBlock Text="Press Q" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="49"/>
+            </WrapPanel>
+        </StackPanel>
     </Grid>
 </Page>
 

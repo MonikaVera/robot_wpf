@@ -149,7 +149,7 @@ namespace TestRobots
             Assert.AreEqual(0, _model.Team2Points);
             Assert.AreEqual(1, _model.NextPlayerFromTeam1);
             Assert.AreEqual(0, _model.NextPlayerFromTeam2);
-            Assert.IsFalse(_model.NextTeam1);
+            Assert.IsTrue(_model.NextTeam1);
 
         }
 

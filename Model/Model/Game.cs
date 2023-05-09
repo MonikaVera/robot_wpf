@@ -26,14 +26,15 @@ namespace Model.Model
 
         #region Fields
 
-        private Robot _robot= null!;
-        private Board _board = null!;
-        private NoticeBoard _noticeBoard = null!;
+        private Robot _robot;
+        private Board _board;
+        private NoticeBoard _noticeBoard;
         private int _gameOverTurn;
         private int _gameTime;
         private IDataAccess _dataAccess;
-        private Team _team1 = null!;
-        private Team _team2 = null!;
+        private string _filepath;
+        private Team _team1;
+        private Team _team2;
         private int _round;
         private int _width;
         private int _height;
@@ -46,8 +47,10 @@ namespace Model.Model
         private int _nextPlayerFromTeam1;
         private int _nextPlayerFromTeam2;
         private bool _nextTeam1;
-        private string _chatTeam1 = null!;
-        private string _chatTeam2 = null!;
+        private Robot _previousRobot;
+        private string _chatTeam1;
+        private string _chatTeam2;
+        private List<Board> _robotsMap = new List<Board>();
 
         #endregion
 
@@ -63,6 +66,7 @@ namespace Model.Model
         public NoticeBoard NoticeBoard { get { return _noticeBoard; } }
 
         public int Round { get { return _round; } set { _round = value; } }
+        public List<Board> RobotsMap { get { return _robotsMap; } }
 
         public int Team1Points { get { return _team1points; } set { _team1points = value; } }
         public int Team2Points { get { return _team2points; } set { _team2points = value; } }
@@ -85,13 +89,15 @@ namespace Model.Model
 
         #region Events 
 
-        public event EventHandler<GameEventArgs>? GameAdvanced;
+        public event EventHandler<GameEventArgs> GameAdvanced;
 
-        public event EventHandler<GameEventArgs>? GameOver;
+        public event EventHandler<GameEventArgs> GameOver;
 
-        public event EventHandler<GameEventArgs>? NewRound;
+        public event EventHandler<RobotEventArgs> RobotAction;
 
-        public event EventHandler<ActionEventArgs>? UpdateFields;
+        public event EventHandler<GameEventArgs> NewRound;
+
+        public event EventHandler<ActionEventArgs> UpdateFields;
 
         /*public event EventHandler<RobotEventArgs> MoveRobot_;
         public event EventHandler<RobotEventArgs> RotateRobot_;
@@ -138,6 +144,7 @@ namespace Model.Model
             _chatTeam1 = "";
             _chatTeam2 = "";
             _nextTeam1 = true;
+
         }
 
         public void LoadGameAsync(string _filepath)
@@ -196,8 +203,40 @@ namespace Model.Model
             Direction direction = (Direction)rnd.Next(0, 4);
             Robot robot = new Robot(x, y, direction, i);
             _board.SetValue(x, y, robot);
+            for (int a = 0; a < i; a++)
+                if (_robotsMap[a].GetFieldValue(x, y) is not None)
+                {
+                    _robotsMap[a].SetValue(x, y, robot);
+
+                }
+
+            createMap(i, x, y);
 
             return robot;
+        }
+
+        private void createMap(int i, int x, int y)
+        {
+            //robot map
+            Board robotsMap = new Board(_board.Width, _board.Height);
+            for (int j = 0; j < _board.Height; j++)
+                for (int l = 0; l < _board.Width; l++)
+                {
+                    robotsMap.SetValue(l, j, new None());
+                }
+
+            for (int j = y - 3; j <= y + 3; j++)
+            {
+                for (int l = x - 3; l <= x + 3; l++)
+                {
+                    if (j >= 0 && l >= 0 && (Math.Abs(j - y) + Math.Abs(l - x)) <= 3
+                        && j < _board.Height && l < _board.Width)
+                    {
+                        robotsMap.SetValue(l, j, _board.GetFieldValue(l, j));
+                    }
+                }
+            }
+            _robotsMap.Add(robotsMap);
         }
 
         private Direction? CalculateDirection()
@@ -760,7 +799,7 @@ namespace Model.Model
 
         public void DisconnectRobot(Robot robot)
         {
-            robot.ClearConnections();
+            robot.clearConnections();
             foreach (Robot r in _team1.Robots)
             {
                 if ((robot.ConnectedRobot).Equals(r.RobotNumber))
@@ -890,13 +929,13 @@ namespace Model.Model
                 {
                     if (_team1.GetRobotByNum(robot.ConnectedRobot) != null)
                     {
-                        Robot r = _team1.GetRobotByNum(robot.ConnectedRobot)!;
+                        Robot r = _team1.GetRobotByNum(robot.ConnectedRobot);
                         SeparateRobotConnections(r, robot, ownCube_1, ownCube_2);
 
                     }
                     if (_team2.GetRobotByNum(robot.ConnectedRobot) != null)
                     {
-                        Robot r = _team2.GetRobotByNum(robot.ConnectedRobot)!;
+                        Robot r = _team2.GetRobotByNum(robot.ConnectedRobot);
                         SeparateRobotConnections(r, robot, ownCube_1, ownCube_2);
 
                     }
@@ -910,8 +949,8 @@ namespace Model.Model
             List<XYcoordinates> connections = r1.AllConnections();
             List<int> healths = r1.AllHealth();
             List<Color> colors = r1.AllColor();
-            r1.ClearConnections();
-            r2.ClearConnections();
+            r1.clearConnections();
+            r2.clearConnections();
             if (ownCube_1.X == ownCube_2.X)
             {
                 if (ownCube_1.Y > ownCube_2.Y)
@@ -1068,7 +1107,7 @@ namespace Model.Model
                         _team1.RemoveRobotFromTeam(cleanRobot);
                         if (_team1.IsEmptyTeam())
                         {
-                            OnGameOver(true,_team2);
+                            OnGameOver(true, _team2);
                         }
                         if (_nextPlayerFromTeam1 > _team1.Robots.Length - 1)
                         {
@@ -1161,7 +1200,7 @@ namespace Model.Model
         public void NextPlayer()
         {
             _robot = NextRobot();
-            if (_nextPlayerFromTeam1 == 0 && _nextPlayerFromTeam2 == 0 && _nextTeam1)
+            if (_nextPlayerFromTeam1 == 0 && _nextPlayerFromTeam2 == 0)
             {
                 _round++;
             }

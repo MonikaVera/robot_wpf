@@ -12,16 +12,16 @@ namespace Model.Model
         #region Fields
         private Direction _direction;
         private List<XYcoordinates> _connected;
-        private List<int> _healthConnected = null!;
-        private List<Color> _colorConnected = null!;
-        private Team? _team = null!;
+        private List<int> _healthConnected;
+        private List<Color> _colorConnected;
+        private Team? _team;
         private int _robotNumber;
         private int _connectedRobot;
         private bool _player;
         public XYcoordinates? WantsToConnectTo = null;
         public XYcoordinates? OwnCube = null;
         private int _health;
-        
+
         #endregion
         public int RobotNumber { get { return _robotNumber; } set { _robotNumber = value; } }
         public int ConnectedRobot { get { return _connectedRobot; } set { _connectedRobot = value; } }
@@ -37,18 +37,19 @@ namespace Model.Model
             _connectedRobot = -1;
             _health = 3;
             _robotNumber = robotNumber;
-            if (_robotNumber<4)
+            if (_robotNumber < 4)
             {
                 _player = true;
             }
             else
             {
-                _player= false;
+                _player = false;
             }
         }
 
-       
-        public Robot(int x, int y, Direction direction, List<XYcoordinates> connected) { 
+
+        public Robot(int x, int y, Direction direction, List<XYcoordinates> connected)
+        {
             _X = x;
             _Y = y;
             _direction = direction;
@@ -65,7 +66,7 @@ namespace Model.Model
 
         public void DeleteConnection(XYcoordinates tuple)
         {
-            for(int i=0; i<_connected.Count; i++)
+            for (int i = 0; i < _connected.Count; i++)
             {
                 if (_connected[i].Equals(tuple))
                 {
@@ -85,7 +86,7 @@ namespace Model.Model
 
         public bool IsConnected(XYcoordinates tuple)
         {
-            for(int i=0; i< _connected.Count; i++)
+            for (int i = 0; i < _connected.Count; i++)
             {
                 if (_connected[i].Equals(tuple))
                 {
@@ -95,7 +96,7 @@ namespace Model.Model
             return false;
         }
 
-        public void ClearConnections()
+        public void clearConnections()
         {
             _connected.Clear();
             _healthConnected.Clear();
@@ -163,7 +164,7 @@ namespace Model.Model
 
         //public int X { set { _x = value; } get { return _x; } }
         //public int Y { set { _y = value; } get { return _y; } }
-        public Team Team { set { _team = value; } get { return _team!; } }
+        public Team Team { set { _team = value; } get { return _team; } }
         public void SetXY(int x, int y)
         {
             if (x < 0 || y < 0)
@@ -181,10 +182,10 @@ namespace Model.Model
         }
 
         public List<int> AllHealth() { return _healthConnected; }
-        public List<Color> AllColor() { return _colorConnected;}
+        public List<Color> AllColor() { return _colorConnected; }
 
         public int getHealthAt(int i) { return _healthConnected[i]; }
-        public Color getColorAt(int i) { return _colorConnected[i];}
+        public Color getColorAt(int i) { return _colorConnected[i]; }
 
         #endregion
 

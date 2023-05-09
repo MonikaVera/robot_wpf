@@ -23,6 +23,7 @@ namespace View
     public partial class App : Application
     {
         private Game _model = null!;
+        private NoticeBoard _board = null!;
         private ViewModelGame _viewModel = null!;
         private PlayerMode _playerMode = null!;
         private ViewerMode _viewerMode = null!;
@@ -61,7 +62,7 @@ namespace View
 
             _mainWindow = new MainWindow();
             _mainPage = new MainPage();
-           // _mainWindow.DataContext = _viewModel;
+            // _mainWindow.DataContext = _viewModel;
             _mainWindow.Closing += new System.ComponentModel.CancelEventHandler(MainWindow_Closing);
             _mainPage.DataContext = _viewModel;
             _mainWindow.Content = _mainPage;
@@ -71,21 +72,21 @@ namespace View
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += new EventHandler(Timer_Tick);
-            
+
 
         }
 
-        private void Timer_Tick(object? sender, EventArgs e) 
+        private void Timer_Tick(object sender, EventArgs e)
         {
             _model.AdvanceTime();
         }
 
-        private void ViewModel_StopTimer(object? sender, EventArgs e)
+        private void ViewModel_StopTimer(object sender, EventArgs e)
         {
             _timer.Stop();
         }
 
-        private void ViewModel_StartTimer(object? sender, EventArgs e)
+        private void ViewModel_StartTimer(object sender, EventArgs e)
         {
             _timer.Start();
         }
@@ -142,16 +143,16 @@ namespace View
             i = 1;
             _model.NewGame();
             //while (File.Exists("file" + i + ".txt"))
-            if(File.Exists("file" + i + ".txt"))
+            if (File.Exists("file" + i + ".txt"))
             {
-                 _model.LoadGameAsync("file" + i + ".txt");
+                _model.LoadGameAsync("file" + i + ".txt");
                 _viewModel.GenerateTableVM();
 
                 _diary = new Diary();
                 _diary.DataContext = _viewModel;
                 _mainWindow.Content = _diary;
                 ++i;
-             //   Thread.Sleep(10000);//will sleep for 10 sec
+                //   Thread.Sleep(10000);//will sleep for 10 sec
             }
 
         }
@@ -174,10 +175,10 @@ namespace View
         }
 
 
-        private void Model_GameOver(object? sender, GameEventArgs e) 
+        private void Model_GameOver(object sender, GameEventArgs e)
         {
             _timer.Stop();
-            
+
             if (e.WinnerTeam == 1)
             {
                 MessageBox.Show("Az 1-es csapat nyert!" + Environment.NewLine +
@@ -202,24 +203,24 @@ namespace View
         }
 
 
-        private void Model_UpdateFields(object? sender, ActionEventArgs e)
+        private void Model_UpdateFields(object sender, ActionEventArgs e)
         {
             _timer.Stop();
-           
-                if (e.CanExecute == false)
-                {
+
+            if (e.CanExecute == false)
+            {
                 MessageBox.Show("A művelet nem végrehajtható.", "CyberChallenge játék",
                            MessageBoxButton.OK,
                            MessageBoxImage.Asterisk);
-                }
-           /*     else
-            {
-                MessageBox.Show("A művelet sikeres volt", "CyberChallenge játék",
-                           MessageBoxButton.OK,
-                           MessageBoxImage.Asterisk);
-            }*/
+            }
+            /*     else
+             {
+                 MessageBox.Show("A művelet sikeres volt", "CyberChallenge játék",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Asterisk);
+             }*/
             _timer.Start();
-            
+
         }
 
         /// <summary>
@@ -276,12 +277,12 @@ namespace View
             _timer.Start();
         }
 
-        private void Model_NewRound(object? sender, GameEventArgs e)
+        private void Model_NewRound(object sender, GameEventArgs e)
         {
             /*MessageBox.Show("Új kör kezdődött.", "CyberChallenge játék", MessageBoxButton.OK,
                                MessageBoxImage.Asterisk);*/
         }
 
-       
+
     }
 }

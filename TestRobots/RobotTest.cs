@@ -20,7 +20,7 @@ namespace TestRobots
         private Robot _robot = null!;
 
         [TestInitialize]
-        public async Task Initialize()
+        public void Initialize()
         {
             _mockedTable = new Board(10, 12);
 

@@ -19,13 +19,13 @@ namespace View.ViewModel
         /// <summary>
         /// Tulajdonság változásának eseménye.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Tulajdonság változása ellenőrzéssel.
         /// </summary>
         /// <param name="propertyName">Tulajdonság neve.</param>
-        protected virtual void OnPropertyChanged([CallerMemberName] String propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] String? propertyName = null)
         {
             if (PropertyChanged != null)
             {

@@ -351,23 +351,11 @@ namespace Model.Model
 
         #region Move
 
-        private bool IsConnectedToRobots(Robot robot)
-        {
-            if (robot.ConnectedRobot == -1)
-            {
-                return false;
-            }
-            else
-            {
-
-                return true;
-            }
-        }
         public void MoveRobot(Robot robot, Direction dir)
         {
             if (IsConnectedToRobots(robot))
             {
-                OnUpdateFields(robot, robot.Direction, Action.Move, false);
+                MoveRobots(robot, dir);
                 return;
             }
             if (dir == Direction.EAST)
@@ -433,24 +421,6 @@ namespace Model.Model
             }
 
 
-        }
-
-        public bool IsOnBoard(int x, int y)
-        {
-            if (x >= _board.Width || x < 0 || y >= _board.Height || y < 0)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        private bool IsOnEdge(int x, int y)
-        {
-            if (x == 0 || y == 0 || x == _board.Width - 1 || y == _board.Height - 1)
-            {
-                return true;
-            }
-            return false;
         }
 
         private bool CanMoveToDirection(Robot robot, int a, int b)
@@ -550,6 +520,256 @@ namespace Model.Model
                         robot.getHealthAt(i), robot.getColorAt(i)));
                 }
             }
+        }
+
+        private bool IsConnectedToRobots(Robot robot)
+        {
+            if (robot.ConnectedRobot == -1)
+            {
+                return false;
+            }
+            else
+            {
+
+                return true;
+            }
+        }
+
+        public bool IsOnBoard(int x, int y)
+        {
+            if (x >= _board.Width || x < 0 || y >= _board.Height || y < 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool IsOnEdge(int x, int y)
+        {
+            if (x == 0 || y == 0 || x == _board.Width - 1 || y == _board.Height - 1)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        #endregion
+
+        #region MoveTwoRobots
+        private void MoveRobots(Robot r1, Direction dir)
+        {
+            Robot? r2 = null;
+            if (_team1.GetRobotByNum(r1.ConnectedRobot) != null)
+            {
+                r2 = _team1.GetRobotByNum(r1.ConnectedRobot);
+
+            }
+            if (_team2.GetRobotByNum(r1.ConnectedRobot) != null)
+            {
+                r2 = _team2.GetRobotByNum(r1.ConnectedRobot);
+
+            }
+            if (r2 != null)
+            {
+                if ((r2.WantsToMoveToDirection) != dir)
+                {
+                    r1.WantsToMoveToDirection = dir;
+                    OnUpdateFields(r1, dir, Action.Move, false);
+                }
+                else
+                {
+                    if (dir == Direction.EAST)
+                    {
+                        if (CanMoveToDirectionRobots(r1, r2, 1, 0))
+                        {
+                            MoveToDirectionRobots(r1, r2, dir);
+                            r1.X++;
+                            r2.X++;
+                            _board.SetValueNewField(r1);
+                            _board.SetValueNewField(r2);
+                            r2.WantsToMoveToDirection = null;
+                            OnUpdateFields(r1, Direction.EAST, Action.Move, true);
+                        }
+                        else
+                        {
+                            r1.WantsToMoveToDirection = dir;
+                            OnUpdateFields(r1, Direction.EAST, Action.Move, false);
+                        }
+                    }
+                    else if (dir == Direction.WEST)
+                    {
+                        if (CanMoveToDirectionRobots(r1, r2, -1, 0))
+                        {
+                            MoveToDirectionRobots(r1, r2, dir);
+                            r1.X--;
+                            r2.X--;
+                            _board.SetValueNewField(r1);
+                            _board.SetValueNewField(r2);
+                            r2.WantsToMoveToDirection = null;
+                            OnUpdateFields(r1, Direction.WEST, Action.Move, true);
+                        }
+                        else
+                        {
+                            r1.WantsToMoveToDirection = dir;
+                            OnUpdateFields(r1, Direction.WEST, Action.Move, false);
+                        }
+                    }
+                    else if (dir == Direction.NORTH)
+                    {
+                        if (CanMoveToDirectionRobots(r1, r2, 0, -1))
+                        {
+                            MoveToDirectionRobots(r1, r2, dir);
+                            r1.Y--;
+                            r2.Y--;
+                            _board.SetValueNewField(r1);
+                            _board.SetValueNewField(r2);
+                            r2.WantsToMoveToDirection = null;
+                            OnUpdateFields(r1, Direction.NORTH, Action.Move, true);
+                        }
+                        else
+                        {
+                            r1.WantsToMoveToDirection = dir;
+                            OnUpdateFields(r1, Direction.NORTH, Action.Move, false);
+                        }
+                    }
+                    else if (dir == Direction.SOUTH)
+                    {
+                        if (CanMoveToDirectionRobots(r1, r2, 0, 1))
+                        {
+                            MoveToDirectionRobots(r1, r2, dir);
+                            r1.Y++;
+                            r2.Y++;
+                            _board.SetValueNewField(r1);
+                            _board.SetValueNewField(r2);
+                            r2.WantsToMoveToDirection = null;
+                            OnUpdateFields(r1, Direction.SOUTH, Action.Move, true);
+                        }
+                        else
+                        {
+                            r1.WantsToMoveToDirection = dir;
+                            OnUpdateFields(r1, Direction.SOUTH, Action.Move, false);
+                        }
+                    }
+                }
+            }
+
+        }
+        private void MoveToDirectionRobots(Robot robot, Robot robot2, Direction dir)
+        {
+            if (IsOnEdge(robot.X, robot.Y))
+            {
+                _board.SetValueNewField(new Exit(robot.X, robot.Y));
+            }
+            else
+            {
+                _board.SetValueNewField(new Empty(robot.X, robot.Y));
+            }
+
+            if (IsOnEdge(robot2.X, robot2.Y))
+            {
+                _board.SetValueNewField(new Exit(robot2.X, robot2.Y));
+            }
+            else
+            {
+                _board.SetValueNewField(new Empty(robot2.X, robot2.Y));
+            }
+
+            List<XYcoordinates> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                if (IsOnBoard(connections[i].X, connections[i].Y))
+                {
+                    if (IsOnEdge(connections[i].X, connections[i].Y))
+                    {
+                        _board.SetValueNewField(new Exit(connections[i].X, connections[i].Y));
+                    }
+                    else
+                    {
+                        _board.SetValueNewField(new Empty(connections[i].X, connections[i].Y));
+                    }
+                }
+
+            }
+
+            if (dir == Direction.EAST)
+            {
+                robot.ToEast();
+            }
+            else if (dir == Direction.WEST)
+            {
+                robot.ToWest();
+            }
+            else if (dir == Direction.NORTH)
+            {
+                robot.ToNorth();
+            }
+            else if (dir == Direction.SOUTH)
+            {
+                robot.ToSouth();
+            }
+
+            List<XYcoordinates> connectionsNew = robot.AllConnections();
+            for (int i = 0; i < connectionsNew.Count; i++)
+            {
+                if (IsOnBoard(connectionsNew[i].X, connectionsNew[i].Y))
+                {
+                    _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
+                        robot.getHealthAt(i), robot.getColorAt(i)));
+                }
+            }
+        }
+
+        private bool CanMoveToDirectionRobots(Robot robot, Robot robot2, int a, int b)
+        {
+            if (!IsOnBoard(robot.X + a, robot.Y + b)
+                   || !((_board.GetFieldValue(robot.X + a, robot.Y + b) is Exit)
+                   || (_board.GetFieldValue(robot.X + a, robot.Y + b) is Empty)
+                   || ((_board.GetFieldValue(robot.X + a, robot.Y + b) is Cube) &&
+                   robot.IsConnected(new XYcoordinates(robot.X + a, robot.Y + b)))))
+            {
+                return false;
+            }
+
+            if (!IsOnBoard(robot2.X + a, robot2.Y + b)
+                   || !((_board.GetFieldValue(robot2.X + a, robot2.Y + b) is Exit)
+                   || (_board.GetFieldValue(robot2.X + a, robot2.Y + b) is Empty)
+                   || ((_board.GetFieldValue(robot2.X + a, robot2.Y + b) is Cube) &&
+                   robot2.IsConnected(new XYcoordinates(robot2.X + a, robot2.Y + b)))))
+            {
+                return false;
+            }
+
+            List<XYcoordinates> connections = robot.AllConnections();
+            for (int i = 0; i < connections.Count; i++)
+            {
+                if (IsOnBoard(connections[i].X + a, connections[i].Y + b))
+                {
+                    if (_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Empty)
+                    {
+                        continue;
+                    }
+                    else if ((_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Robot)
+                    && ((connections[i].X + a == robot.X && connections[i].Y + b == robot.Y)
+                        || connections[i].X + a == robot2.X && connections[i].Y + b == robot2.Y))
+                    {
+                        continue;
+                    }
+                    else if ((_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Cube) &&
+                    robot.IsConnected(new XYcoordinates(connections[i].X + a, connections[i].Y + b)))
+                    {
+                        continue;
+                    }
+                    else if (_board.GetFieldValue(connections[i].X + a, connections[i].Y + b) is Exit)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         #endregion

@@ -1130,8 +1130,6 @@ namespace Model.Model
 
         #region DisconnectCubes
 
-
-
         public void DisconnectCubes(Robot robot, XYcoordinates ownCube_1, XYcoordinates ownCube_2)
         {
             ownCube_1.X = ownCube_1.X + robot.X;
@@ -1160,13 +1158,22 @@ namespace Model.Model
             }
         }
 
-        private void SeparateRobotConnections(Robot r1, Robot r2, XYcoordinates ownCube_1, XYcoordinates ownCube_2)
+        public void SeparateRobotConnections(Robot r1, Robot r2, XYcoordinates ownCube_1, XYcoordinates ownCube_2)
         {
-            List<XYcoordinates> connections = r1.AllConnections();
-            List<int> healths = r1.AllHealth();
-            List<Color> colors = r1.AllColor();
+            List<XYcoordinates> connections = new List<XYcoordinates>();
+            List<int> healths = new List<int>();
+            List<Color> colors = new List<Color>();
+
+            for (int i = 0; i < r1.AllConnections().Count(); i++)
+            {
+                connections.Add(r1.AllConnections()[i]);
+                healths.Add(r1.getHealthAt(i));
+                colors.Add(r1.getColorAt(i));
+            }
             r1.ClearConnections();
             r2.ClearConnections();
+            r2.ConnectedRobot = -1;
+            r1.ConnectedRobot = -1;
             if (ownCube_1.X == ownCube_2.X)
             {
                 if (ownCube_1.Y > ownCube_2.Y)

@@ -20,6 +20,7 @@ namespace Model.Model
         private bool _player;
         public XYcoordinates? WantsToConnectTo = null;
         public XYcoordinates? OwnCube = null;
+        public Direction? WantsToMoveToDirection;
         private int _health;
 
         #endregion

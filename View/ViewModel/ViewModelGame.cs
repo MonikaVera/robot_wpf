@@ -234,19 +234,21 @@ namespace View.ViewModel
 
         private XYcoordinates? firstCube = null;
         private XYcoordinates? lastCube = null;
-        private bool _round = true;
+        private bool inround = true;
         public void OnClickField(int param)
         {
-            if (_round)
+            if (inround)
             {
                 firstCube = new XYcoordinates(param % 7 - 3, param / 7 - 3);
-                _round = false;
+                inround = false;
             }
             else
             {
                 lastCube = new XYcoordinates(param % 7 - 3, param / 7 - 3);
-                _round = true;
+                inround = true;
             }
+            ViewModelField field = Fields[param];
+            _model.ChooseActionField(field.IndX, field.IndY);
             /*MessageBox.Show(param.ToString() +' '+ (param%7).ToString() + ' ' + (param/7).ToString());*/
         }
         #region Public Methods
@@ -286,7 +288,7 @@ namespace View.ViewModel
                         field.SetPicture(_model.Board.GetFieldValue(i, j));
                         field.IndX = x;
                         field.IndY = y;
-                        field.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
+                        field.ChooseActionFieldCommand = new DelegateCommand(param => OnClickField(Convert.ToInt32(param)));
                         ++y;
                         Fields.Add(field);
                     }
@@ -296,7 +298,7 @@ namespace View.ViewModel
                         //field.SetText(_model.Board.GetFieldValue(0, 0));//Black
                         field.IndX = x;
                         field.IndY = y;
-                        field.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
+                        field.ChooseActionFieldCommand = new DelegateCommand(param => OnClickField(Convert.ToInt32(param)));
                         ++y;
                         Fields.Add(field);
                     }
@@ -312,7 +314,7 @@ namespace View.ViewModel
                         fieldMap.SetPicture(_model.RobotsMap[_model.Robot.RobotNumber].GetFieldValue(i, j));
                         fieldMap.IndX = i;
                         fieldMap.IndY = j;
-                        fieldMap.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
+                        fieldMap.ChooseActionFieldCommand = new DelegateCommand(param => OnClickField(Convert.ToInt32(param)));
 
                         FieldsMap.Add(fieldMap);
                     }
@@ -323,7 +325,7 @@ namespace View.ViewModel
                         fieldMap.SetText(_model.RobotsMap[_model.Robot.RobotNumber].GetFieldValue(i, j));
                         fieldMap.IndX = i;
                         fieldMap.IndY = j;
-                        fieldMap.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
+                        fieldMap.ChooseActionFieldCommand = new DelegateCommand(param => OnClickField(Convert.ToInt32(param)));
 
                         FieldsMap.Add(fieldMap);
                     }
@@ -346,7 +348,7 @@ namespace View.ViewModel
                     fieldMapView.SetPicture(_model.Board.GetFieldValue(i, j));
                     fieldMapView.IndX = i;
                     fieldMapView.IndY = j;
-                    fieldMapView.ChooseActionFieldCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
+                    fieldMapView.ChooseActionFieldCommand = new DelegateCommand(param => OnClickField(Convert.ToInt32(param)));
 
                     FieldsMapView.Add(fieldMapView);
                 }
@@ -366,7 +368,7 @@ namespace View.ViewModel
                     fieldTasks.X = i;
                     fieldTasks.Y = j;
                     // fieldTasks.CubeColor = CubeToField(_model.NoticeBoard.Fields[i, j]);
-                    fieldTasks.FieldChangeCommand = new DelegateCommand(param => ChooseActionField(Convert.ToInt32(param)));
+                    fieldTasks.FieldChangeCommand = new DelegateCommand(param => OnClickField(Convert.ToInt32(param)));
 
                     FieldsTasks.Add(fieldTasks);
                 }
@@ -517,18 +519,12 @@ namespace View.ViewModel
             ExitClick?.Invoke(this, EventArgs.Empty);
         }
 
-        private void ChooseActionField(int number)
-        {
-            ViewModelField field = Fields[number];
-            MessageBox.Show(number.ToString());
-            _model.ChooseActionField(field.IndX, field.IndY);
-        }
-
         private void KeyDown(string? action)
         {
             // lekérdezzük, hogy hol helyezkedik épp a robot
             Int32 x = _model.Robot.X;
             Int32 y = _model.Robot.Y;
+            inround = true;
             if (!_canMove)
             {
                 return;

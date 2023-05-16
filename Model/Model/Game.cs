@@ -305,12 +305,17 @@ namespace Model.Model
 
                 }
 
-            createMap(i, x, y); //creation of the map
+            createMap(x, y); //creation of the map
 
             return robot;
         }
 
-        private void createMap(int i, int x, int y)
+        /// <summary>
+        /// Creates the manhattan map for a robot.
+        /// </summary>
+        /// <param name="x">The X coordinate of the robot we want to create the map</param>
+        /// <param name="y">The Y coordinate of the robot we want to create the map</param>
+        private void createMap(int x, int y)
         {
             //robot map
             Board robotsMap = new Board(_board.Width, _board.Height);
@@ -334,6 +339,9 @@ namespace Model.Model
             _robotsMap.Add(robotsMap);
         }
 
+        /// <summary>
+        /// Calculates the direction of the current action.
+        /// </summary>
         private Direction? CalculateDirection()
         {
             if (_actionFieldX == null || _actionFieldY == null)
@@ -369,6 +377,11 @@ namespace Model.Model
             }
         }
 
+        /// <summary>
+        /// Triggers the GameOver event.
+        /// </summary>
+        /// <param name="end">Whether the game is over.</param>
+        /// <param name="team">The team who won.</param>
         private void OnGameOver(bool end, Team team)
         {
             if (team == _team1)
@@ -382,6 +395,10 @@ namespace Model.Model
 
         }
 
+        /// <summary>
+        /// Updates the game time and the round, also ptentially triggers the NewRound event.
+        /// </summary>
+        /// <param name="team">The team which made the last move.</param>
         private void OnNewRound(Team team)
         {
             if (_nextPlayerFromTeam1 == 0 && _nextPlayerFromTeam2 == 0)
@@ -400,56 +417,35 @@ namespace Model.Model
             }
         }
 
+        /// <summary>
+        /// Triggers the GameAdvanced event.
+        /// </summary>
         private void OnGameAdvanced()
         {
             GameAdvanced?.Invoke(this, new GameEventArgs(false, 1, _round, _gameTime, _team1points, _team2points));
         }
 
+        /// <summary>
+        /// Triggers the UpdateFields event.
+        /// </summary>
+        /// <param name="robot">The robot who made the action.</param>
+        /// <param name="direction">The direction of the action.</param>
+        /// <param name="action">The type of the action.</param>
+        /// <param name="direction">Whether the action was successful or not.</param>
         private void OnUpdateFields(Robot robot, Direction direction, Action action, bool canExecute)
         {
             UpdateFields?.Invoke(this, new ActionEventArgs(robot, direction, action, canExecute));
         }
 
-        /*private void MoveRobot_(int x, int y, Direction dir, Robot robot)
-        {
-            if (x < 0 || x >= _board.Width)
-                return;
-            if (y < 0 || y >= _board.Height)
-                return;
-
-            Int32 prevX = robot.X;
-            Int32 prevY = robot.Y;
-
-            if (!(prevX == x || prevY == y) || x < prevX - 1 || x > prevX + 1 || y > prevY + 1 || y < prevY - 1)
-                return; //ellenrzs, hogy kizrlag vzszintesen vagy fgglegesen lp
-
-            if (_board.GetFieldValue(x, y) is Obstacle || _board.GetFieldValue(x, y) is Cube || _board.GetFieldValue(x, y) is Exit) // ha a mezn akadly van, nem lphetnk
-                return;
-
-
-
-            //mezk State-jeinek frisstse a lpsnek megfelelen
-            robot.SetXY(x, y);
-            _board.SetValue(prevX, prevY, new Empty(prevX, prevY));
-            _board.SetValue(x, y, robot);
-
-            //OnRobotAction(prevX, prevY, x, y);
-
-            OnGameAdvanced();
-
-
-        }*/
-        private void RotateRobot(Direction dir) { /*code*/ ; }
-        private void DisConnectRobot(Direction dir) { /*code*/ ; }
-        private void ConnectCubes(int x, int y) { /*code*/ ; }
-        private void DisConnectCubes(int x, int y) { /*code*/ ; }
-        private void Clean(int x, int y) { /*code*/ ; }
-
-
         #endregion
 
         #region Move
 
+        /// <summary>
+        /// The move action.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <param name="dir">The direction of the move.</param>
         public void MoveRobot(Robot robot, Direction dir)
         {
             if (IsConnectedToRobots(robot))
@@ -519,9 +515,15 @@ namespace Model.Model
                 return;
             }
 
-
         }
 
+        /// <summary>
+        /// Checks whether the robot can move to a specific direction.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <param name="a">The X relative coordinate.</param>
+        /// <param name="b">The Y relative coordinate.</param>
+        /// <returns>True, if the robot can move, else false.</returns>
         private bool CanMoveToDirection(Robot robot, int a, int b)
         {
             if (!IsOnBoard(robot.X + a, robot.Y + b)
@@ -565,6 +567,12 @@ namespace Model.Model
             return true;
         }
 
+        /// <summary>
+        /// Checks whether the robot can move to a specific direction.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <param name="dir">The direction of the move.</param>
+        /// <returns>True, if the robot can move, else false.</returns>
         private void MoveToDirection(Robot robot, Direction dir)
         {
             if (IsOnEdge(robot.X, robot.Y))
@@ -621,6 +629,11 @@ namespace Model.Model
             }
         }
 
+        /// <summary>
+        /// Checks whether the robot is connected to other robots.
+        /// </summary>
+        /// <param name="robot">The robot we want to check its connection.</param>
+        /// <returns>True, if it's connected, else false.</returns>
         private bool IsConnectedToRobots(Robot robot)
         {
             if (robot.ConnectedRobot == -1)
@@ -629,11 +642,16 @@ namespace Model.Model
             }
             else
             {
-
                 return true;
             }
         }
 
+        /// <summary>
+        /// Checks whether a coordinate is on the board.
+        /// </summary>
+        /// <param name="x">The X coordinate of the field.</param>
+        /// <param name="y">The Y coordinate of the field.</param>
+        /// <returns>True, if it's on the board, else false.</returns>
         public bool IsOnBoard(int x, int y)
         {
             if (x >= _board.Width || x < 0 || y >= _board.Height || y < 0)
@@ -643,6 +661,12 @@ namespace Model.Model
             return true;
         }
 
+        /// <summary>
+        /// Checks whether a coordinate is on the edge of the board.
+        /// </summary>
+        /// <param name="x">The X coordinate of the field.</param>
+        /// <param name="y">The Y coordinate of the field.</param>
+        /// <returns>True, if it's on the edge of the board, else false.</returns>
         private bool IsOnEdge(int x, int y)
         {
             if (x == 0 || y == 0 || x == _board.Width - 1 || y == _board.Height - 1)
@@ -655,18 +679,23 @@ namespace Model.Model
         #endregion
 
         #region MoveTwoRobots
+
+        /// <summary>
+        /// The move action of two robots.
+        /// </summary>
+        /// <param name="r1">One of the robots we want to move with.</param>
+        /// <param name="dir">The direction of the movement.</param>
         private void MoveRobots(Robot r1, Direction dir)
         {
             Robot? r2 = null;
+
             if (_team1.GetRobotByNum(r1.ConnectedRobot) != null)
             {
                 r2 = _team1.GetRobotByNum(r1.ConnectedRobot);
-
             }
             if (_team2.GetRobotByNum(r1.ConnectedRobot) != null)
             {
                 r2 = _team2.GetRobotByNum(r1.ConnectedRobot);
-
             }
             if (r2 != null)
             {
@@ -753,6 +782,13 @@ namespace Model.Model
             }
 
         }
+
+        /// <summary>
+        /// Updates the fields according to the move action of two robots.
+        /// </summary>
+        /// <param name="robot">The first robot.</param>
+        /// <param name="robot2">The second robot.</param>
+        /// <param name="dir">The direction of the movement.</param>
         private void MoveToDirectionRobots(Robot robot, Robot robot2, Direction dir)
         {
             if (IsOnEdge(robot.X, robot.Y))
@@ -774,6 +810,7 @@ namespace Model.Model
             }
 
             List<XYcoordinates> connections = robot.AllConnections();
+
             for (int i = 0; i < connections.Count; i++)
             {
                 if (IsOnBoard(connections[i].X, connections[i].Y))
@@ -818,6 +855,14 @@ namespace Model.Model
             }
         }
 
+        /// <summary>
+        /// Checks whether the robots can move to a specific direction.
+        /// </summary>
+        /// <param name="robot">The first robot we want to execute the action with.</param>
+        /// <param name="robot2">The second robot we want to execute the action with.</param>
+        /// <param name="a">The X relative coordinate.</param>
+        /// <param name="b">The Y relative coordinate.</param>
+        /// <returns>True, if the robots can move, else false.</returns>
         private bool CanMoveToDirectionRobots(Robot robot, Robot robot2, int a, int b)
         {
             if (!IsOnBoard(robot.X + a, robot.Y + b)
@@ -839,6 +884,7 @@ namespace Model.Model
             }
 
             List<XYcoordinates> connections = robot.AllConnections();
+
             for (int i = 0; i < connections.Count; i++)
             {
                 if (IsOnBoard(connections[i].X + a, connections[i].Y + b))
@@ -875,6 +921,11 @@ namespace Model.Model
 
         #region Rotate
 
+        /// <summary>
+        /// The rotation action.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <param name="angle">The angle of the action.</param>
         public void RotateRobot(Robot robot, Angle angle)
         {
             if (IsConnectedToRobots(robot))
@@ -901,9 +952,15 @@ namespace Model.Model
             }
         }
 
+        // <summary>
+        /// The rotation action of the connected cubes of the robot.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <param name="angle">The angle of the action.</param>
         private void RotateAll(Robot robot, Angle angle)
         {
             List<XYcoordinates> connections = robot.AllConnections();
+
             for (int i = 0; i < connections.Count; i++)
             {
                 if (IsOnBoard(connections[i].X, connections[i].Y))
@@ -922,6 +979,7 @@ namespace Model.Model
             if (angle == Angle.Clockwise)
             {
                 robot.RotateClockwise();
+
                 switch (robot.Direction)
                 {
                     case Direction.EAST:
@@ -941,6 +999,7 @@ namespace Model.Model
             else
             {
                 robot.RotateCounterClockwise();
+
                 switch (robot.Direction)
                 {
                     case Direction.EAST:
@@ -965,17 +1024,23 @@ namespace Model.Model
                 if (IsOnBoard(connectionsNew[i].X, connectionsNew[i].Y))
                 {
                     _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
-                       robot.getHealthAt(i), robot.getColorAt(i)));
+                    robot.getHealthAt(i), robot.getColorAt(i)));
                 }
             }
         }
 
+        /// <summary>
+        /// Checks whether the robot can rotate clockwise.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <returns>True, if the robot can rotate, else false.</returns>
         private bool CanRotateClockwise(Robot robot)
         {
             for (int i = 0; i < (robot.AllConnections()).Count(); i++)
             {
                 int newX = robot.X + robot.Y - (robot.AllConnections())[i].Y;
                 int newY = -robot.X + robot.Y + (robot.AllConnections())[i].X;
+
                 if (IsOnBoard(newX, newY))
                 {
                     if (_board.GetFieldValue(newX, newY) is Empty)
@@ -995,12 +1060,18 @@ namespace Model.Model
             return true;
         }
 
+        /// <summary>
+        /// Checks whether the robot can rotate counter clockwise.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <returns>True, if the robot can rotate, else false.</returns>
         private bool CanRotateCounterClockwise(Robot robot)
         {
             for (int i = 0; i < (robot.AllConnections()).Count(); i++)
             {
                 int newX = robot.X - robot.Y + (robot.AllConnections())[i].Y;
                 int newY = robot.X + robot.Y - (robot.AllConnections())[i].X;
+
                 if (IsOnBoard(newX, newY))
                 {
                     if (_board.GetFieldValue(newX, newY) is Empty)

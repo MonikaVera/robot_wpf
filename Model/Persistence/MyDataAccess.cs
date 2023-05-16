@@ -229,28 +229,28 @@ namespace Model.Persistence
                                 Robot robot = (Robot)table.GetFieldValue(i, j);
                                 if (robot.Direction == Direction.EAST)
                                 {
-                                    if(robot.Player==true)
+                                    if(robot.Player1==true)
                                         await Task.Run(() => writer.WriteLine("robot_right"));
                                     else
                                         await Task.Run(() => writer.WriteLine("b_robot_right"));
                                 }
                                 else if (robot.Direction == Direction.WEST)
                                 {
-                                    if (robot.Player == true)
+                                    if (robot.Player1 == true)
                                         await Task.Run(() => writer.WriteLine("robot_left"));
                                     else
                                         await Task.Run(() => writer.WriteLine("b_robot_left"));
                                 }
                                 else if (robot.Direction == Direction.SOUTH)
                                 {
-                                    if (robot.Player == true)
+                                    if (robot.Player1 == true)
                                         await Task.Run(() => writer.WriteLine("robot_front"));
                                     else
                                         await Task.Run(() => writer.WriteLine("b_robot_front"));
                                 }
                                 else if (robot.Direction == Direction.NORTH)
                                 {
-                                    if (robot.Player == true)
+                                    if (robot.Player1 == true)
                                         await Task.Run(() => writer.WriteLine("robot_back"));
                                     else
                                         await Task.Run(() => writer.WriteLine("b_robot_back"));

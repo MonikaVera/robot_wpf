@@ -13,105 +13,176 @@ using System.Security.Cryptography;
 
 namespace Model.Model
 {
+    /// <summary>
+    /// Robots Game type.
+    /// </summary>
     public class Game
     {
+       
+        #region Fields
+
+        private Robot _robot = null!; // the current robot on the board
+        private Board _board = null!; // the board of the game
+        private NoticeBoard _noticeBoard = null!; // the notice board which contains the guests
+        private int _gameOverTurn; // the number of turns when the game ends
+        private int _gameTime; // the amount of time in a round
+        private IDataAccess _dataAccess; // for load and save methods
+        private Team _team1 = null!; // the first team on the board
+        private Team _team2 = null!; // the second team on the board
+        private int _round; // the current round
+        private int _width; // the width of the board
+        private int _height; // the height of the board
+        private int? _actionFieldX; // the x coordinate of the action
+        private int? _actionFieldY; // the y coordinate of the action
+        private Direction? _actionDirection; // the direction of the action
+        private int _team1points; // the first team's points
+        private int _team2points; // the second team's points
+        private int _teamMembers; // the number of robots in a team
+        private int _nextPlayerFromTeam1; // the next number of robot in first team
+        private int _nextPlayerFromTeam2; // the next number of robot in second team
+        private bool _nextTeam1; // whether the next team is the first or not
+        private string _chatTeam1 = null!; // the content of the first team's chat
+        private string _chatTeam2 = null!; // the content of the second team's chat
+        private List<Board> _robotsMap = new List<Board>(); // the map of each robot with the fields they can view
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Query or setting of the robot on the board.
+        /// </summary>
+        public Robot Robot { get { return _robot; } set { _robot = value; } }
+
+        /// <summary>
+        /// Query or setting of the board.
+        /// </summary>
+        public Board Board { get { return _board; } set { _board = value; } }
+
+        /// <summary>
+        /// Query or setting of the first team.
+        /// </summary>
+        public Team Team1 { get { return _team1; } set { _team1 = value; } }
+
+        /// <summary>
+        /// Query or setting of the second team.
+        /// </summary>
+        public Team Team2 { get { return _team2; } set { _team2 = value; } }
+
+        /// <summary>
+        /// Query or setting of the notice board.
+        /// </summary>
+        public NoticeBoard NoticeBoard { get { return _noticeBoard; } }
+
+        /// <summary>
+        /// Query or setting of the current round.
+        /// </summary>
+        public int Round { get { return _round; } set { _round = value; } }
+
+        /// <summary>
+        /// Query of the robots map with the fields they can currently see.
+        /// </summary>
+        public List<Board> RobotsMap { get { return _robotsMap; } }
+
+        /// <summary>
+        /// Query or setting of the first team points.
+        /// </summary>
+        public int Team1Points { get { return _team1points; } set { _team1points = value; } }
+
+        /// <summary>
+        /// Query or setting of the second team points.
+        /// </summary>
+        public int Team2Points { get { return _team2points; } set { _team2points = value; } }
+
+        /// <summary>
+        /// Query or setting of amount of time in a round.
+        /// </summary>
+        public int GameTime { get { return _gameTime; } }
+
+        /// <summary>
+        /// Query of whether it's game over.
+        /// </summary>
+        public bool IsGameOver { get { return _round == _gameOverTurn; } }
+
+        /// <summary>
+        /// Query of whether it's round over.
+        /// </summary>
+        public bool IsRoundOver { get { return _gameTime == 0; } }
+
+        /// <summary>
+        /// Query of which robot is the next from the first team.
+        /// </summary>
+        public int NextPlayerFromTeam1 { get { return _nextPlayerFromTeam1; } }
+
+        /// <summary>
+        /// Query of which robot is the next from the second team.
+        /// </summary>
+        public int NextPlayerFromTeam2 { get { return _nextPlayerFromTeam2; } }
+
+        /// <summary>
+        /// Query of whether the next team is the first team.
+        /// </summary>
+        public bool NextTeam1 { get { return _nextTeam1; } }
+
+        /// <summary>
+        /// Query or setting of the content of the first team's chat.
+        /// </summary>
+        public string ChatTeam1 { get { return _chatTeam1; } set { _chatTeam1 = value; } }
+
+        /// <summary>
+        /// Query or setting of the content of the second team's chat.
+        /// </summary>
+        public string ChatTeam2 { get { return _chatTeam2; } set { _chatTeam2 = value; } }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Instantiation of the Game class.
+        /// </summary>
+        /// <param name="dataAccess">The data access for the Load and Save methods.</param>
         public Game(IDataAccess dataAccess)
         {
             _dataAccess = dataAccess;
             _gameOverTurn = 50;
             _width = 10;
             _height = 12;
-            //NewGame();
         }
 
-        #region Fields
-
-        private Robot _robot = null!;
-        private Board _board = null!;
-        private NoticeBoard _noticeBoard = null!;
-        private int _gameOverTurn;
-        private int _gameTime;
-        private IDataAccess _dataAccess;
-        private Team _team1 = null!;
-        private Team _team2 = null!;
-        private int _round;
-        private int _width;
-        private int _height;
-        private int? _actionFieldX;
-        private int? _actionFieldY;
-        private Direction? _actionDirection;
-        private int _team1points;
-        private int _team2points;
-        private int _teamMembers;
-        private int _nextPlayerFromTeam1;
-        private int _nextPlayerFromTeam2;
-        private bool _nextTeam1;
-        private string _chatTeam1 = null!;
-        private string _chatTeam2 = null!;
-        private List<Board> _robotsMap = new List<Board>();
-
-        #endregion
-
-        #region Properties
-        public Robot Robot { get { return _robot; } set { _robot = value; } }
-
-        public Board Board { get { return _board; } set { _board = value; } }
-
-        public Team Team1 { get { return _team1; } set { _team1 = value; } }
-
-        public Team Team2 { get { return _team2; } set { _team2 = value; } }
-
-        public NoticeBoard NoticeBoard { get { return _noticeBoard; } }
-
-        public int Round { get { return _round; } set { _round = value; } }
-        public List<Board> RobotsMap { get { return _robotsMap; } }
-
-        public int Team1Points { get { return _team1points; } set { _team1points = value; } }
-        public int Team2Points { get { return _team2points; } set { _team2points = value; } }
-
-        public int GameTime { get { return _gameTime; } }
-
-        public bool IsGameOver { get { return _round == _gameOverTurn; } }
-
-        public bool IsRoundOver { get { return _gameTime == 0; } }
-
-        public int NextPlayerFromTeam1 { get { return _nextPlayerFromTeam1; } }
-
-        public int NextPlayerFromTeam2 { get { return _nextPlayerFromTeam2; } }
-
-        public bool NextTeam1 { get { return _nextTeam1; } }
-        public string ChatTeam1 { get { return _chatTeam1; } set { _chatTeam1 = value; } }
-        public string ChatTeam2 { get { return _chatTeam2; } set { _chatTeam2 = value; } }
-
-        #endregion
+        #endregion 
 
         #region Events 
 
+        /// <summary>
+        /// The event of whether the game continues.
+        /// </summary>
         public event EventHandler<GameEventArgs>? GameAdvanced;
 
+        /// <summary>
+        /// The event of game over.
+        /// </summary>
         public event EventHandler<GameEventArgs>? GameOver;
 
+        /// <summary>
+        /// The event of starting a new round.
+        /// </summary>
         public event EventHandler<GameEventArgs>? NewRound;
 
+        /// <summary>
+        /// The event of updating the fields.
+        /// </summary>
         public event EventHandler<ActionEventArgs>? UpdateFields;
-
-        /*public event EventHandler<RobotEventArgs> MoveRobot_;
-        public event EventHandler<RobotEventArgs> RotateRobot_;
-        public event EventHandler<RobotEventArgs> ConnectRobot_;
-        public event EventHandler<RobotEventArgs> DisConnectRobot_;
-        public event EventHandler<RobotEventArgs> ConnectCubes_;
-        public event EventHandler<RobotEventArgs> DisConnectCubes_;
-        public event EventHandler<RobotEventArgs> Clean_;*/
-
-
 
         #endregion
 
         #region  Public  Methods
 
+        /// <summary>
+        /// Advances time else when time is 0, starts a new round.
+        /// </summary>
         public void AdvanceTime()
         {
-
             if (IsRoundOver)
             {
                 OnNewRound(_team1);
@@ -120,9 +191,11 @@ namespace Model.Model
 
             _gameTime--;
             OnGameAdvanced();
-
         }
 
+        /// <summary>
+        /// Starts a new game.
+        /// </summary>
         public void NewGame()
         {
             _teamMembers = 4;
@@ -140,26 +213,39 @@ namespace Model.Model
             _chatTeam1 = "";
             _chatTeam2 = "";
             _nextTeam1 = true;
-
         }
 
-        public void LoadGameAsync(string _filepath)
+        /// <summary>
+        /// Loads a game.
+        /// </summary>
+        /// <param name="filepath">The relative path to the file from where we want to load a game.</param>
+        public void LoadGameAsync(string filepath)
         {
             if (_dataAccess == null)
                 throw new InvalidOperationException("No data access is provided.");
 
-            Board board = _dataAccess.LoadAsync(_filepath, _board.Height, _board.Width);
+            Board board = _dataAccess.LoadAsync(filepath, _board.Height, _board.Width);
             _board = board;
         }
-        public async Task SaveGameAsync(string _filepath)
+
+        /// <summary>
+        /// Saves a game.
+        /// </summary>
+        /// <param name="filepath">The relative path to the file where we want to save the game.</param>
+        public async Task SaveGameAsync(string filepath)
         {
             if (_dataAccess == null)
                 return;
 
-            await _dataAccess.SaveAsync(_filepath, _board);
+            await _dataAccess.SaveAsync(filepath, _board);
 
         }
 
+        /// <summary>
+        /// Calculates the field for action.
+        /// </summary>
+        /// <param name="x">The X coordinate of the field on which we want to execute an action.</param>
+        /// <param name="y">The Y coordinate of the field on which we want to execute an action.</param>
         public void ChooseActionField(int x, int y)
         {
             _actionFieldX = x;
@@ -172,6 +258,12 @@ namespace Model.Model
 
         #region Private Methods
 
+        /// <summary>
+        /// Creates a new team.
+        /// </summary>
+        /// <param name="number">The number of robots we want to create the team with.</param>
+        /// <param name="teamNumber">The identifier of the team.</param>
+        /// <returns>The created array of robots.</returns>
         private Robot[] CreateTeam(int number, int teamNumber)
         {
             Robot[] robots = new Robot[number];
@@ -184,6 +276,11 @@ namespace Model.Model
             return robots;
         }
 
+        /// <summary>
+        /// Creates a new robot to a random field.
+        /// </summary>
+        /// <param name="i">The identifier of the robot we want to create.</param>
+        /// <returns>The created robot.</returns>
         private Robot RandomRobot(int i)
         {
             Random rnd = new Random();
@@ -194,19 +291,21 @@ namespace Model.Model
                 x = rnd.Next(1, _board.Width - 1);
                 y = rnd.Next(1, _board.Height - 1);
             }
-            while (!(_board.GetFieldValue(x, y) is Empty));
+            while (!(_board.GetFieldValue(x, y) is Empty)); //until the chosen field is not empty
 
             Direction direction = (Direction)rnd.Next(0, 4);
             Robot robot = new Robot(x, y, direction, i);
             _board.SetValue(x, y, robot);
+
+
             for (int a = 0; a < i; a++)
                 if (_robotsMap[a].GetFieldValue(x, y) is not None)
                 {
-                    _robotsMap[a].SetValue(x, y, robot);
+                    _robotsMap[a].SetValue(x, y, robot); //initialization of the robot's map
 
                 }
 
-            createMap(i, x, y);
+            createMap(i, x, y); //creation of the map
 
             return robot;
         }
@@ -1325,7 +1424,7 @@ namespace Model.Model
                 if (cleanRobot.Health == 0)
                 {
                     _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));
-                    if (cleanRobot.Player)
+                    if (cleanRobot.Player1)
                     {
                         _team1.RemoveRobotFromTeam(cleanRobot);
                         if (_team1.IsEmptyTeam())

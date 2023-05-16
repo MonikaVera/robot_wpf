@@ -166,28 +166,28 @@ namespace View.ViewModel
                 Robot robot = (Robot)field;
                 if (robot.Direction == Direction.EAST) 
                 {
-                    if (robot.Player == true)
+                    if (robot.Player1 == true)
                         _picture = "robot_right.jpg";
                     else
                         _picture = "blue_robot_right.jpg";
                 }
                 else if (robot.Direction == Direction.WEST)
                 {
-                    if (robot.Player == true)
+                    if (robot.Player1 == true)
                         _picture = "robot_left.jpg";
                     else
                         _picture = "blue_robot_left.jpg";
                 }
                 else if (robot.Direction == Direction.SOUTH)
                 {
-                    if (robot.Player == true)
+                    if (robot.Player1 == true)
                         _picture = "robot_front.jpg";
                     else
                         _picture = "blue_fobot_front.jpg";
                 }
                 else if (robot.Direction == Direction.NORTH)
                 {
-                    if (robot.Player == true)
+                    if (robot.Player1 == true)
                         _picture = "robot_back.jpg";
                     else
                         _picture = "blue_robot_back.jpg";

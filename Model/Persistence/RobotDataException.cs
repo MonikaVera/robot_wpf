@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace Model.Persistence
 {
+    /// <summary>
+    /// Robots RobotDataException type.
+    /// </summary>
     public class RobotDataException : Exception
     {
         /// <summary>
-        /// Kivétel példányosítása.
+        /// Instantiation of the RobotDataException class.
         /// </summary>
+        /// <param name="message">The message of the exception.</param>
         public RobotDataException(String message) : base(message) { }
     }
 }

@@ -1,52 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace Model.Model
 {
+    /// <summary>
+    /// Robots Board type.
+    /// </summary>
     public class Board
     {
 
-        public Board(int width, int height)
-        {
-            if (height < 0 || width < 0)
-                throw new ArgumentOutOfRangeException("One of the table sizes is less than 0.");
-            _height = height;
-            _width = width;
-
-
-
-            _cubes = 0; // kockák kezdőértéke
-
-            _fields = new Field[width, height];
-            GenerateTable(width, height);
-            PrintTable(width, height);
-
-        }
-
         #region Fields
 
-        private int _height;
-        private int _width;
-        private Field[,] _fields;
-        private int _cubes;
+        private int _height; // height of the table
+        private int _width; // width of the table
+        private Field[,] _fields; // the fields of the table
+        private int _cubes; // the number of cubes on the field
 
         #endregion
 
         #region Properties
 
+        /// <summary>
+        /// Query of the height of the table.
+        /// </summary>
         public Int32 Height { get { return _height; } }
 
+        /// <summary>
+        /// Query of the width of the table.
+        /// </summary>
         public Int32 Width { get { return _width; } }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Instantiation of the Board class.
+        /// </summary>
+        /// <param name="width">Width of the table.</param>
+        /// <param name="height">Height of the table.</param>
+        public Board(int width, int height)
+        {
+            if (height < 0 || width < 0)
+                throw new ArgumentOutOfRangeException("One of the table sizes is less than 0.");
+
+            _height = height;
+            _width = width;
+
+            _cubes = 0; // kockák kezdőértéke
+
+            _fields = new Field[width, height];
+            GenerateTable(width, height); // pálya generálása
+
+        }
 
         #endregion
 
         #region Public Methods
 
+        /// <summary>
+        /// Query of the field's value.
+        /// </summary>
+        /// <param name="x">The X coordinate of the field. </param>
+        /// <param name="y">The Y coordinate of the field. </param>
+        /// <returns> The specified field, if the coordinates are valid, else throws exception. </returns>
         public Field GetFieldValue(int x, int y)
         {
             if (x < 0 || x >= _fields.GetLength(0))
@@ -57,6 +73,11 @@ namespace Model.Model
             return _fields[x, y];
         }
 
+        /// <summary>
+        /// Setting of the field's value.
+        /// </summary>
+        /// <param name="x">The X coordinate of the field. </param>
+        /// <param name="y">The Y coordinate of the field. </param>
         public void SetValue(int x, int y, Field field)
         {
             if (x < 0 || x >= _fields.GetLength(0))
@@ -67,6 +88,10 @@ namespace Model.Model
             _fields[x, y] = field;
         }
 
+        /// <summary>
+        /// Setting of the field's value.
+        /// </summary>
+        /// <param name="field">The new value of the field. </param>
         public void SetValueNewField(Field field)
         {
             if (field.X < 0 || field.X >= _fields.GetLength(0))
@@ -77,47 +102,10 @@ namespace Model.Model
             _fields[field.X, field.Y] = field;
         }
 
-        #endregion
-
-        #region Private Methods
-
-        private void PrintTable(int width, int height)
-        {
-            /*using (StreamWriter writer = new StreamWriter("C:\\Users\\Mathe Arnold\\Desktop\\proba1.txt"))
-            {
-
-                for (int j = 0; j < height; j++)
-                {
-                    writer.WriteLine(" ");
-                    for (int i = 0; i < width; i++)
-                    {
-                        if (_fields[i, j] is Empty)
-                        {
-                            writer.Write("  ");
-                        }
-                        else if (_fields[i, j] is Obstacle)
-                        {
-                            writer.Write("O ");
-                        }
-                        else if (_fields[i, j] is Exit)
-                        {
-                            writer.Write("E ");
-                        }
-                        else if (_fields[i, j] is Robot)
-                        {
-                            writer.Write("R ");
-                        }
-                        else if (_fields[i, j] is Cube)
-                        {
-                            writer.Write("C ");
-                        }
-
-                    }
-                }
-            }*/
-
-        }
-
+        /// <summary>
+        /// Generating new cubes.
+        /// </summary>
+        /// <param name="number">The number of the new cubes to be generated.</param>
         public void GenerateNewCubes(int number)
         {
             Random rnd = new Random();
@@ -139,6 +127,15 @@ namespace Model.Model
             }
         }
 
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Generating the new table.
+        /// </summary>
+        /// <param name="width">Width of the table.</param>
+        /// <param name="height">Height of the table.</param>
         private void GenerateTable(int width, int height)
         {
             for (int i = 1; i < width - 1; i++) // minden mezőt üresnek inicializál
@@ -242,14 +239,14 @@ namespace Model.Model
 
         #endregion
 
-
-
     }
 
+    /// <summary>
+    /// Robots Angle type.
+    /// </summary>
     public enum Angle
     {
         Clockwise, CounterClockwise
-        //_90, _180, _270, _360
     }
 }
 

@@ -30,7 +30,7 @@ namespace View
         private MainPage _mainPage = null!;
         private MainWindow _mainWindow = null!;
         private Window1 _window1 = null!;
-        MyDataAccess _dataAccess = null!;
+        RobotDataAccess _dataAccess = null!;
         private DispatcherTimer _timer = null!;
         private OpenFileDialog? _openFileDialog;
         private SaveFileDialog? _saveFileDialog;
@@ -40,7 +40,7 @@ namespace View
         }
         private void App_Startup(object sender, StartupEventArgs e)
         {
-            _dataAccess = new MyDataAccess();
+            _dataAccess = new RobotDataAccess();
             _model = new Game(_dataAccess);
             _model.GameOver += new EventHandler<GameEventArgs>(Model_GameOver);
             _model.NewRound += new EventHandler<GameEventArgs>(Model_NewRound);

@@ -13,105 +13,176 @@ using System.Security.Cryptography;
 
 namespace Model.Model
 {
+    /// <summary>
+    /// Robots Game type.
+    /// </summary>
     public class Game
     {
+       
+        #region Fields
+
+        private Robot _robot = null!; // the current robot on the board
+        private Board _board = null!; // the board of the game
+        private NoticeBoard _noticeBoard = null!; // the notice board which contains the guests
+        private int _gameOverTurn; // the number of turns when the game ends
+        private int _gameTime; // the amount of time in a round
+        private IDataAccess _dataAccess; // for load and save methods
+        private Team _team1 = null!; // the first team on the board
+        private Team _team2 = null!; // the second team on the board
+        private int _round; // the current round
+        private int _width; // the width of the board
+        private int _height; // the height of the board
+        private int? _actionFieldX; // the x coordinate of the action
+        private int? _actionFieldY; // the y coordinate of the action
+        private Direction? _actionDirection; // the direction of the action
+        private int _team1points; // the first team's points
+        private int _team2points; // the second team's points
+        private int _teamMembers; // the number of robots in a team
+        private int _nextPlayerFromTeam1; // the next number of robot in first team
+        private int _nextPlayerFromTeam2; // the next number of robot in second team
+        private bool _nextTeam1; // whether the next team is the first or not
+        private string _chatTeam1 = null!; // the content of the first team's chat
+        private string _chatTeam2 = null!; // the content of the second team's chat
+        private List<Board> _robotsMap = new List<Board>(); // the map of each robot with the fields they can view
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Query or setting of the robot on the board.
+        /// </summary>
+        public Robot Robot { get { return _robot; } set { _robot = value; } }
+
+        /// <summary>
+        /// Query or setting of the board.
+        /// </summary>
+        public Board Board { get { return _board; } set { _board = value; } }
+
+        /// <summary>
+        /// Query or setting of the first team.
+        /// </summary>
+        public Team Team1 { get { return _team1; } set { _team1 = value; } }
+
+        /// <summary>
+        /// Query or setting of the second team.
+        /// </summary>
+        public Team Team2 { get { return _team2; } set { _team2 = value; } }
+
+        /// <summary>
+        /// Query or setting of the notice board.
+        /// </summary>
+        public NoticeBoard NoticeBoard { get { return _noticeBoard; } }
+
+        /// <summary>
+        /// Query or setting of the current round.
+        /// </summary>
+        public int Round { get { return _round; } set { _round = value; } }
+
+        /// <summary>
+        /// Query of the robots map with the fields they can currently see.
+        /// </summary>
+        public List<Board> RobotsMap { get { return _robotsMap; } }
+
+        /// <summary>
+        /// Query or setting of the first team points.
+        /// </summary>
+        public int Team1Points { get { return _team1points; } set { _team1points = value; } }
+
+        /// <summary>
+        /// Query or setting of the second team points.
+        /// </summary>
+        public int Team2Points { get { return _team2points; } set { _team2points = value; } }
+
+        /// <summary>
+        /// Query or setting of amount of time in a round.
+        /// </summary>
+        public int GameTime { get { return _gameTime; } }
+
+        /// <summary>
+        /// Query of whether it's game over.
+        /// </summary>
+        public bool IsGameOver { get { return _round == _gameOverTurn; } }
+
+        /// <summary>
+        /// Query of whether it's round over.
+        /// </summary>
+        public bool IsRoundOver { get { return _gameTime == 0; } }
+
+        /// <summary>
+        /// Query of which robot is the next from the first team.
+        /// </summary>
+        public int NextPlayerFromTeam1 { get { return _nextPlayerFromTeam1; } }
+
+        /// <summary>
+        /// Query of which robot is the next from the second team.
+        /// </summary>
+        public int NextPlayerFromTeam2 { get { return _nextPlayerFromTeam2; } }
+
+        /// <summary>
+        /// Query of whether the next team is the first team.
+        /// </summary>
+        public bool NextTeam1 { get { return _nextTeam1; } }
+
+        /// <summary>
+        /// Query or setting of the content of the first team's chat.
+        /// </summary>
+        public string ChatTeam1 { get { return _chatTeam1; } set { _chatTeam1 = value; } }
+
+        /// <summary>
+        /// Query or setting of the content of the second team's chat.
+        /// </summary>
+        public string ChatTeam2 { get { return _chatTeam2; } set { _chatTeam2 = value; } }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Instantiation of the Game class.
+        /// </summary>
+        /// <param name="dataAccess">The data access for the Load and Save methods.</param>
         public Game(IDataAccess dataAccess)
         {
             _dataAccess = dataAccess;
             _gameOverTurn = 50;
             _width = 10;
             _height = 12;
-            //NewGame();
         }
 
-        #region Fields
-
-        private Robot _robot = null!;
-        private Board _board = null!;
-        private NoticeBoard _noticeBoard = null!;
-        private int _gameOverTurn;
-        private int _gameTime;
-        private IDataAccess _dataAccess;
-        private Team _team1 = null!;
-        private Team _team2 = null!;
-        private int _round;
-        private int _width;
-        private int _height;
-        private int? _actionFieldX;
-        private int? _actionFieldY;
-        private Direction? _actionDirection;
-        private int _team1points;
-        private int _team2points;
-        private int _teamMembers;
-        private int _nextPlayerFromTeam1;
-        private int _nextPlayerFromTeam2;
-        private bool _nextTeam1;
-        private string _chatTeam1 = null!;
-        private string _chatTeam2 = null!;
-        private List<Board> _robotsMap = new List<Board>();
-
-        #endregion
-
-        #region Properties
-        public Robot Robot { get { return _robot; } set { _robot = value; } }
-
-        public Board Board { get { return _board; } set { _board = value; } }
-
-        public Team Team1 { get { return _team1; } set { _team1 = value; } }
-
-        public Team Team2 { get { return _team2; } set { _team2 = value; } }
-
-        public NoticeBoard NoticeBoard { get { return _noticeBoard; } }
-
-        public int Round { get { return _round; } set { _round = value; } }
-        public List<Board> RobotsMap { get { return _robotsMap; } }
-
-        public int Team1Points { get { return _team1points; } set { _team1points = value; } }
-        public int Team2Points { get { return _team2points; } set { _team2points = value; } }
-
-        public int GameTime { get { return _gameTime; } }
-
-        public bool IsGameOver { get { return _round == _gameOverTurn; } }
-
-        public bool IsRoundOver { get { return _gameTime == 0; } }
-
-        public int NextPlayerFromTeam1 { get { return _nextPlayerFromTeam1; } }
-
-        public int NextPlayerFromTeam2 { get { return _nextPlayerFromTeam2; } }
-
-        public bool NextTeam1 { get { return _nextTeam1; } }
-        public string ChatTeam1 { get { return _chatTeam1; } set { _chatTeam1 = value; } }
-        public string ChatTeam2 { get { return _chatTeam2; } set { _chatTeam2 = value; } }
-
-        #endregion
+        #endregion 
 
         #region Events 
 
+        /// <summary>
+        /// The event of whether the game continues.
+        /// </summary>
         public event EventHandler<GameEventArgs>? GameAdvanced;
 
+        /// <summary>
+        /// The event of game over.
+        /// </summary>
         public event EventHandler<GameEventArgs>? GameOver;
 
+        /// <summary>
+        /// The event of starting a new round.
+        /// </summary>
         public event EventHandler<GameEventArgs>? NewRound;
 
+        /// <summary>
+        /// The event of updating the fields.
+        /// </summary>
         public event EventHandler<ActionEventArgs>? UpdateFields;
-
-        /*public event EventHandler<RobotEventArgs> MoveRobot_;
-        public event EventHandler<RobotEventArgs> RotateRobot_;
-        public event EventHandler<RobotEventArgs> ConnectRobot_;
-        public event EventHandler<RobotEventArgs> DisConnectRobot_;
-        public event EventHandler<RobotEventArgs> ConnectCubes_;
-        public event EventHandler<RobotEventArgs> DisConnectCubes_;
-        public event EventHandler<RobotEventArgs> Clean_;*/
-
-
 
         #endregion
 
         #region  Public  Methods
 
+        /// <summary>
+        /// Advances time else when time is 0, starts a new round.
+        /// </summary>
         public void AdvanceTime()
         {
-
             if (IsRoundOver)
             {
                 OnNewRound(_team1);
@@ -120,9 +191,11 @@ namespace Model.Model
 
             _gameTime--;
             OnGameAdvanced();
-
         }
 
+        /// <summary>
+        /// Starts a new game.
+        /// </summary>
         public void NewGame()
         {
             _teamMembers = 4;
@@ -140,26 +213,39 @@ namespace Model.Model
             _chatTeam1 = "";
             _chatTeam2 = "";
             _nextTeam1 = true;
-
         }
 
-        public void LoadGameAsync(string _filepath)
+        /// <summary>
+        /// Loads a game.
+        /// </summary>
+        /// <param name="filepath">The relative path to the file from where we want to load a game.</param>
+        public void LoadGameAsync(string filepath)
         {
             if (_dataAccess == null)
                 throw new InvalidOperationException("No data access is provided.");
 
-            Board board = _dataAccess.LoadAsync(_filepath, _board.Height, _board.Width);
+            Board board = _dataAccess.LoadAsync(filepath, _board.Height, _board.Width);
             _board = board;
         }
-        public async Task SaveGameAsync(string _filepath)
+
+        /// <summary>
+        /// Saves a game.
+        /// </summary>
+        /// <param name="filepath">The relative path to the file where we want to save the game.</param>
+        public async Task SaveGameAsync(string filepath)
         {
             if (_dataAccess == null)
                 return;
 
-            await _dataAccess.SaveAsync(_filepath, _board);
+            await _dataAccess.SaveAsync(filepath, _board);
 
         }
 
+        /// <summary>
+        /// Calculates the field for action.
+        /// </summary>
+        /// <param name="x">The X coordinate of the field on which we want to execute an action.</param>
+        /// <param name="y">The Y coordinate of the field on which we want to execute an action.</param>
         public void ChooseActionField(int x, int y)
         {
             _actionFieldX = x;
@@ -167,11 +253,32 @@ namespace Model.Model
             CalculateDirection();
         }
 
+        /// <summary>
+        /// Switches to the next player.
+        /// </summary>
+        public void NextPlayer()
+        {
+            _robot = NextRobot();
+
+            if (_nextPlayerFromTeam1 == 0 && _nextPlayerFromTeam2 == 0 && _nextTeam1)
+            {
+                _round++;
+            }
+
+            NextTeam();
+            _gameTime = 30;
+        }
 
         #endregion
 
         #region Private Methods
 
+        /// <summary>
+        /// Creates a new team.
+        /// </summary>
+        /// <param name="number">The number of robots we want to create the team with.</param>
+        /// <param name="teamNumber">The identifier of the team.</param>
+        /// <returns>The created array of robots.</returns>
         private Robot[] CreateTeam(int number, int teamNumber)
         {
             Robot[] robots = new Robot[number];
@@ -184,6 +291,11 @@ namespace Model.Model
             return robots;
         }
 
+        /// <summary>
+        /// Creates a new robot to a random field.
+        /// </summary>
+        /// <param name="i">The identifier of the robot we want to create.</param>
+        /// <returns>The created robot.</returns>
         private Robot RandomRobot(int i)
         {
             Random rnd = new Random();
@@ -194,24 +306,31 @@ namespace Model.Model
                 x = rnd.Next(1, _board.Width - 1);
                 y = rnd.Next(1, _board.Height - 1);
             }
-            while (!(_board.GetFieldValue(x, y) is Empty));
+            while (!(_board.GetFieldValue(x, y) is Empty)); //until the chosen field is not empty
 
             Direction direction = (Direction)rnd.Next(0, 4);
             Robot robot = new Robot(x, y, direction, i);
             _board.SetValue(x, y, robot);
+
+
             for (int a = 0; a < i; a++)
                 if (_robotsMap[a].GetFieldValue(x, y) is not None)
                 {
-                    _robotsMap[a].SetValue(x, y, robot);
+                    _robotsMap[a].SetValue(x, y, robot); //initialization of the robot's map
 
                 }
 
-            createMap(i, x, y);
+            createMap(x, y); //creation of the map
 
             return robot;
         }
 
-        private void createMap(int i, int x, int y)
+        /// <summary>
+        /// Creates the manhattan map for a robot.
+        /// </summary>
+        /// <param name="x">The X coordinate of the robot we want to create the map</param>
+        /// <param name="y">The Y coordinate of the robot we want to create the map</param>
+        private void createMap(int x, int y)
         {
             //robot map
             Board robotsMap = new Board(_board.Width, _board.Height);
@@ -235,6 +354,9 @@ namespace Model.Model
             _robotsMap.Add(robotsMap);
         }
 
+        /// <summary>
+        /// Calculates the direction of the current action.
+        /// </summary>
         private Direction? CalculateDirection()
         {
             if (_actionFieldX == null || _actionFieldY == null)
@@ -270,6 +392,11 @@ namespace Model.Model
             }
         }
 
+        /// <summary>
+        /// Triggers the GameOver event.
+        /// </summary>
+        /// <param name="end">Whether the game is over.</param>
+        /// <param name="team">The team who won.</param>
         private void OnGameOver(bool end, Team team)
         {
             if (team == _team1)
@@ -283,6 +410,10 @@ namespace Model.Model
 
         }
 
+        /// <summary>
+        /// Updates the game time and the round, also ptentially triggers the NewRound event.
+        /// </summary>
+        /// <param name="team">The team which made the last move.</param>
         private void OnNewRound(Team team)
         {
             if (_nextPlayerFromTeam1 == 0 && _nextPlayerFromTeam2 == 0)
@@ -301,56 +432,90 @@ namespace Model.Model
             }
         }
 
+        /// <summary>
+        /// Triggers the GameAdvanced event.
+        /// </summary>
         private void OnGameAdvanced()
         {
             GameAdvanced?.Invoke(this, new GameEventArgs(false, 1, _round, _gameTime, _team1points, _team2points));
         }
 
+        /// <summary>
+        /// Triggers the UpdateFields event.
+        /// </summary>
+        /// <param name="robot">The robot who made the action.</param>
+        /// <param name="direction">The direction of the action.</param>
+        /// <param name="action">The type of the action.</param>
+        /// <param name="direction">Whether the action was successful or not.</param>
         private void OnUpdateFields(Robot robot, Direction direction, Action action, bool canExecute)
         {
             UpdateFields?.Invoke(this, new ActionEventArgs(robot, direction, action, canExecute));
         }
 
-        /*private void MoveRobot_(int x, int y, Direction dir, Robot robot)
+        /// <summary>
+        /// Switches to the next team.
+        /// </summary>
+        private void NextTeam()
         {
-            if (x < 0 || x >= _board.Width)
-                return;
-            if (y < 0 || y >= _board.Height)
-                return;
+            if (_nextTeam1)
+            {
+                if (_nextPlayerFromTeam1 == _team1.Robots.Length - 1)
+                {
+                    _nextTeam1 = false;
+                }
 
-            Int32 prevX = robot.X;
-            Int32 prevY = robot.Y;
+                if (_nextPlayerFromTeam1 < _team1.Robots.Length - 1)
+                {
+                    _nextPlayerFromTeam1++;
+                }
+                else
+                {
+                    _nextPlayerFromTeam1 = 0;
+                }
 
-            if (!(prevX == x || prevY == y) || x < prevX - 1 || x > prevX + 1 || y > prevY + 1 || y < prevY - 1)
-                return; //ellenrzs, hogy kizrlag vzszintesen vagy fgglegesen lp
+            }
+            else
+            {
+                if (_nextPlayerFromTeam2 == _team2.Robots.Length - 1)
+                {
+                    _nextTeam1 = true;
+                }
 
-            if (_board.GetFieldValue(x, y) is Obstacle || _board.GetFieldValue(x, y) is Cube || _board.GetFieldValue(x, y) is Exit) // ha a mezn akadly van, nem lphetnk
-                return;
+                if (_nextPlayerFromTeam2 < _team2.Robots.Length - 1)
+                {
+                    _nextPlayerFromTeam2++;
+                }
+                else
+                {
+                    _nextPlayerFromTeam2 = 0;
+                }
+            }
+        }
 
-
-
-            //mezk State-jeinek frisstse a lpsnek megfelelen
-            robot.SetXY(x, y);
-            _board.SetValue(prevX, prevY, new Empty(prevX, prevY));
-            _board.SetValue(x, y, robot);
-
-            //OnRobotAction(prevX, prevY, x, y);
-
-            OnGameAdvanced();
-
-
-        }*/
-        private void RotateRobot(Direction dir) { /*code*/ ; }
-        private void DisConnectRobot(Direction dir) { /*code*/ ; }
-        private void ConnectCubes(int x, int y) { /*code*/ ; }
-        private void DisConnectCubes(int x, int y) { /*code*/ ; }
-        private void Clean(int x, int y) { /*code*/ ; }
-
+        /// <summary>
+        /// Switches to the next robot.
+        /// </summary>
+        private Robot NextRobot()
+        {
+            if (_nextTeam1)
+            {
+                return _team1.GetRobot(_nextPlayerFromTeam1);
+            }
+            else
+            {
+                return _team2.GetRobot(_nextPlayerFromTeam2);
+            }
+        }
 
         #endregion
 
         #region Move
 
+        /// <summary>
+        /// The move action.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <param name="dir">The direction of the move.</param>
         public void MoveRobot(Robot robot, Direction dir)
         {
             if (IsConnectedToRobots(robot))
@@ -420,9 +585,15 @@ namespace Model.Model
                 return;
             }
 
-
         }
 
+        /// <summary>
+        /// Checks whether the robot can move to a specific direction.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <param name="a">The X relative coordinate.</param>
+        /// <param name="b">The Y relative coordinate.</param>
+        /// <returns>True, if the robot can move, else false.</returns>
         private bool CanMoveToDirection(Robot robot, int a, int b)
         {
             if (!IsOnBoard(robot.X + a, robot.Y + b)
@@ -466,6 +637,12 @@ namespace Model.Model
             return true;
         }
 
+        /// <summary>
+        /// Checks whether the robot can move to a specific direction.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <param name="dir">The direction of the move.</param>
+        /// <returns>True, if the robot can move, else false.</returns>
         private void MoveToDirection(Robot robot, Direction dir)
         {
             if (IsOnEdge(robot.X, robot.Y))
@@ -522,6 +699,11 @@ namespace Model.Model
             }
         }
 
+        /// <summary>
+        /// Checks whether the robot is connected to other robots.
+        /// </summary>
+        /// <param name="robot">The robot we want to check its connection.</param>
+        /// <returns>True, if it's connected, else false.</returns>
         private bool IsConnectedToRobots(Robot robot)
         {
             if (robot.ConnectedRobot == -1)
@@ -530,11 +712,16 @@ namespace Model.Model
             }
             else
             {
-
                 return true;
             }
         }
 
+        /// <summary>
+        /// Checks whether a coordinate is on the board.
+        /// </summary>
+        /// <param name="x">The X coordinate of the field.</param>
+        /// <param name="y">The Y coordinate of the field.</param>
+        /// <returns>True, if it's on the board, else false.</returns>
         public bool IsOnBoard(int x, int y)
         {
             if (x >= _board.Width || x < 0 || y >= _board.Height || y < 0)
@@ -544,6 +731,12 @@ namespace Model.Model
             return true;
         }
 
+        /// <summary>
+        /// Checks whether a coordinate is on the edge of the board.
+        /// </summary>
+        /// <param name="x">The X coordinate of the field.</param>
+        /// <param name="y">The Y coordinate of the field.</param>
+        /// <returns>True, if it's on the edge of the board, else false.</returns>
         private bool IsOnEdge(int x, int y)
         {
             if (x == 0 || y == 0 || x == _board.Width - 1 || y == _board.Height - 1)
@@ -556,18 +749,23 @@ namespace Model.Model
         #endregion
 
         #region MoveTwoRobots
+
+        /// <summary>
+        /// The move action of two robots.
+        /// </summary>
+        /// <param name="r1">One of the robots we want to move with.</param>
+        /// <param name="dir">The direction of the movement.</param>
         private void MoveRobots(Robot r1, Direction dir)
         {
             Robot? r2 = null;
+
             if (_team1.GetRobotByNum(r1.ConnectedRobot) != null)
             {
                 r2 = _team1.GetRobotByNum(r1.ConnectedRobot);
-
             }
             if (_team2.GetRobotByNum(r1.ConnectedRobot) != null)
             {
                 r2 = _team2.GetRobotByNum(r1.ConnectedRobot);
-
             }
             if (r2 != null)
             {
@@ -654,6 +852,13 @@ namespace Model.Model
             }
 
         }
+
+        /// <summary>
+        /// Updates the fields according to the move action of two robots.
+        /// </summary>
+        /// <param name="robot">The first robot.</param>
+        /// <param name="robot2">The second robot.</param>
+        /// <param name="dir">The direction of the movement.</param>
         private void MoveToDirectionRobots(Robot robot, Robot robot2, Direction dir)
         {
             if (IsOnEdge(robot.X, robot.Y))
@@ -675,6 +880,7 @@ namespace Model.Model
             }
 
             List<XYcoordinates> connections = robot.AllConnections();
+
             for (int i = 0; i < connections.Count; i++)
             {
                 if (IsOnBoard(connections[i].X, connections[i].Y))
@@ -719,6 +925,14 @@ namespace Model.Model
             }
         }
 
+        /// <summary>
+        /// Checks whether the robots can move to a specific direction.
+        /// </summary>
+        /// <param name="robot">The first robot we want to execute the action with.</param>
+        /// <param name="robot2">The second robot we want to execute the action with.</param>
+        /// <param name="a">The X relative coordinate.</param>
+        /// <param name="b">The Y relative coordinate.</param>
+        /// <returns>True, if the robots can move, else false.</returns>
         private bool CanMoveToDirectionRobots(Robot robot, Robot robot2, int a, int b)
         {
             if (!IsOnBoard(robot.X + a, robot.Y + b)
@@ -740,6 +954,7 @@ namespace Model.Model
             }
 
             List<XYcoordinates> connections = robot.AllConnections();
+
             for (int i = 0; i < connections.Count; i++)
             {
                 if (IsOnBoard(connections[i].X + a, connections[i].Y + b))
@@ -776,6 +991,11 @@ namespace Model.Model
 
         #region Rotate
 
+        /// <summary>
+        /// The rotation action.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <param name="angle">The angle of the action.</param>
         public void RotateRobot(Robot robot, Angle angle)
         {
             if (IsConnectedToRobots(robot))
@@ -802,9 +1022,15 @@ namespace Model.Model
             }
         }
 
+        // <summary>
+        /// The rotation action of the connected cubes of the robot.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <param name="angle">The angle of the action.</param>
         private void RotateAll(Robot robot, Angle angle)
         {
             List<XYcoordinates> connections = robot.AllConnections();
+
             for (int i = 0; i < connections.Count; i++)
             {
                 if (IsOnBoard(connections[i].X, connections[i].Y))
@@ -823,6 +1049,7 @@ namespace Model.Model
             if (angle == Angle.Clockwise)
             {
                 robot.RotateClockwise();
+
                 switch (robot.Direction)
                 {
                     case Direction.EAST:
@@ -842,6 +1069,7 @@ namespace Model.Model
             else
             {
                 robot.RotateCounterClockwise();
+
                 switch (robot.Direction)
                 {
                     case Direction.EAST:
@@ -866,17 +1094,23 @@ namespace Model.Model
                 if (IsOnBoard(connectionsNew[i].X, connectionsNew[i].Y))
                 {
                     _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
-                       robot.getHealthAt(i), robot.getColorAt(i)));
+                    robot.getHealthAt(i), robot.getColorAt(i)));
                 }
             }
         }
 
+        /// <summary>
+        /// Checks whether the robot can rotate clockwise.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <returns>True, if the robot can rotate, else false.</returns>
         private bool CanRotateClockwise(Robot robot)
         {
             for (int i = 0; i < (robot.AllConnections()).Count(); i++)
             {
                 int newX = robot.X + robot.Y - (robot.AllConnections())[i].Y;
                 int newY = -robot.X + robot.Y + (robot.AllConnections())[i].X;
+
                 if (IsOnBoard(newX, newY))
                 {
                     if (_board.GetFieldValue(newX, newY) is Empty)
@@ -896,12 +1130,18 @@ namespace Model.Model
             return true;
         }
 
+        /// <summary>
+        /// Checks whether the robot can rotate counter clockwise.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <returns>True, if the robot can rotate, else false.</returns>
         private bool CanRotateCounterClockwise(Robot robot)
         {
             for (int i = 0; i < (robot.AllConnections()).Count(); i++)
             {
                 int newX = robot.X - robot.Y + (robot.AllConnections())[i].Y;
                 int newY = robot.X + robot.Y - (robot.AllConnections())[i].X;
+
                 if (IsOnBoard(newX, newY))
                 {
                     if (_board.GetFieldValue(newX, newY) is Empty)
@@ -925,9 +1165,14 @@ namespace Model.Model
 
         #region ConnectRobot
 
+        /// <summary>
+        /// The connect to a cube action.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
         public void ConnectRobot(Robot robot)
         {
             _actionDirection = robot.Direction;
+
             if (_actionDirection == null)
             {
                 return;
@@ -984,17 +1229,22 @@ namespace Model.Model
                 return;
             }
 
-
         }
 
+        /// <summary>
+        /// Checks whether the robot can connect to a cube.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <param name="a">The X relative coordinate.</param>
+        /// <param name="b">The Y relative coordinate.</param>
+        /// <returns>True, if the robot can connect to the cube, else false.</returns>
         private bool ConnectDirection(Robot robot, int a, int b)
         {
             int x = robot.X + a;
             int y = robot.Y + b;
+
             if (robot.IsConnected(new XYcoordinates(x, y)))
             {
-                /*x = x + a;
-                y = y + b;*/
                 return false;
             }
             if (IsOnBoard(x, y) && _board.GetFieldValue(x, y) is Cube)
@@ -1013,9 +1263,14 @@ namespace Model.Model
 
         #region DisconnectRobot
 
+        /// <summary>
+        /// The disconnect action.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
         public void DisconnectRobot(Robot robot)
         {
             robot.ClearConnections();
+
             foreach (Robot r in _team1.Robots)
             {
                 if ((robot.ConnectedRobot).Equals(r.RobotNumber))
@@ -1031,6 +1286,7 @@ namespace Model.Model
                 }
             }
             robot.ConnectedRobot = -1;
+
             OnUpdateFields(robot, Direction.WEST, Action.DisconnectRobot, true);
         }
 
@@ -1038,19 +1294,24 @@ namespace Model.Model
 
         #region ConnectCubes
 
+        /// <summary>
+        /// The connect multiple cubes with another robot action.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <param name="ownCube">The coordinates of the cube the robot is linked to.</param>
+        /// <param name="wantsToConnect">The coordinates of the cube the robot wants to connect to.</param>
         public void ConnectCubes(Robot robot, XYcoordinates ownCube, XYcoordinates wantsToConnect)
         {
             ownCube.X = ownCube.X + robot.X;
             ownCube.Y = ownCube.Y + robot.Y;
+
             wantsToConnect.X = wantsToConnect.X + robot.X;
             wantsToConnect.Y = wantsToConnect.Y + robot.Y;
-            /*MessageBox.Show((ownCube.X).ToString() + ' ' + (ownCube.Y).ToString());
-            MessageBox.Show((wantsToConnect.X).ToString() + ' ' + (wantsToConnect.Y).ToString());*/
 
             if (_board.GetFieldValue(ownCube.X, ownCube.Y) is Cube &&
-                _board.GetFieldValue(wantsToConnect.X, wantsToConnect.Y) is Cube
-                && robot.IsConnected(ownCube) && !robot.IsConnected(wantsToConnect)
-                && NextToEachOther(ownCube, wantsToConnect))
+                _board.GetFieldValue(wantsToConnect.X, wantsToConnect.Y) is Cube && 
+                robot.IsConnected(ownCube) && !robot.IsConnected(wantsToConnect) && 
+                NextToEachOther(ownCube, wantsToConnect))
             {
                 if (robot.RobotNumber < 4)
                 {
@@ -1086,14 +1347,18 @@ namespace Model.Model
                         }
                     }
                 }
+
                 robot.WantsToConnectTo = wantsToConnect;
                 robot.OwnCube = ownCube;
             }
 
-
-
         }
 
+        /// <summary>
+        /// Creates the union of the connections of the two robots.
+        /// </summary>
+        /// <param name="r1">The first robot we want to execute the action with.</param>
+        /// <param name="r2">The second robot we want to execute the action with.</param>
         private void UnionRobotConnections(Robot r1, Robot r2)
         {
             for (int i = 0; i < r1.AllConnections().Count; i++)
@@ -1114,12 +1379,18 @@ namespace Model.Model
             }
         }
 
+        /// <summary>
+        /// Checks whether the two cubes we want to connect are next to each other.
+        /// </summary>
+        /// <param name="ownCube">The coordinates of the first cube.</param>
+        /// <param name="wantsToConnect">The coordinates of the second cube.</param>
+        /// <returns>True, if the the cubes are next to each other, else false.</returns>
         private bool NextToEachOther(XYcoordinates ownCube, XYcoordinates wantsToConnect)
         {
-            if ((ownCube.X + 1 == wantsToConnect.X && ownCube.Y == wantsToConnect.Y)
-                || (ownCube.X - 1 == wantsToConnect.X && ownCube.Y == wantsToConnect.Y)
-                || (ownCube.X == wantsToConnect.X && ownCube.Y + 1 == wantsToConnect.Y)
-                || (ownCube.X == wantsToConnect.X && ownCube.Y - 1 == wantsToConnect.Y))
+            if ((ownCube.X + 1 == wantsToConnect.X && ownCube.Y == wantsToConnect.Y) || 
+                (ownCube.X - 1 == wantsToConnect.X && ownCube.Y == wantsToConnect.Y) || 
+                (ownCube.X == wantsToConnect.X && ownCube.Y + 1 == wantsToConnect.Y) || 
+                (ownCube.X == wantsToConnect.X && ownCube.Y - 1 == wantsToConnect.Y))
             {
                 return true;
             }
@@ -1130,14 +1401,22 @@ namespace Model.Model
 
         #region DisconnectCubes
 
+        /// <summary>
+        /// The disconnecting of more cubes action.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <param name="ownCube_1">The coordinates of the first cube.</param>
+        /// <param name="ownCube_2">The coordinates of the second cube.</param>
         public void DisconnectCubes(Robot robot, XYcoordinates ownCube_1, XYcoordinates ownCube_2)
         {
             ownCube_1.X = ownCube_1.X + robot.X;
             ownCube_1.Y = ownCube_1.Y + robot.Y;
+
             ownCube_2.X = ownCube_2.X + robot.X;
             ownCube_2.Y = ownCube_2.Y + robot.Y;
-            if (IsConnectedToRobots(robot) && robot.IsConnected(ownCube_1) && robot.IsConnected(ownCube_2)
-                && NextToEachOther(ownCube_1, ownCube_2))
+
+            if (IsConnectedToRobots(robot) && robot.IsConnected(ownCube_1) && 
+                robot.IsConnected(ownCube_2) && NextToEachOther(ownCube_1, ownCube_2))
             {
                 if (robot != null)
                 {
@@ -1158,6 +1437,13 @@ namespace Model.Model
             }
         }
 
+        /// <summary>
+        /// The separation of the connections of the two robots.
+        /// </summary>
+        /// <param name="r1">The first robot we want to execute the separation with.</param>
+        /// <param name="r2">The second robot we want to execute the separation with.</param>
+        /// <param name="ownCube_1">The coordinates of the first cube.</param>
+        /// <param name="ownCube_2">The coordinates of the second cube.</param>
         public void SeparateRobotConnections(Robot r1, Robot r2, XYcoordinates ownCube_1, XYcoordinates ownCube_2)
         {
             List<XYcoordinates> connections = new List<XYcoordinates>();
@@ -1170,10 +1456,13 @@ namespace Model.Model
                 healths.Add(r1.getHealthAt(i));
                 colors.Add(r1.getColorAt(i));
             }
+
             r1.ClearConnections();
             r2.ClearConnections();
+
             r2.ConnectedRobot = -1;
             r1.ConnectedRobot = -1;
+
             if (ownCube_1.X == ownCube_2.X)
             {
                 if (ownCube_1.Y > ownCube_2.Y)
@@ -1263,6 +1552,10 @@ namespace Model.Model
 
         #region Clean
 
+        /// <summary>
+        /// The cleaning action.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
         public void Clean(Robot robot)
         {
             if (robot.Direction == Direction.EAST && CleanDirection(robot, 1, 0))
@@ -1287,12 +1580,20 @@ namespace Model.Model
             }
         }
 
+        /// <summary>
+        /// Checks whether the robot can clean in a specific direction.
+        /// </summary>
+        /// <param name="robot">The robot we want to execute the action with.</param>
+        /// <param name="a">The X relative coordinate of the field.</param>
+        /// <param name="b">The Y relative coordinate of the field</param>
+        /// <returns>True, if the robot can clean, else false.</returns>
         private bool CleanDirection(Robot robot, int a, int b)
         {
             if (_board.GetFieldValue(robot.X + a, robot.Y + b) is Obstacle)
             {
                 Obstacle obs = (Obstacle)_board.GetFieldValue(robot.X + a, robot.Y + b);
                 obs.DecreaseHealth();
+
                 if (obs.Health == 0)
                 {
                     _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));
@@ -1308,6 +1609,7 @@ namespace Model.Model
             {
                 Cube cube = (Cube)_board.GetFieldValue(robot.X + a, robot.Y + b);
                 cube.DecreaseHealth();
+
                 if (cube.Health == 0)
                 {
                     _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));
@@ -1322,10 +1624,11 @@ namespace Model.Model
             {
                 Robot cleanRobot = (Robot)_board.GetFieldValue(robot.X + a, robot.Y + b);
                 cleanRobot.DecreaseHealth();
+
                 if (cleanRobot.Health == 0)
                 {
                     _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));
-                    if (cleanRobot.Player)
+                    if (cleanRobot.Player1)
                     {
                         _team1.RemoveRobotFromTeam(cleanRobot);
                         if (_team1.IsEmptyTeam())
@@ -1370,75 +1673,65 @@ namespace Model.Model
 
         #endregion
 
-        private void NextTeam()
-        {
-            if (_nextTeam1)
-            {
-                if (_nextPlayerFromTeam1 == _team1.Robots.Length - 1)
-                {
-                    _nextTeam1 = false;
-                }
-
-                if (_nextPlayerFromTeam1 < _team1.Robots.Length - 1)
-                {
-                    _nextPlayerFromTeam1++;
-                }
-                else
-                {
-                    _nextPlayerFromTeam1 = 0;
-                }
-
-            }
-            else
-            {
-                if (_nextPlayerFromTeam2 == _team2.Robots.Length - 1)
-                {
-                    _nextTeam1 = true;
-                }
-
-                if (_nextPlayerFromTeam2 < _team2.Robots.Length - 1)
-                {
-                    _nextPlayerFromTeam2++;
-                }
-                else
-                {
-                    _nextPlayerFromTeam2 = 0;
-                }
-
-            }
-        }
-
-        private Robot NextRobot()
-        {
-            if (_nextTeam1)
-            {
-                return _team1.GetRobot(_nextPlayerFromTeam1);
-            }
-            else
-            {
-                return _team2.GetRobot(_nextPlayerFromTeam2);
-            }
-        }
-
-        public void NextPlayer()
-        {
-            _robot = NextRobot();
-            if (_nextPlayerFromTeam1 == 0 && _nextPlayerFromTeam2 == 0 && _nextTeam1 )
-            {
-                _round++;
-            }
-            NextTeam();
-            _gameTime = 30;
-
-
-        }
-
     }
 
 
-
+    /// <summary>
+    /// Robots GameEventArgs type.
+    /// </summary>
     public class GameEventArgs : EventArgs
     {
+        #region Fields
+
+        private bool _isGameOver;
+        private int _winnerTeam;
+        private int _currentRound;
+        private int _gameTime;
+        private int _team1points;
+        private int _team2points;
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// The query or setting of wheter the game is over.
+        /// </summary>
+        public bool IsGameOver { get { return _isGameOver; } set { _isGameOver = value; } }
+
+        /// <summary>
+        /// The query or setting of the winner team.
+        /// </summary>
+        public int WinnerTeam { get { return _winnerTeam; } set { _winnerTeam = value; } }
+
+        /// <summary>
+        /// The query or setting of the current round.
+        /// </summary>
+        public int CurrentRound { get { return _currentRound; } set { _currentRound = value; } }
+
+        /// <summary>
+        /// The query or setting of the amount of the game time.
+        /// </summary>
+        public int GameTime { get { return _gameTime; } set { _gameTime = value; } }
+
+        /// <summary>
+        /// The first team's points.
+        /// </summary>
+        public int Team1Points { get { return _team1points; } set { _team1points = value; } }
+
+        /// <summary>
+        /// The second team's points.
+        /// </summary>
+        public int Team2Points { get { return _team2points; } set { _team2points = value; } }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Instantiation of the Game class.
+        /// </summary>
+        /// <param name="dataAccess">The data access for the Load and Save methods.</param>
         public GameEventArgs(bool isGameOver, int winnerTeam, int currentRound, int gameTime, int team1points, int team2points)
         {
             _isGameOver = isGameOver;
@@ -1448,20 +1741,8 @@ namespace Model.Model
             _team1points = team1points;
             _team2points = team2points;
         }
-        private bool _isGameOver;
-        private int _winnerTeam;
-        private int _currentRound;
-        private int _gameTime;
-        private int _team1points;
-        private int _team2points;
 
-        public bool IsGameOver { get { return _isGameOver; } set { _isGameOver = value; } }
-        public int WinnerTeam { get { return _winnerTeam; } set { _winnerTeam = value; } }
-        public int CurrentRound { get { return _currentRound; } set { _currentRound = value; } }
-        public int GameTime { get { return _gameTime; } set { _gameTime = value; } }
-        public int Team1Points { get { return _team1points; } set { _team1points = value; } }
-        public int Team2Points { get { return _team2points; } set { _team2points = value; } }
-
+        #endregion
 
     }
 

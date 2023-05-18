@@ -1700,7 +1700,6 @@ namespace Model.Model
             {
                 Obstacle obs = (Obstacle)_board.GetFieldValue(robot.X + a, robot.Y + b);
                 obs.DecreaseHealth();
-
                 if (obs.Health == 0)
                 {
                     _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));
@@ -1715,23 +1714,28 @@ namespace Model.Model
                 !robot.IsConnected(new XYcoordinates(robot.X + a, robot.Y + b)))
             {
                 Cube cube = (Cube)_board.GetFieldValue(robot.X + a, robot.Y + b);
-                cube.DecreaseHealth();
-
-                if (cube.Health == 0)
+                if (!cube.IsConnected)
                 {
-                    _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));
+                    cube.DecreaseHealth();
+                    if (cube.Health == 0)
+                    {
+                        _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));
+                    }
+                    else
+                    {
+                        _board.SetValueNewField(cube);
+                    }
+                    return true;
                 }
                 else
                 {
-                    _board.SetValueNewField(cube);
+                    return false;
                 }
-                return true;
             }
             else if (_board.GetFieldValue(robot.X + a, robot.Y + b) is Robot)
             {
                 Robot cleanRobot = (Robot)_board.GetFieldValue(robot.X + a, robot.Y + b);
                 cleanRobot.DecreaseHealth();
-
                 if (cleanRobot.Health == 0)
                 {
                     _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));

@@ -695,6 +695,8 @@ namespace Model.Model
                 {
                     _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
                         robot.getHealthAt(i), robot.getColorAt(i)));
+                    Cube cube = (Cube)_board.GetFieldValue(connectionsNew[i].X, connectionsNew[i].Y);
+                    cube.IsConnected = true;
                 }
             }
         }
@@ -921,6 +923,8 @@ namespace Model.Model
                 {
                     _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
                         robot.getHealthAt(i), robot.getColorAt(i)));
+                    Cube cube = (Cube)_board.GetFieldValue(connectionsNew[i].X, connectionsNew[i].Y);
+                    cube.IsConnected = true;
                 }
             }
         }
@@ -1095,6 +1099,8 @@ namespace Model.Model
                 {
                     _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
                     robot.getHealthAt(i), robot.getColorAt(i)));
+                    Cube cube = (Cube)_board.GetFieldValue(connectionsNew[i].X, connectionsNew[i].Y);
+                    cube.IsConnected = true;
                 }
             }
         }
@@ -1242,7 +1248,6 @@ namespace Model.Model
         {
             int x = robot.X + a;
             int y = robot.Y + b;
-
             if (robot.IsConnected(new XYcoordinates(x, y)))
             {
                 return false;
@@ -1250,9 +1255,17 @@ namespace Model.Model
             if (IsOnBoard(x, y) && _board.GetFieldValue(x, y) is Cube)
             {
                 Cube cube = (Cube)_board.GetFieldValue(x, y);
-                robot.AddConnection(new XYcoordinates(x, y));
-                robot.addHealthColor(cube.Health, cube.Color);
-                return true;
+                if (!cube.IsConnected)
+                {
+                    robot.AddConnection(new XYcoordinates(x, y));
+                    robot.addHealthColor(cube.Health, cube.Color);
+                    cube.IsConnected = true;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
@@ -1269,8 +1282,19 @@ namespace Model.Model
         /// <param name="robot">The robot we want to execute the action with.</param>
         public void DisconnectRobot(Robot robot)
         {
+            if (IsOnEdge(robot.X, robot.Y))
+            {
+                GetPoints(robot);
+            }
+            foreach (XYcoordinates cubeXY in Robot.AllConnections())
+            {
+                if (IsOnBoard(cubeXY.X, cubeXY.Y))
+                {
+                    Cube cube = (Cube)_board.GetFieldValue(cubeXY.X, cubeXY.Y);
+                    cube.IsConnected = false;
+                }
+            }
             robot.ClearConnections();
-
             foreach (Robot r in _team1.Robots)
             {
                 if ((robot.ConnectedRobot).Equals(r.RobotNumber))
@@ -1286,8 +1310,91 @@ namespace Model.Model
                 }
             }
             robot.ConnectedRobot = -1;
-
             OnUpdateFields(robot, Direction.WEST, Action.DisconnectRobot, true);
+        }
+
+        private void GetPoints(Robot robot)
+        {
+            bool canGetPoints = false;
+            if (robot.X == 0)
+            {
+                if (CanAddPoints(robot, new XYcoordinates(3, 0)) ||
+                CanAddPoints(robot, new XYcoordinates(3, 1)) ||
+                CanAddPoints(robot, new XYcoordinates(3, 2)))
+                {
+                    canGetPoints = true;
+                }
+            }
+            if (robot.X == _board.Width - 1)
+            {
+                if (CanAddPoints(robot, new XYcoordinates(-1, 0)) ||
+                CanAddPoints(robot, new XYcoordinates(-1, 1)) ||
+                CanAddPoints(robot, new XYcoordinates(-1, 2)))
+                {
+                    canGetPoints = true;
+                }
+            }
+            if (robot.Y == 0)
+            {
+                if (CanAddPoints(robot, new XYcoordinates(0, 3)) ||
+                CanAddPoints(robot, new XYcoordinates(1, 3)) ||
+                CanAddPoints(robot, new XYcoordinates(2, 3)))
+                {
+                    canGetPoints = true;
+                }
+            }
+            if (robot.Y == _board.Height - 1)
+            {
+                if (CanAddPoints(robot, new XYcoordinates(0, -1)) ||
+                CanAddPoints(robot, new XYcoordinates(1, -1)) ||
+                CanAddPoints(robot, new XYcoordinates(2, -1)))
+                {
+                    canGetPoints = true;
+                }
+            }
+            if (canGetPoints)
+            {
+                if (robot.Player1)
+                {
+                    _team1.Points = _noticeBoard.TaskReward;
+                }
+                if (robot.Player1)
+                {
+                    _team2.Points = _noticeBoard.TaskReward;
+                }
+            }
+        }
+
+        private bool CanAddPoints(Robot robot, XYcoordinates robotRelPos)
+        {
+            bool canAdd = true;
+            foreach (Field f in NoticeBoard.Fields)
+            {
+                if (f is Cube)
+                {
+                    int newX = f.X + (robot.X - robotRelPos.X);
+                    int newY = f.Y + (robot.Y - robotRelPos.Y);
+                    for (int i = 0; i < Robot.AllConnections().Count(); i++)
+                    {
+                        canAdd = false;
+                        {
+                            if (Robot.AllConnections()[i].X == newX && Robot.AllConnections()[i].Y == newY)
+                            {
+                                Cube cube = (Cube)f;
+                                if (cube.Color == Robot.AllColor()[i])
+                                {
+                                    canAdd = true;
+                                }
+                            }
+                        }
+                        if (!canAdd)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         #endregion
@@ -1593,7 +1700,6 @@ namespace Model.Model
             {
                 Obstacle obs = (Obstacle)_board.GetFieldValue(robot.X + a, robot.Y + b);
                 obs.DecreaseHealth();
-
                 if (obs.Health == 0)
                 {
                     _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));
@@ -1608,23 +1714,28 @@ namespace Model.Model
                 !robot.IsConnected(new XYcoordinates(robot.X + a, robot.Y + b)))
             {
                 Cube cube = (Cube)_board.GetFieldValue(robot.X + a, robot.Y + b);
-                cube.DecreaseHealth();
-
-                if (cube.Health == 0)
+                if (!cube.IsConnected)
                 {
-                    _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));
+                    cube.DecreaseHealth();
+                    if (cube.Health == 0)
+                    {
+                        _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));
+                    }
+                    else
+                    {
+                        _board.SetValueNewField(cube);
+                    }
+                    return true;
                 }
                 else
                 {
-                    _board.SetValueNewField(cube);
+                    return false;
                 }
-                return true;
             }
             else if (_board.GetFieldValue(robot.X + a, robot.Y + b) is Robot)
             {
                 Robot cleanRobot = (Robot)_board.GetFieldValue(robot.X + a, robot.Y + b);
                 cleanRobot.DecreaseHealth();
-
                 if (cleanRobot.Health == 0)
                 {
                     _board.SetValueNewField(new Empty(robot.X + a, robot.Y + b));

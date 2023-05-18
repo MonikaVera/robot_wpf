@@ -113,6 +113,7 @@ namespace Model.Model
 
         private Color _color; //color of the cube
         private int _health; //health of the cube
+        private bool _isConnected;
 
         #endregion
 
@@ -132,6 +133,11 @@ namespace Model.Model
         /// Query of the color of the field.
         /// </summary>
         public Color CubeColor { get { return _color; } }
+
+        /// <summary>
+        /// Query of the color of the field.
+        /// </summary>
+        public bool IsConnected { get { return _isConnected; } set { _isConnected = value; } }
 
         #endregion
 

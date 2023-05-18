@@ -695,6 +695,8 @@ namespace Model.Model
                 {
                     _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
                         robot.getHealthAt(i), robot.getColorAt(i)));
+                    Cube cube = (Cube)_board.GetFieldValue(connectionsNew[i].X, connectionsNew[i].Y);
+                    cube.IsConnected = true;
                 }
             }
         }
@@ -921,6 +923,8 @@ namespace Model.Model
                 {
                     _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
                         robot.getHealthAt(i), robot.getColorAt(i)));
+                    Cube cube = (Cube)_board.GetFieldValue(connectionsNew[i].X, connectionsNew[i].Y);
+                    cube.IsConnected = true;
                 }
             }
         }
@@ -1095,6 +1099,8 @@ namespace Model.Model
                 {
                     _board.SetValueNewField(new Cube(connectionsNew[i].X, connectionsNew[i].Y,
                     robot.getHealthAt(i), robot.getColorAt(i)));
+                    Cube cube = (Cube)_board.GetFieldValue(connectionsNew[i].X, connectionsNew[i].Y);
+                    cube.IsConnected = true;
                 }
             }
         }
@@ -1242,7 +1248,6 @@ namespace Model.Model
         {
             int x = robot.X + a;
             int y = robot.Y + b;
-
             if (robot.IsConnected(new XYcoordinates(x, y)))
             {
                 return false;
@@ -1250,9 +1255,17 @@ namespace Model.Model
             if (IsOnBoard(x, y) && _board.GetFieldValue(x, y) is Cube)
             {
                 Cube cube = (Cube)_board.GetFieldValue(x, y);
-                robot.AddConnection(new XYcoordinates(x, y));
-                robot.addHealthColor(cube.Health, cube.Color);
-                return true;
+                if (!cube.IsConnected)
+                {
+                    robot.AddConnection(new XYcoordinates(x, y));
+                    robot.addHealthColor(cube.Health, cube.Color);
+                    cube.IsConnected = true;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {

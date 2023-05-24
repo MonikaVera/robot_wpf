@@ -1356,11 +1356,11 @@ namespace Model.Model
             {
                 if (robot.Player1)
                 {
-                    _team1.NewPoints = _noticeBoard.TaskReward;
+                    _team1.Points = _noticeBoard.TaskReward;
                 }
                 if (robot.Player1)
                 {
-                    _team2.NewPoints = _noticeBoard.TaskReward;
+                    _team2.Points = _noticeBoard.TaskReward;
                 }
             }
         }

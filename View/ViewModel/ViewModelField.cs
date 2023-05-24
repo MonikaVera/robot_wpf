@@ -221,7 +221,7 @@ namespace View.ViewModel
                         if (robot.AllConnections().Any())
                             _picture = "blue_robot_right_conect.png";
                         else
-                            _picture = "Blue_robot_right.jpg";
+                            _picture = "blue_robot_right.jpg";
                     }
 
                 }

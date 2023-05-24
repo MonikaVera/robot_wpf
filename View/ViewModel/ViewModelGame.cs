@@ -26,6 +26,8 @@ namespace View.ViewModel
         private string str = "no";
         private int size = 0;
         private string _chatText = null!;
+        private XYcoordinates? firstCube = null;
+        private XYcoordinates? lastCube = null;
         public string Connect { get { return str; } set { OnPropertyChanged(nameof(str)); } }
         public int Size { get { return size; } set { OnPropertyChanged(nameof(size)); } }
         #region Commands
@@ -232,8 +234,7 @@ namespace View.ViewModel
         }
 
 
-        private XYcoordinates? firstCube = null;
-        private XYcoordinates? lastCube = null;
+       
         private bool inround = true;
         public void OnClickField(int param)
         {

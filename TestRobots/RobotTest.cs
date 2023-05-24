@@ -539,6 +539,101 @@ namespace TestRobots
             _model.Team2 = _team2;
             _model.Robot = _team2.GetRobot(0);
 
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 2).GetType());
+
+            _model.RotateRobot(_model.Robot, Angle.Clockwise);
+            Assert.AreEqual(Direction.NORTH, _model.Robot.Direction);
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 2).GetType());
+
+        }
+
+        [TestMethod]
+        public void GameConnectRobotRightFailedTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team2.GetRobot(3);
+
+
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(Direction.EAST, _model.Robot.Direction);
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameConnectRobotLeftFailedTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team2.GetRobot(3);
+
+
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(3, 8).GetType());
+
+            _model.RotateRobot(_model.Robot, Angle.Clockwise);
+            _model.RotateRobot(_model.Robot, Angle.Clockwise);
+            Assert.AreEqual(Direction.WEST, _model.Robot.Direction);
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(3, 8).GetType());
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameConnectRobotDownFailedTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(1, 3).GetType());
+
+            _model.RotateRobot(_model.Robot, Angle.CounterClockwise);
+            Assert.AreEqual(Direction.SOUTH, _model.Robot.Direction);
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(1, 3).GetType());
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameConnectRobotUpFailedTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team2.GetRobot(0);
+
 
             Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 2).GetType());
 
@@ -549,6 +644,9 @@ namespace TestRobots
 
             Assert.AreEqual(1, _model.Robot.AllConnections().Count);
             Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 2).GetType());
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
 
         }
 
@@ -684,6 +782,150 @@ namespace TestRobots
 
             _model.RotateRobot(_model.Robot, Angle.Clockwise);
             Assert.AreEqual(Direction.NORTH, _model.Robot.Direction);
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 2).GetType());
+
+            _model.DisconnectRobot(_model.Robot); // lecsatoljuk a kockáról a robotot
+
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 2).GetType());
+
+        }
+
+        [TestMethod]
+        public void GameDisconnectRobotRightMultipleTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team2.GetRobot(3);
+
+
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(Direction.EAST, _model.Robot.Direction);
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+
+            _model.DisconnectRobot(_model.Robot); // lecsatoljuk a kockáról a robotot
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+
+            _model.DisconnectRobot(_model.Robot); // lecsatoljuk a kockáról a robotot
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+        }
+
+        [TestMethod]
+        public void GameDisconnectRobotLeftMultipleTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team2.GetRobot(3);
+
+
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(3, 8).GetType());
+
+            _model.RotateRobot(_model.Robot, Angle.Clockwise);
+            _model.RotateRobot(_model.Robot, Angle.Clockwise);
+            Assert.AreEqual(Direction.WEST, _model.Robot.Direction);
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(3, 8).GetType());
+
+            _model.DisconnectRobot(_model.Robot); // lecsatoljuk a kockáról a robotot
+
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(3, 8).GetType());
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(3, 8).GetType());
+
+            _model.DisconnectRobot(_model.Robot); // lecsatoljuk a kockáról a robotot
+
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(3, 8).GetType());
+
+        }
+
+        [TestMethod]
+        public void GameDisconnectRobotDownMultipleTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(0);
+
+
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(1, 3).GetType());
+
+            _model.RotateRobot(_model.Robot, Angle.CounterClockwise);
+            Assert.AreEqual(Direction.SOUTH, _model.Robot.Direction);
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(1, 3).GetType());
+
+            _model.DisconnectRobot(_model.Robot); // lecsatoljuk a kockáról a robotot
+
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(1, 3).GetType());
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(1, 3).GetType());
+
+            _model.DisconnectRobot(_model.Robot); // lecsatoljuk a kockáról a robotot
+
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(1, 3).GetType());
+
+        }
+
+        [TestMethod]
+        public void GameDisconnectRobotUpMultipleTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team2.GetRobot(0);
+
+
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 2).GetType());
+
+            _model.RotateRobot(_model.Robot, Angle.Clockwise);
+            Assert.AreEqual(Direction.NORTH, _model.Robot.Direction);
+
+            _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
+
+            Assert.AreEqual(1, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 2).GetType());
+
+            _model.DisconnectRobot(_model.Robot); // lecsatoljuk a kockáról a robotot
+
+            Assert.AreEqual(0, _model.Robot.AllConnections().Count);
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 2).GetType());
 
             _model.ConnectRobot(_model.Robot); // hozzácsatoljuk a kockához a robotot
 
@@ -897,6 +1139,31 @@ namespace TestRobots
         }
 
         [TestMethod]
+        public void GameCleanEmptyTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+            _model.Robot = _team1.GetRobot(1);
+
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(2, 3).GetType());
+
+            _model.RotateRobot(_model.Robot, Angle.CounterClockwise);
+
+            Assert.AreEqual(Direction.SOUTH, _model.Robot.Direction);
+
+            _model.Clean(_model.Robot); // akadályt tisztitunk jobbra
+
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(2, 3).GetType());
+
+            _model.Clean(_model.Robot); // akadályt tisztitunk jobbra
+
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(2, 3).GetType());
+
+        }
+
+        [TestMethod]
         public void GameCleanRobotUntilNoHealthTest()
         {
             _model.NewGame();
@@ -926,29 +1193,1026 @@ namespace TestRobots
         }
 
         [TestMethod]
-        public void GameConnectCubesVerticallyTest()
+        public void GameConnectCubesVerticallySouthFirstTest()
         {
             _model.NewGame();
             _model.Board = _mockedTable;
             _model.Team1 = _team1;
             _model.Team2 = _team2;
-            _model.Robot = _team1.GetRobot(0);
 
-            _model.RotateRobot(_model.Robot, Angle.CounterClockwise);
-            Assert.AreEqual(Direction.SOUTH, _model.Robot.Direction);
+            _model.RotateRobot(_model.Team1.GetRobot(0), Angle.CounterClockwise);
+            Assert.AreEqual(Direction.SOUTH, _model.Team1.GetRobot(0).Direction);
 
-            _model.ConnectRobot(_model.Robot);
-
-            _model.Board.SetValue(1, 5, new Robot(1, 5, Direction.NORTH, 1));
-            _model.Robot = (Robot)_model.Board.GetFieldValue(1, 5);
-            _model.ConnectRobot(_model.Robot);
+            _model.ConnectRobot(_model.Team1.GetRobot(0));
+            Assert.AreEqual(1, _team1.GetRobot(0).AllConnections().Count);
 
 
-            _model.ConnectCubes(_team1.GetRobot(0), new XYcoordinates(1, 3), new XYcoordinates(1, 4));
-            _model.ConnectCubes(_model.Robot, new XYcoordinates(1, 4), new XYcoordinates(1, 3));
+            _model.Team1.GetRobot(3).SetXY(1, 5);
+            _model.Team1.GetRobot(3).Direction = Direction.NORTH;
+            _model.Board.SetValue(1, 5, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team1.GetRobot(3));
+            Assert.AreEqual(1, _team1.GetRobot(3).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team1.GetRobot(0), new XYcoordinates(0, 1), new XYcoordinates(0, 2));
+            _model.ConnectCubes(_model.Team1.GetRobot(3), new XYcoordinates(0, -1), new XYcoordinates(0, -2));
           
+            Assert.AreEqual(2, _team1.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team1.GetRobot(3).AllConnections().Count);
 
-            //Assert.AreEqual(2, _team1.GetRobot(0).AllConnections().Count);
+        }
+
+        [TestMethod]
+        public void GameConnectCubesVerticallyNorthFirstTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.RotateRobot(_model.Team1.GetRobot(0), Angle.CounterClockwise);
+            Assert.AreEqual(Direction.SOUTH, _model.Team1.GetRobot(0).Direction);
+
+            _model.ConnectRobot(_model.Team1.GetRobot(0));
+            Assert.AreEqual(1, _team1.GetRobot(0).AllConnections().Count);
+
+
+            _model.Team1.GetRobot(3).SetXY(1, 5);
+            _model.Team1.GetRobot(3).Direction = Direction.NORTH;
+            _model.Board.SetValue(1, 5, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team1.GetRobot(3));
+            Assert.AreEqual(1, _team1.GetRobot(3).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team1.GetRobot(3), new XYcoordinates(0, -1), new XYcoordinates(0, -2));
+            _model.ConnectCubes(_model.Team1.GetRobot(0), new XYcoordinates(0, 1), new XYcoordinates(0, 2));
+          
+            Assert.AreEqual(2, _team1.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team1.GetRobot(3).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameConnectCubesVerticallyNorthFirstFailedTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.RotateRobot(_model.Team1.GetRobot(0), Angle.CounterClockwise);
+            Assert.AreEqual(Direction.SOUTH, _model.Team1.GetRobot(0).Direction);
+
+            _model.ConnectRobot(_model.Team1.GetRobot(0));
+            Assert.AreEqual(1, _team1.GetRobot(0).AllConnections().Count);
+
+
+            _model.Team1.GetRobot(3).SetXY(1, 5);
+            _model.Team1.GetRobot(3).Direction = Direction.NORTH;
+            _model.Board.SetValue(1, 5, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team1.GetRobot(3));
+            Assert.AreEqual(1, _team1.GetRobot(3).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team1.GetRobot(3), new XYcoordinates(0, -1), new XYcoordinates(0, -2));
+
+            Assert.AreEqual(1, _team1.GetRobot(3).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameConnectCubesVerticallySouthFirstFailedTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.RotateRobot(_model.Team1.GetRobot(0), Angle.CounterClockwise);
+            Assert.AreEqual(Direction.SOUTH, _model.Team1.GetRobot(0).Direction);
+
+            _model.ConnectRobot(_model.Team1.GetRobot(0));
+            Assert.AreEqual(1, _team1.GetRobot(0).AllConnections().Count);
+
+
+            _model.Team1.GetRobot(3).SetXY(1, 5);
+            _model.Team1.GetRobot(3).Direction = Direction.NORTH;
+            _model.Board.SetValue(1, 5, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team1.GetRobot(3));
+            Assert.AreEqual(1, _team1.GetRobot(3).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team1.GetRobot(0), new XYcoordinates(0, 1), new XYcoordinates(0, 2));
+
+            Assert.AreEqual(1, _team1.GetRobot(0).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameConnectCubesHorizontallyWestFirstTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameConnectCubesHorizontallyEastFirstTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+           
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameConnectCubesThenRotateClockwiseTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.RotateRobot(_model.Team2.GetRobot(0),Angle.Clockwise);
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(7, 8).GetType());
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(4, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 8).GetType());
+
+        }
+
+        [TestMethod]
+        public void GameConnectCubesThenRotateCounterClockwiseTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.RotateRobot(_model.Team2.GetRobot(0), Angle.CounterClockwise);
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(7, 8).GetType());
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(4, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 8).GetType());
+
+        }
+
+        [TestMethod]
+        public void GameConnectCubesThenRotateBothClockwiseTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.RotateRobot(_model.Team2.GetRobot(0), Angle.Clockwise);
+            _model.RotateRobot(_model.Team2.GetRobot(3), Angle.Clockwise);
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(7, 8).GetType());
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(4, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 8).GetType());
+
+        }
+
+        [TestMethod]
+        public void GameConnectCubesThenRotateBothCounterClockwiseTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.RotateRobot(_model.Team2.GetRobot(0), Angle.CounterClockwise);
+            _model.RotateRobot(_model.Team2.GetRobot(3), Angle.CounterClockwise);
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(7, 8).GetType());
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(4, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 8).GetType());
+
+        }
+
+        [TestMethod]
+        public void GameConnectRobotMoreThanOneTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameConnectCubesHorizontallyWestFirstFailedTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team2.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameConnectCubesHorizontallyEastFirstFailedTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team2.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameConnectCubesHorizontallyFailedTooMuchDistanceTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.Board.SetValue(4, 5, new Cube(4, 5, 5, Color.PINK));
+
+            _model.Team2.GetRobot(3).SetXY(3, 5);
+            _model.Team2.GetRobot(3).Direction = Direction.EAST;
+            _model.Board.SetValue(3, 5, _model.Team2.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.Team2.GetRobot(0).SetXY(7, 5);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 5, _model.Team2.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameConnectCubesVerticallyFailedTooMuchDistanceTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.Team2.GetRobot(3).SetXY(1, 10);
+            _model.Team2.GetRobot(3).Direction = Direction.NORTH;
+            _model.Board.SetValue(1, 10, _model.Team2.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.Team2.GetRobot(0).SetXY(1, 5);
+            _model.Team2.GetRobot(0).Direction = Direction.SOUTH;
+            _model.Board.SetValue(1, 5, _model.Team2.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameConnectCubesMoveSouthTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.MoveRobot(_team2.GetRobot(0), Direction.SOUTH);
+            _model.MoveRobot(_team2.GetRobot(3), Direction.SOUTH);
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(7, 9).GetType());
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(4, 9).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 9).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 9).GetType());
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(4, 8).GetType());
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(6, 8).GetType());
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(7, 8).GetType());
+        }
+
+        [TestMethod]
+        public void GameConnectCubesMoveNorthTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.Board.SetValue(6, 7, new Empty(6,7));
+            _model.Board.SetValue(5, 7, new Empty(5, 7));
+
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.MoveRobot(_team2.GetRobot(0), Direction.NORTH);
+            _model.MoveRobot(_team2.GetRobot(3), Direction.NORTH);
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(7, 7).GetType());
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(4, 7).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 7).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 7).GetType());
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(4, 8).GetType());
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(6, 8).GetType());
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(7, 8).GetType());
+        }
+
+        [TestMethod]
+        public void GameConnectCubesMoveWestTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.Board.SetValue(3, 8, new Empty(3, 8));
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.MoveRobot(_team2.GetRobot(0), Direction.WEST);
+            _model.MoveRobot(_team2.GetRobot(3), Direction.WEST);
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(3, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(4, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(6, 8).GetType());
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(7, 8).GetType());
+        }
+
+        [TestMethod]
+        public void GameConnectCubesMoveEastTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.Board.SetValue(8, 8, new Empty(8, 8));
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.MoveRobot(_team2.GetRobot(0), Direction.EAST);
+            _model.MoveRobot(_team2.GetRobot(3), Direction.EAST);
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(7, 8).GetType());
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(8, 8).GetType());
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(4, 8).GetType());
+        }
+
+        [TestMethod]
+        public void GameConnectCubesMoveFailedNorthVsSouthTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.Board.SetValue(6, 7, new Empty(6, 7));
+            _model.Board.SetValue(5, 7, new Empty(5, 7));
+
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.MoveRobot(_team2.GetRobot(0), Direction.NORTH);
+            _model.MoveRobot(_team2.GetRobot(3), Direction.SOUTH);
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(7, 8).GetType());
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(4, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 8).GetType());
+        }
+
+        [TestMethod]
+        public void GameConnectCubesMoveFailedOnlyOneMovingTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.Board.SetValue(3, 8, new Empty(3, 8));
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.MoveRobot(_team2.GetRobot(0), Direction.WEST);
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(4, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 8).GetType());
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(7, 8).GetType());
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(3, 8).GetType());
+        }
+
+        [TestMethod]
+        public void GameConnectCubesMoveFailedDifferentDirectionTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.Board.SetValue(8, 8, new Empty(8, 8));
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.MoveRobot(_team2.GetRobot(0), Direction.EAST);
+            _model.MoveRobot(_team2.GetRobot(3), Direction.WEST);
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(4, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 8).GetType());
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(7, 8).GetType());
+            Assert.AreEqual(typeof(Empty), _model.Board.GetFieldValue(8, 8).GetType());
+        }
+
+        [TestMethod]
+        public void GameConnectCubesMoveNorthFailedBecauseNotEmptyTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.MoveRobot(_team2.GetRobot(0), Direction.NORTH);
+            _model.MoveRobot(_team2.GetRobot(3), Direction.NORTH);
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(7, 8).GetType());
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(4, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 8).GetType());
+        }
+
+        [TestMethod]
+        public void GameConnectCubesMoveWestFailedBecauseNotEmptyTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.MoveRobot(_team2.GetRobot(0), Direction.WEST);
+            _model.MoveRobot(_team2.GetRobot(3), Direction.WEST);
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(4, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 8).GetType());
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(7, 8).GetType());
+        }
+
+        [TestMethod]
+        public void GameConnectCubesMoveEastFailedBecauseNotEmptyTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.MoveRobot(_team2.GetRobot(0), Direction.EAST);
+            _model.MoveRobot(_team2.GetRobot(3), Direction.EAST);
+
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(4, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(5, 8).GetType());
+            Assert.AreEqual(typeof(Cube), _model.Board.GetFieldValue(6, 8).GetType());
+            Assert.AreEqual(typeof(Robot), _model.Board.GetFieldValue(7, 8).GetType());
+        }
+
+        [TestMethod]
+        public void GameDisconnectCubesVerticallyFromSouthTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.RotateRobot(_model.Team1.GetRobot(0), Angle.CounterClockwise);
+            Assert.AreEqual(Direction.SOUTH, _model.Team1.GetRobot(0).Direction);
+
+            _model.ConnectRobot(_model.Team1.GetRobot(0));
+            Assert.AreEqual(1, _team1.GetRobot(0).AllConnections().Count);
+
+
+            _model.Team1.GetRobot(3).SetXY(1, 5);
+            _model.Team1.GetRobot(3).Direction = Direction.NORTH;
+            _model.Board.SetValue(1, 5, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team1.GetRobot(3));
+            Assert.AreEqual(1, _team1.GetRobot(3).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team1.GetRobot(0), new XYcoordinates(0, 1), new XYcoordinates(0, 2));
+            _model.ConnectCubes(_model.Team1.GetRobot(3), new XYcoordinates(0, -1), new XYcoordinates(0, -2));
+
+            Assert.AreEqual(2, _team1.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team1.GetRobot(3).AllConnections().Count);
+
+            _model.DisconnectCubes(_team1.GetRobot(0), new XYcoordinates(0, 1), new XYcoordinates(0, 2));
+
+            Assert.AreEqual(1, _team1.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(1, _team1.GetRobot(3).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameDisconnectCubesVerticallyFromNorthTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.RotateRobot(_model.Team1.GetRobot(0), Angle.CounterClockwise);
+            Assert.AreEqual(Direction.SOUTH, _model.Team1.GetRobot(0).Direction);
+
+            _model.ConnectRobot(_model.Team1.GetRobot(0));
+            Assert.AreEqual(1, _team1.GetRobot(0).AllConnections().Count);
+
+
+            _model.Team1.GetRobot(3).SetXY(1, 5);
+            _model.Team1.GetRobot(3).Direction = Direction.NORTH;
+            _model.Board.SetValue(1, 5, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team1.GetRobot(3));
+            Assert.AreEqual(1, _team1.GetRobot(3).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team1.GetRobot(3), new XYcoordinates(0, -1), new XYcoordinates(0, -2));
+            _model.ConnectCubes(_model.Team1.GetRobot(0), new XYcoordinates(0, 1), new XYcoordinates(0, 2));
+
+            Assert.AreEqual(2, _team1.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team1.GetRobot(3).AllConnections().Count);
+
+            _model.DisconnectCubes(_team1.GetRobot(3), new XYcoordinates(0, -1), new XYcoordinates(0, -2));
+
+            Assert.AreEqual(1, _team1.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(1, _team1.GetRobot(3).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameDisconnectCubesHorizontallyFromWestTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.DisconnectCubes(_team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameDisconnectCubesHorizontallyFromEastTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.DisconnectCubes(_team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameDisconnectCubesCompletelyHorizontallyFromEastFailedTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.DisconnectCubes(_team2.GetRobot(3), new XYcoordinates(0, 0), new XYcoordinates(1, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+        }
+
+
+        [TestMethod]
+        public void GameDisconnectCubesVerticallyTooMuchDistanceTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.RotateRobot(_model.Team1.GetRobot(0), Angle.CounterClockwise);
+            Assert.AreEqual(Direction.SOUTH, _model.Team1.GetRobot(0).Direction);
+
+            _model.ConnectRobot(_model.Team1.GetRobot(0));
+            Assert.AreEqual(1, _team1.GetRobot(0).AllConnections().Count);
+
+            _model.Team1.GetRobot(3).SetXY(1, 5);
+            _model.Team1.GetRobot(3).Direction = Direction.NORTH;
+            _model.Board.SetValue(1, 5, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team1.GetRobot(3));
+            Assert.AreEqual(1, _team1.GetRobot(3).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team1.GetRobot(3), new XYcoordinates(0, -1), new XYcoordinates(0, -2));
+            _model.ConnectCubes(_model.Team1.GetRobot(0), new XYcoordinates(0, 1), new XYcoordinates(0, 2));
+
+            Assert.AreEqual(2, _team1.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team1.GetRobot(3).AllConnections().Count);
+
+            _model.DisconnectCubes(_team1.GetRobot(3), new XYcoordinates(0, -1), new XYcoordinates(0, -3));
+
+            Assert.AreEqual(2, _team1.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team1.GetRobot(3).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameDisconnectCubesHorizontallyFailedNotConnectedTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.DisconnectCubes(_team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+        }
+
+        [TestMethod]
+        public void GameDisconnectCubesHorizontallyFailedTooMuchDistanceTest()
+        {
+            _model.NewGame();
+            _model.Board = _mockedTable;
+            _model.Team1 = _team1;
+            _model.Team2 = _team2;
+
+            _model.ConnectRobot(_model.Team2.GetRobot(3));
+            Assert.AreEqual(1, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.Team2.GetRobot(0).SetXY(7, 8);
+            _model.Team2.GetRobot(0).Direction = Direction.WEST;
+            _model.Board.SetValue(7, 8, _model.Team1.GetRobot(3));
+            _model.ConnectRobot(_model.Team2.GetRobot(0));
+            Assert.AreEqual(1, _team2.GetRobot(0).AllConnections().Count);
+
+            _model.ConnectCubes(_model.Team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(2, 0));
+            _model.ConnectCubes(_model.Team2.GetRobot(0), new XYcoordinates(-1, 0), new XYcoordinates(-2, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
+
+            _model.DisconnectCubes(_team2.GetRobot(3), new XYcoordinates(1, 0), new XYcoordinates(3, 0));
+
+            Assert.AreEqual(2, _team2.GetRobot(0).AllConnections().Count);
+            Assert.AreEqual(2, _team2.GetRobot(3).AllConnections().Count);
 
         }
 
@@ -987,7 +2251,6 @@ namespace TestRobots
             _model.Team2 = _team2;
             _model.Robot = _team1.GetRobot(0);
 
-
             Assert.AreEqual(1,_model.NextPlayerFromTeam1);
             Assert.AreEqual(0, _model.NextPlayerFromTeam2);
             Assert.IsTrue(_model.NextTeam1);
@@ -997,7 +2260,6 @@ namespace TestRobots
             Assert.AreEqual(2, _model.NextPlayerFromTeam1);
             Assert.AreEqual(0, _model.NextPlayerFromTeam2);
             Assert.IsTrue(_model.NextTeam1);
-
 
         }
 
@@ -1011,7 +2273,6 @@ namespace TestRobots
             _model.Team2 = _team2;
             _model.Robot = _team1.GetRobot(0);
 
-
             Assert.AreEqual(1, _model.NextPlayerFromTeam1);
             Assert.AreEqual(0, _model.NextPlayerFromTeam2);
             Assert.IsTrue(_model.NextTeam1);
@@ -1020,11 +2281,9 @@ namespace TestRobots
             _model.NextPlayer();
             _model.NextPlayer();
 
-
             Assert.AreEqual(0, _model.NextPlayerFromTeam1);
             Assert.AreEqual(0, _model.NextPlayerFromTeam2);
             Assert.IsFalse(_model.NextTeam1);
-
 
         }
 
@@ -1463,27 +2722,34 @@ namespace TestRobots
 
         }
 
-
-
-        /*
-
-        private void Model_GameAdvanced(Object? sender, MaciLaciEventArgs e)
+        [TestMethod]
+        public void GameModelLoadTest()
         {
-            Assert.IsTrue(_model.GameTime >= 0); // a játékidõ nem lehet negatív
-            Assert.AreEqual(_model.Table.NoMoreBaskets() || _model.Busted(), _model.IsGameOver);
-            // a tesztben a játéknak csak akkor lehet vége, ha elfogytak a kosarak vagy elkapták a játékost
+            // kezdünk egy új játékot
+            _model.NewGame();
 
-            Assert.AreEqual(e.BasketCount, _model.BasketCount); // a két értéknek egyeznie kell
-            Assert.AreEqual(e.GameTime, _model.GameTime); // a két értéknek egyeznie kell
-            Assert.IsFalse(e.IsWon); // még nem nyertek 
-            Assert.IsFalse(e.IsLost); // még nem vesztettek 
+            // majd betöltünk egy játékot
+            _model.LoadGameAsync(String.Empty);
+
+
+            Int32 emptyFields = 0;
+            for (Int32 i = 0; i < 12; i++)
+                for (Int32 j = 0; j < 10; j++)
+                    if (_model.Board.GetFieldValue(j, i) is Empty)
+                        emptyFields++;
+
+            Assert.AreEqual(42, emptyFields); // szabad mezõk száma is megfelelõ
+            Assert.AreEqual(30, _model.GameTime);
+            Assert.AreEqual(1, _model.Round);
+            Assert.AreEqual(0, _model.Team1Points);
+            Assert.AreEqual(0, _model.Team2Points);
+            Assert.AreEqual(1, _model.NextPlayerFromTeam1);
+            Assert.AreEqual(0, _model.NextPlayerFromTeam2);
+            Assert.IsTrue(_model.NextTeam1);
+
+            // ellenõrizzük, hogy meghívták-e a Load mûveletet a megadott paraméterrel
+            _mock.Verify(dataAccess => dataAccess.LoadAsync(String.Empty, 12, 10), Times.Once());
         }
 
-        private void Model_GameOver(Object? sender, MaciLaciEventArgs e)
-        {
-            Assert.IsTrue(_model.IsGameOver); // biztosan vége van a játéknak
-            Assert.IsFalse(e.IsWon);
-            Assert.IsTrue(e.IsLost); // a tesztben csak vereség esetén váltódik ki
-        }*/
     }
 }

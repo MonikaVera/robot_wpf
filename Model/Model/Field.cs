@@ -1,6 +1,4 @@
-﻿
-
-namespace Model.Model
+﻿namespace Model.Model
 {
     /// <summary>
     /// Robots Field abstract type.
@@ -93,7 +91,8 @@ namespace Model.Model
         /// <summary>
         /// Decreases the obstacle's health by one.
         /// </summary>
-        public void DecreaseHealth() {
+        public void DecreaseHealth()
+        {
             if (_health <= 0)
             {
                 throw new ArgumentOutOfRangeException("The health can't be less than 0.");

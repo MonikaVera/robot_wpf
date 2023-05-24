@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Controls;
 
 namespace View.ViewModel
 {
@@ -24,12 +25,8 @@ namespace View.ViewModel
         private int round = 1;
         private int roundTask = 1;
         private string str = "no";
-        private int size = 0;
         private string _chatText = null!;
-        private XYcoordinates? firstCube = null;
-        private XYcoordinates? lastCube = null;
         public string Connect { get { return str; } set { OnPropertyChanged(nameof(str)); } }
-        public int Size { get { return size; } set { OnPropertyChanged(nameof(size)); } }
         #region Commands
         public DelegateCommand PlayerModeCommand { get; private set; }
         public DelegateCommand ViewerModeCommand { get; private set; }
@@ -67,7 +64,6 @@ namespace View.ViewModel
 
         public event EventHandler? StopTimer;
         public event EventHandler? StartTimer;
-
 
 
         public event EventHandler? ExitGame;
@@ -234,7 +230,8 @@ namespace View.ViewModel
         }
 
 
-       
+        private XYcoordinates? firstCube = null;
+        private XYcoordinates? lastCube = null;
         private bool inround = true;
         public void OnClickField(int param)
         {
@@ -421,27 +418,9 @@ namespace View.ViewModel
                         ViewModelField field = Fields[y]; //x,y
                         field.SetPicture(_model.Board.GetFieldValue(i, j));
 
-                        //make Connections
-                        List<XYcoordinates> connect = _model.Robot.AllConnections();
-                        if (connect.Contains(new XYcoordinates(i, j)))
-                        {
-                            /* Fields[y].BorderThickness = new Thickness(2.0);
-                             Fields[y].BorderBrush = Brushes.Red; */
-                            field.BorderThickness = new Thickness(2.0);
-                            str = "yes";
-                            size = 2;
-                        }
-                        else
-                        {
-                            str = "no";
-                            size = 0;
-                            // Fields[y].BorderThickness = new Thickness(0.0);
-                        }
-
                         ViewModelField fieldMap = FieldsMap[j * _model.Board.Width + i];
                         _model.RobotsMap[_model.Robot.RobotNumber].SetValue(i, j, _model.Board.GetFieldValue(i, j));
                         fieldMap.SetPicture(_model.RobotsMap[_model.Robot.RobotNumber].GetFieldValue(i, j));
-
                         //synchronized map
                         if (_model.Board.GetFieldValue(i, j) is Robot)
                         {
@@ -469,6 +448,55 @@ namespace View.ViewModel
                         ViewModelField fieldMapView = FieldsMapView[j * _model.Board.Width + i];
                         fieldMapView.SetPicture(_model.Board.GetFieldValue(i, j));
                         ++y;
+
+
+                        //make Connections
+                        List<XYcoordinates> connect = _model.Robot.AllConnections();
+                        if (connect.Contains(new XYcoordinates(i, j)))
+                        {
+                            //str = "yes";
+                            Border b = new Border();
+                            b.BorderBrush = Brushes.Red;
+                            b.Height = 400;
+                            b.Width = 400;
+
+                            Thickness myThickness = new Thickness();
+                            myThickness.Bottom = 5;
+                            myThickness.Left = 10;
+                            myThickness.Right = 15;
+                            myThickness.Top = 20;
+                            b.BorderThickness = myThickness;
+                            field.BorderBrush = new SolidColorBrush(Colors.GreenYellow);
+                            field.BorderThickness = new Thickness(2.0);
+                            field.Borders = b;
+                            field.BorderThickness = myThickness;
+                            fieldMap.BorderBrush = new SolidColorBrush(Colors.Red);
+                            fieldMap.BorderThickness = new Thickness(2.0);
+                            fieldMapView.BorderBrush = new SolidColorBrush(Colors.Red);
+                            fieldMapView.BorderThickness = new Thickness(2.0);
+                        }
+                        else
+                        {
+                            // str = "no";
+                            field.BorderThickness = new Thickness(0.0);
+                            fieldMap.BorderThickness = new Thickness(0.0);
+                            fieldMapView.BorderThickness = new Thickness(0.0);
+                            // Fields[y].BorderThickness = new Thickness(0.0);
+                        }
+                    }
+                    else if (j >= 0 && i >= 0 && (Math.Abs(j - _model.Robot.Y) + Math.Abs(i - _model.Robot.X)) == 4
+                        && j < _model.Board.Height && i < _model.Board.Width)
+                    {
+                        ViewModelField fieldMap = FieldsMap[j * _model.Board.Width + i];
+                        if (_model.RobotsMap[_model.Robot.RobotNumber].GetFieldValue(i, j) is not None)
+                        {
+                            _model.RobotsMap[_model.Robot.RobotNumber].SetValue(i, j, _model.Board.GetFieldValue(i, j));
+                            fieldMap.SetPicture(_model.RobotsMap[_model.Robot.RobotNumber].GetFieldValue(i, j));
+                        }
+
+                        ViewModelField fieldMapView = FieldsMapView[j * _model.Board.Width + i];
+                        fieldMapView.SetPicture(_model.Board.GetFieldValue(i, j));
+                        ++y;
                     }
                     else
                     {
@@ -483,7 +511,6 @@ namespace View.ViewModel
             // frissítjük a megszerzett kosarak számát és a játékidőt
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Connect));
-            OnPropertyChanged(nameof(Size));
             OnPropertyChanged(nameof(TaskDeadline));
             OnPropertyChanged(nameof(TaskName));
             OnPropertyChanged(nameof(TaskReward));
@@ -613,7 +640,6 @@ namespace View.ViewModel
             }
 
             OnPropertyChanged(nameof(Connect));
-            OnPropertyChanged(nameof(Size));
 
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Round));
@@ -643,7 +669,6 @@ namespace View.ViewModel
         {
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Connect));
-            OnPropertyChanged(nameof(Size));
             OnPropertyChanged(nameof(Health));
             OnPropertyChanged(nameof(Number));
         }
@@ -658,7 +683,6 @@ namespace View.ViewModel
             RefreshTable();
 
             OnPropertyChanged(nameof(Connect));
-            OnPropertyChanged(nameof(Size));
             OnPropertyChanged(nameof(Health));
             OnPropertyChanged(nameof(Number));
 
@@ -834,17 +858,12 @@ namespace View.ViewModel
         }
 
 
-
-        private void ReFresh() {/*code*/; }
         private void OnLoadGame() { LoadGame?.Invoke(this, EventArgs.Empty); }
-        private void OnNewGame() {/*code*/; }
         private void OnSaveGame() { SaveGame?.Invoke(this, EventArgs.Empty); }
-        private void OnExitGame() {/*code*/; }
-        private void OnExtraTask() {/*code*/; }
+
 
         #endregion
 
 
     }
 }
-

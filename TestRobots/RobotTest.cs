@@ -118,9 +118,9 @@ namespace TestRobots
             // elõre definiálunk egy játéktáblát a perzisztencia mockolt teszteléséhez
 
             _mock = new Mock<IDataAccess>();
-            _mock.Setup(mock => mock.LoadAsync(It.IsAny<String>(), It.IsAny<int>(), It.IsAny<int>()))
+            _mock.Setup(mock => mock.Load(It.IsAny<String>(), It.IsAny<int>(), It.IsAny<int>()))
                 .Returns(() => _mockedTable);
-            // a mock a LoadAsync mûveletben bármilyen paraméterre az elõre beállított játéktáblát fogja visszaadni
+            // a mock a Load mûveletben bármilyen paraméterre az elõre beállított játéktáblát fogja visszaadni
 
             _model = new Game(_mock.Object);
             // példányosítjuk a modellt a mock objektummal
@@ -2729,7 +2729,7 @@ namespace TestRobots
             _model.NewGame();
 
             // majd betöltünk egy játékot
-            _model.LoadGameAsync(String.Empty);
+            _model.LoadGame(String.Empty);
 
 
             Int32 emptyFields = 0;
@@ -2748,7 +2748,7 @@ namespace TestRobots
             Assert.IsTrue(_model.NextTeam1);
 
             // ellenõrizzük, hogy meghívták-e a Load mûveletet a megadott paraméterrel
-            _mock.Verify(dataAccess => dataAccess.LoadAsync(String.Empty, 12, 10), Times.Once());
+            _mock.Verify(dataAccess => dataAccess.Load(String.Empty, 12, 10), Times.Once());
         }
 
     }

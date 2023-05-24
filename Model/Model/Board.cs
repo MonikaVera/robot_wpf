@@ -162,36 +162,48 @@ namespace Model.Model
                 this.SetValue(width - 1, i, field2);
             }
 
-            int numberOfExits = Math.Max(width / 5, 1);
+            int numberOfExits = Math.Max(width / 10, 1);
 
             Random rnd = new Random();
             for (int i = 0; i < numberOfExits; i++)
             {
-                int index = rnd.Next(0, width);
+                int index = rnd.Next(1, width - 2);
                 Field field1 = new Exit(index, 0);
                 this.SetValue(index, 0, field1);
+                field1 = new Exit(index + 1, 0);
+                this.SetValue(index + 1, 0, field1);
             }
 
             for (int i = 0; i < numberOfExits; i++)
             {
-                int index = rnd.Next(0, width);
+                int index = rnd.Next(1, width - 3);
                 Field field1 = new Exit(index, height - 1);
                 this.SetValue(index, height - 1, field1);
+                field1 = new Exit(index + 1, height - 1);
+                this.SetValue(index + 1, height - 1, field1);
+                field1 = new Exit(index + 2, height - 1);
+                this.SetValue(index + 2, height - 1, field1);
             }
             numberOfExits = Math.Max(height / 5, 1);
 
             for (int i = 0; i < numberOfExits; i++)
             {
-                int index = rnd.Next(0, height);
+                int index = rnd.Next(1, height - 2);
                 Field field1 = new Exit(0, index);
                 this.SetValue(0, index, field1);
+                field1 = new Exit(0, index + 1);
+                this.SetValue(0, index + 1, field1);
             }
 
             for (int i = 0; i < numberOfExits; i++)
             {
-                int index = rnd.Next(0, height);
+                int index = rnd.Next(1, height - 3);
                 Field field1 = new Exit(width - 1, index);
                 this.SetValue(width - 1, index, field1);
+                field1 = new Exit(width - 1, index + 1);
+                this.SetValue(width - 1, index + 1, field1);
+                field1 = new Exit(width - 1, index + 2);
+                this.SetValue(width - 1, index + 2, field1);
             }
 
             //akadályok, kockák generálása
@@ -236,6 +248,7 @@ namespace Model.Model
 
 
         }
+
 
         #endregion
 

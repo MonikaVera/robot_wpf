@@ -1,10 +1,13 @@
 ﻿using Model.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 
 namespace Model.Persistence
 {
-    /// <summary>
-    /// Robots IDataAccess interface.
-    /// </summary>
     public interface IDataAccess
     {
         /// <summary>
@@ -14,7 +17,7 @@ namespace Model.Persistence
         /// <param name="height">The height of the table we want to load.</param>
         /// <param name="width">The width of the table we want to load.</param>
         /// <returns>The table.</returns>
-        Board LoadAsync(String path, int height, int width);
+        Board Load(String path, int height, int width);
 
         /// <summary>
         /// The saving of the table.

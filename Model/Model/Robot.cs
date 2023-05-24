@@ -1,6 +1,4 @@
-﻿
-
-namespace Model.Model
+﻿namespace Model.Model
 {
     /// <summary>
     /// Robots Robot type.
@@ -360,7 +358,7 @@ namespace Model.Model
         public RobotEventArgs(bool canExecute) { _canExecute = canExecute; }
 
         #endregion
-       
+
     }
 
     /// <summary>
@@ -495,5 +493,3 @@ namespace Model.Model
         Wait, Clean, Move, Turn, DisconnectRobot, ConnectRobot, DisconnectCubes, ConnectCubes
     }
 }
-
-

@@ -18,7 +18,7 @@ namespace Model.Model
     /// </summary>
     public class Game
     {
-       
+
         #region Fields
 
         private Robot _robot = null!; // the current robot on the board
@@ -219,12 +219,12 @@ namespace Model.Model
         /// Loads a game.
         /// </summary>
         /// <param name="filepath">The relative path to the file from where we want to load a game.</param>
-        public void LoadGameAsync(string filepath)
+        public void LoadGame(string filepath)
         {
             if (_dataAccess == null)
                 throw new InvalidOperationException("No data access is provided.");
 
-            Board board = _dataAccess.LoadAsync(filepath, _board.Height, _board.Width);
+            Board board = _dataAccess.Load(filepath, _board.Height, _board.Width);
             _board = board;
         }
 
@@ -1356,11 +1356,11 @@ namespace Model.Model
             {
                 if (robot.Player1)
                 {
-                    _team1.Points = _noticeBoard.TaskReward;
+                    _team1.NewPoints = _noticeBoard.TaskReward;
                 }
                 if (robot.Player1)
                 {
-                    _team2.Points = _noticeBoard.TaskReward;
+                    _team2.NewPoints = _noticeBoard.TaskReward;
                 }
             }
         }
@@ -1416,8 +1416,8 @@ namespace Model.Model
             wantsToConnect.Y = wantsToConnect.Y + robot.Y;
 
             if (_board.GetFieldValue(ownCube.X, ownCube.Y) is Cube &&
-                _board.GetFieldValue(wantsToConnect.X, wantsToConnect.Y) is Cube && 
-                robot.IsConnected(ownCube) && !robot.IsConnected(wantsToConnect) && 
+                _board.GetFieldValue(wantsToConnect.X, wantsToConnect.Y) is Cube &&
+                robot.IsConnected(ownCube) && !robot.IsConnected(wantsToConnect) &&
                 NextToEachOther(ownCube, wantsToConnect))
             {
                 if (robot.RobotNumber < 4)
@@ -1494,9 +1494,9 @@ namespace Model.Model
         /// <returns>True, if the the cubes are next to each other, else false.</returns>
         private bool NextToEachOther(XYcoordinates ownCube, XYcoordinates wantsToConnect)
         {
-            if ((ownCube.X + 1 == wantsToConnect.X && ownCube.Y == wantsToConnect.Y) || 
-                (ownCube.X - 1 == wantsToConnect.X && ownCube.Y == wantsToConnect.Y) || 
-                (ownCube.X == wantsToConnect.X && ownCube.Y + 1 == wantsToConnect.Y) || 
+            if ((ownCube.X + 1 == wantsToConnect.X && ownCube.Y == wantsToConnect.Y) ||
+                (ownCube.X - 1 == wantsToConnect.X && ownCube.Y == wantsToConnect.Y) ||
+                (ownCube.X == wantsToConnect.X && ownCube.Y + 1 == wantsToConnect.Y) ||
                 (ownCube.X == wantsToConnect.X && ownCube.Y - 1 == wantsToConnect.Y))
             {
                 return true;
@@ -1522,7 +1522,7 @@ namespace Model.Model
             ownCube_2.X = ownCube_2.X + robot.X;
             ownCube_2.Y = ownCube_2.Y + robot.Y;
 
-            if (IsConnectedToRobots(robot) && robot.IsConnected(ownCube_1) && 
+            if (IsConnectedToRobots(robot) && robot.IsConnected(ownCube_1) &&
                 robot.IsConnected(ownCube_2) && NextToEachOther(ownCube_1, ownCube_2))
             {
                 if (robot != null)
@@ -1860,3 +1860,4 @@ namespace Model.Model
 
 
 }
+

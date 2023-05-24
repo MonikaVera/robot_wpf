@@ -144,7 +144,7 @@ namespace View
             //while (File.Exists("file" + i + ".txt"))
             if (File.Exists("file" + i + ".txt"))
             {
-                _model.LoadGameAsync("file" + i + ".txt");
+                _model.LoadGame("file" + i + ".txt");
                 _viewModel.GenerateTableVM();
 
                 _diary = new Diary();
@@ -163,7 +163,7 @@ namespace View
         {
             if (File.Exists("file" + i + ".txt"))
             {
-                _model.LoadGameAsync("file" + i + ".txt");
+                _model.LoadGame("file" + i + ".txt");
                 _viewModel.GenerateTableVM();
 
                 _diary = new Diary();
@@ -240,7 +240,7 @@ namespace View
             {
                 try
                 {
-                    _model.LoadGameAsync(_openFileDialog.FileName); // játék betöltése
+                    _model.LoadGame(_openFileDialog.FileName); // játék betöltése
                 }
                 catch (RobotDataException)
                 {

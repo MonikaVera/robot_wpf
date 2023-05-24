@@ -15,7 +15,7 @@ namespace Model.Persistence
         /// <param name="height">The height of the table we want to load.</param>
         /// <param name="width">The width of the table we want to load.</param>
         /// <returns>The table.</returns>
-        public Board LoadAsync(String path, int height, int width) {
+        public Board Load(String path, int height, int width) {
 
             if (path == null)
             {

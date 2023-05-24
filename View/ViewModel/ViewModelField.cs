@@ -41,12 +41,13 @@ namespace View.ViewModel
                 if (_indX != value)
                 {
                     _indX = value;
-                    OnPropertyChanged(); 
+                    OnPropertyChanged();
                 }
             }
         }
-        
-        public string? Picture {
+
+        public string? Picture
+        {
             get { return _picture; }
             set
             {
@@ -58,7 +59,8 @@ namespace View.ViewModel
             }
         }
         public int Number { get { return IndY; } }
-        public string? Text {
+        public string? Text
+        {
             get { return _text; }
             set
             {
@@ -99,7 +101,7 @@ namespace View.ViewModel
         public void SetPicture(Field field)
         {
             //_text = _number.ToString();
-            if(field is None)
+            if (field is None)
             {
                 _picture = "";
             }
@@ -109,10 +111,10 @@ namespace View.ViewModel
             }
             else if (field is Obstacle)
             {
-                if(((Obstacle)field).Health>500)
+                if (((Obstacle)field).Health > 500)
                 {
                     _picture = "water.jpg";
-                } 
+                }
                 else if (((Obstacle)field).Health == 1)
                 {
                     _picture = "cart1.jpg";
@@ -135,27 +137,68 @@ namespace View.ViewModel
                 }
 
             }
-            else if (field is Cube )
+            else if (field is Cube)
             {
                 Cube cube = (Cube)field;
 
                 if (cube.CubeColor == Color.RED)
-                    _picture = "red.jpg";
+                {
+                    if (cube.IsConnected)
+                        _picture = "red_conected.jpg";
+                    else
+                        _picture = "red.jpg";
+                }
                 else if (cube.CubeColor == Color.YELLOW)
-                    _picture = "yellow.jpg";
+                {
+                    if (cube.IsConnected)
+                        _picture = "yellow_conected.jpg";
+                    else
+                        _picture = "yellow.jpg";
+                }
                 else if (cube.CubeColor == Color.PINK)
-                    _picture = "pink.jpg";
+                {
+                    if (cube.IsConnected)
+                        _picture = "pink_conected.jpg";
+                    else
+                        _picture = "pink.jpg";
+                }
                 else if (cube.CubeColor == Color.PURPLE)
-                    _picture = "purple.jpg";
+                {
+                    if (cube.IsConnected)
+                        _picture = "purple_conected.jpg";
+                    else
+                        _picture = "purple.jpg";
+                }
                 else if (cube.CubeColor == Color.BLUE)
-                    _picture = "blue.jpg";
+                {
+                    if (cube.IsConnected)
+                        _picture = "blue_conected.jpg";
+                    else
+                        _picture = "blue.jpg";
+                }
                 else if (cube.CubeColor == Color.ORANGE)
-                    _picture = "brown.jpg";
+                {
+                    if (cube.IsConnected)
+                        _picture = "brown_conected.jpg";
+                    else
+                        _picture = "brown.jpg";
+                }
                 else if (cube.CubeColor == Color.GRAY)
-                    _picture = "gray.jpg";
+                {
+                    if (cube.IsConnected)
+                        _picture = "gray_conected.jpg";
+                    else
+                        _picture = "gray.jpg";
+                }
                 else //if (cube.CubeColor == Color.GREEN)
-                  _picture = "green.jpg";
-               //_picture = "cube.png";
+                {
+                    if (cube.IsConnected)
+                        _picture = "green_conected.jpg";
+                    else
+                        _picture = "green.jpg";
+                }
+
+                //_picture = "cube.png";
             }
             else if (field is Exit)
             {
@@ -164,33 +207,81 @@ namespace View.ViewModel
             else if (field is Robot)
             {
                 Robot robot = (Robot)field;
-                if (robot.Direction == Direction.EAST) 
+                if (robot.Direction == Direction.EAST)
                 {
                     if (robot.Player1 == true)
-                        _picture = "robot_right.jpg";
+                    {
+                        if (robot.AllConnections().Any())
+                            _picture = "robot_right_cone.png";
+                        else
+                            _picture = "robot_right.jpg";
+                    }
                     else
-                        _picture = "blue_robot_right.jpg";
+                    {
+                        if (robot.AllConnections().Any())
+                            _picture = "blue_robot_right_conect.png";
+                        else
+                            _picture = "Blue_robot_right.jpg";
+                    }
+
                 }
                 else if (robot.Direction == Direction.WEST)
                 {
                     if (robot.Player1 == true)
-                        _picture = "robot_left.jpg";
+                    {
+                        if (robot.AllConnections().Any())
+                            _picture = "robot_left_cone.png";
+                        else
+                            _picture = "robot_left.jpg";
+
+                    }
+
                     else
-                        _picture = "blue_robot_left.jpg";
+                    {
+                        if (robot.AllConnections().Any())
+                            _picture = "blue_robot_left_conect.png";
+                        else
+                            _picture = "blue_robot_left.jpg";
+                    }
+
                 }
                 else if (robot.Direction == Direction.SOUTH)
                 {
                     if (robot.Player1 == true)
-                        _picture = "robot_front.jpg";
+                    {
+                        if (robot.AllConnections().Any())
+                            _picture = "robot_front_cone.png";
+                        else
+                            _picture = "robot_front.jpg";
+                    }
+
                     else
-                        _picture = "blue_fobot_front.jpg";
+                    {
+                        if (robot.AllConnections().Any())
+                            _picture = "blue_robot_front_conect.png";
+                        else
+                            _picture = "blue_fobot_front.jpg";
+                    }
+
                 }
                 else if (robot.Direction == Direction.NORTH)
                 {
                     if (robot.Player1 == true)
-                        _picture = "robot_back.jpg";
+                    {
+                        if (robot.AllConnections().Any())
+                            _picture = "robot_back_conect.png";
+                        else
+                            _picture = "robot_back.jpg";
+                    }
+
                     else
-                        _picture = "blue_robot_back.jpg";
+                    {
+                        if (robot.AllConnections().Any())
+                            _picture = "blue_robot_back_conect.png";
+                        else
+                            _picture = "blue_robot_back.jpg";
+                    }
+
                 }
             }
             OnPropertyChanged(nameof(Picture));
@@ -200,8 +291,8 @@ namespace View.ViewModel
         /// </summary>
         public DelegateCommand? ChooseActionFieldCommand { get; set; }
         public Thickness BorderThickness { get; internal set; }
-        public System.Windows.Media.SolidColorBrush BorderBrush { get; internal set; }
-
+        public System.Windows.Media.SolidColorBrush? BorderBrush { get; internal set; }
+        public System.Windows.Controls.Border? Borders { get; internal set; }
         #endregion
     }
 }

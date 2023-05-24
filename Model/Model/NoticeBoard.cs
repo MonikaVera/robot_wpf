@@ -1,5 +1,4 @@
-﻿
-namespace Model.Model
+﻿namespace Model.Model
 {
     /// <summary>
     /// Robots NoticeBoard type.
@@ -67,7 +66,7 @@ namespace Model.Model
                     _fields[i, j] = field;
                 }
 
-            int cubeNr = _rand.Next(3, 6);
+            int cubeNr = _rand.Next(2, 5);
             _points = cubeNr;
 
             int generCubeNr = 0;
@@ -77,31 +76,36 @@ namespace Model.Model
             Field field2 = new Cube(1, 1, 1, (Color)(col % 8));
             _fields[1, 1] = field2;
             generCubeNr++;
-            if(cubeNr > 4)
+            if (cubeNr == 5)
             {
                 generCubeNr++;
                 col = _rand.Next(0, 8);
                 field2 = new Cube(1, 0, 1, (Color)(col % 8));
                 _fields[1, 0] = field2;
 
-                _deadline = 15;
+                _deadline = 40;
                 _taskName = "Hard";
             }
-            if(cubeNr == 3)
+            else if (cubeNr == 2)
             {
-                _deadline = 9;
+                _deadline = 21;
                 _taskName = "Easy";
             }
-            if (cubeNr == 4)
+            else if (cubeNr == 3)
             {
-                _deadline = 12;
+                _deadline = 27;
+                _taskName = "Medium";
+            }
+            else if (cubeNr == 4)
+            {
+                _deadline = 32;
                 _taskName = "Medium";
             }
 
             while (generCubeNr < cubeNr)
             {
-                int x = ( _rand.Next(0, 6) ) % 3;
-                int y = ( _rand.Next(0, 6) ) % 3;
+                int x = (_rand.Next(0, 6)) % 3;
+                int y = (_rand.Next(0, 6)) % 3;
 
                 if (_fields[x, y] is Empty)
                     if ((x > 0 && _fields[x - 1, y] is Cube)

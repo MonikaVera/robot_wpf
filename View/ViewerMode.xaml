@@ -32,27 +32,6 @@
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
                         </Button.RenderTransform>
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Style.Triggers>
-
-                                    <!-- <DataTrigger Binding="{Binding View}"  Value="No"> 
-                                        <Setter Property="Background" Value="Black" /> -->
-                                    <!--  </DataTrigger>
--->
-                                    <!-- <DataTrigger Binding="{Binding MovePlayer}"  Value="Up"/>
--->
-                                    <!-- <DataTrigger Binding="{Binding MovePlayer}"  Value="Left"/>
--->
-                                    <!--  <DataTrigger Binding="{Binding MovePlayer}"  Value="Right"/>
--->
-                                    <!-- <DataTrigger Binding="{Binding MovePlayer}"  Value="Down"/>
--->
-                                </Style.Triggers>
-
-
-                            </Style>
-                        </Button.Style>
                     </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
@@ -84,43 +63,7 @@
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
                         </Button.RenderTransform>
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Style.Triggers>
 
-                                    <!--
-                                    <DataTrigger Binding="{Binding Block}"  Value="Free">
-                                        <Setter Property="Background" Value="White" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Black">
-                                        <Setter Property="Background" Value="Black" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Red">
-                                        <Setter Property="Background" Value="Red" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Blue">
-                                        <Setter Property="Background" Value="Blue" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Green">
-                                        <Setter Property="Background" Value="Green" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Purple">
-                                        <Setter Property="Background" Value="Purple" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Block}"  Value="Purple">
-                                        <Setter Property="Background" Value="Yellow" />
-                                    </DataTrigger> -->
-                                </Style.Triggers>
-
-
-                            </Style>
-                        </Button.Style>
                     </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

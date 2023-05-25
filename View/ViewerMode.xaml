@@ -58,7 +58,7 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding }" CommandParameter="{Binding Number}" >
+                    <Button CommandParameter="{Binding Number}" >
                         <Image Source="{Binding Image, TargetNullValue={x:Null}}" Stretch="Fill" />
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />

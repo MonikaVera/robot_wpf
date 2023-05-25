@@ -1374,9 +1374,9 @@ namespace Model.Model
                 {
                     int newX = f.X + (robot.X - robotRelPos.X);
                     int newY = f.Y + (robot.Y - robotRelPos.Y);
+                    canAdd = false;
                     for (int i = 0; i < Robot.AllConnections().Count(); i++)
                     {
-                        canAdd = false;
                         {
                             if (Robot.AllConnections()[i].X == newX && Robot.AllConnections()[i].Y == newY)
                             {
@@ -1387,10 +1387,11 @@ namespace Model.Model
                                 }
                             }
                         }
-                        if (!canAdd)
-                        {
-                            return false;
-                        }
+                       
+                    }
+                    if (!canAdd)
+                    {
+                        return false;
                     }
                 }
             }

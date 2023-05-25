@@ -24,9 +24,7 @@ namespace View.ViewModel
         private bool _canMove;
         private int round = 1;
         private int roundTask = 1;
-        private string str = "no";
         private string _chatText = null!;
-        public string Connect { get { return str; } set { OnPropertyChanged(nameof(str)); } }
         #region Commands
         public DelegateCommand PlayerModeCommand { get; private set; }
         public DelegateCommand ViewerModeCommand { get; private set; }
@@ -449,40 +447,6 @@ namespace View.ViewModel
                         fieldMapView.SetPicture(_model.Board.GetFieldValue(i, j));
                         ++y;
 
-
-                        //make Connections
-                        List<XYcoordinates> connect = _model.Robot.AllConnections();
-                        if (connect.Contains(new XYcoordinates(i, j)))
-                        {
-                            //str = "yes";
-                            Border b = new Border();
-                            b.BorderBrush = Brushes.Red;
-                            b.Height = 400;
-                            b.Width = 400;
-
-                            Thickness myThickness = new Thickness();
-                            myThickness.Bottom = 5;
-                            myThickness.Left = 10;
-                            myThickness.Right = 15;
-                            myThickness.Top = 20;
-                            b.BorderThickness = myThickness;
-                            field.BorderBrush = new SolidColorBrush(Colors.GreenYellow);
-                            field.BorderThickness = new Thickness(2.0);
-                            field.Borders = b;
-                            field.BorderThickness = myThickness;
-                            fieldMap.BorderBrush = new SolidColorBrush(Colors.Red);
-                            fieldMap.BorderThickness = new Thickness(2.0);
-                            fieldMapView.BorderBrush = new SolidColorBrush(Colors.Red);
-                            fieldMapView.BorderThickness = new Thickness(2.0);
-                        }
-                        else
-                        {
-                            // str = "no";
-                            field.BorderThickness = new Thickness(0.0);
-                            fieldMap.BorderThickness = new Thickness(0.0);
-                            fieldMapView.BorderThickness = new Thickness(0.0);
-                            // Fields[y].BorderThickness = new Thickness(0.0);
-                        }
                     }
                     else if (j >= 0 && i >= 0 && (Math.Abs(j - _model.Robot.Y) + Math.Abs(i - _model.Robot.X)) == 4
                         && j < _model.Board.Height && i < _model.Board.Width)
@@ -510,7 +474,6 @@ namespace View.ViewModel
 
             // frissítjük a megszerzett kosarak számát és a játékidőt
             OnPropertyChanged(nameof(GameTime));
-            OnPropertyChanged(nameof(Connect));
             OnPropertyChanged(nameof(TaskDeadline));
             OnPropertyChanged(nameof(TaskName));
             OnPropertyChanged(nameof(TaskReward));
@@ -639,8 +602,6 @@ namespace View.ViewModel
                 ChatText = _model.ChatTeam1;
             }
 
-            OnPropertyChanged(nameof(Connect));
-
             OnPropertyChanged(nameof(GameTime));
             OnPropertyChanged(nameof(Round));
             OnPropertyChanged(nameof(Team1Points));
@@ -668,7 +629,6 @@ namespace View.ViewModel
         private void Model_GameAdvanced(object? sender, GameEventArgs e)
         {
             OnPropertyChanged(nameof(GameTime));
-            OnPropertyChanged(nameof(Connect));
             OnPropertyChanged(nameof(Health));
             OnPropertyChanged(nameof(Number));
         }
@@ -681,8 +641,6 @@ namespace View.ViewModel
             }
             _model.NextPlayer();
             RefreshTable();
-
-            OnPropertyChanged(nameof(Connect));
             OnPropertyChanged(nameof(Health));
             OnPropertyChanged(nameof(Number));
 

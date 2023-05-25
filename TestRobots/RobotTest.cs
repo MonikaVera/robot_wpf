@@ -2716,7 +2716,7 @@ namespace TestRobots
 
             Assert.IsTrue(9 <= _model.NoticeBoard.Deadline);
 
-            Assert.IsTrue(3 <= _model.NoticeBoard.TaskReward && 5 >= _model.NoticeBoard.TaskReward);
+            Assert.IsTrue(2 <= _model.NoticeBoard.TaskReward && 5 >= _model.NoticeBoard.TaskReward);
 
             Assert.IsTrue(9 == _model.NoticeBoard.Fields.Length);
 

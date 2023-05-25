@@ -58,7 +58,7 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding TaskFieldChangeCommand}" CommandParameter="{Binding Number}" >
+                    <Button Command="{Binding }" CommandParameter="{Binding Number}" >
                         <Image Source="{Binding Image, TargetNullValue={x:Null}}" Stretch="Fill" />
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
@@ -68,13 +68,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
 
-            <ItemsControl.ItemContainerStyle>
-                <!--a függőségi tulajdonságokat kjülön kell kötnünk-->
-                <Style>
-                    <Setter Property="Grid.Row" Value="{Binding XTask}" />
-                    <Setter Property="Grid.Column" Value="{Binding YTask}" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>
         </ItemsControl>
 
         <TextBlock Text ="Chat" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Center" Width="185" Grid.Row="1"/>

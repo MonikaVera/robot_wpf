@@ -95,28 +95,11 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding ChooseActionFieldCommand}" CommandParameter="{Binding Number}" Padding="0,0,0,0" BorderThickness="{Binding Size}"  Background="Black">
+                    <Button Command="{Binding ChooseActionFieldCommand}" CommandParameter="{Binding Number}" Padding="0,0,0,0" BorderThickness="0.0"  Background="Black">
                         <Image Source="{Binding Picture, TargetNullValue={x:Null}}" Stretch="Fill" />
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
                         </Button.RenderTransform>
-
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Style.Triggers>
-
-                                    <DataTrigger Binding="{Binding Connect}"  Value="yes">
-                                        <Setter Property="BorderThickness" Value="2.0"/>
-                                        <Setter Property="Background" Value="Red"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding Connect}"  Value="no">
-                                        <Setter Property="BorderThickness" Value="0.0"/>
-                                    </DataTrigger>
-
-                                </Style.Triggers>
-
-                            </Style>
-                        </Button.Style>
 
                     </Button>
                 </DataTemplate>
@@ -147,7 +130,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <!--   <Button Command="{Binding TaskFieldChangeCommand}" CommandParameter="{Binding Number}" Content="{Binding Text}"> -->
-                    <Button Command="{Binding TaskFieldChangeCommand}" CommandParameter="{Binding Number}" >
+                    <Button Command="{Binding }" CommandParameter="{Binding Number}" >
                         <Image Source="{Binding Image, TargetNullValue={x:Null}}" Stretch="Fill" />
                         <Button.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1" />
@@ -157,13 +140,6 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
 
-            <ItemsControl.ItemContainerStyle>
-                <!--a függőségi tulajdonságokat kjülön kell kötnünk-->
-                <Style>
-                    <Setter Property="Grid.Row" Value="{Binding XTask}" />
-                    <Setter Property="Grid.Column" Value="{Binding YTask}" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>
         </ItemsControl>
 
         <!--map-->
@@ -190,14 +166,6 @@
                     </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-
-            <ItemsControl.ItemContainerStyle>
-                <!--a függőségi tulajdonságokat kjülön kell kötnünk-->
-                <Style>
-                    <Setter Property="Grid.Row" Value="{Binding XMap}" />
-                    <Setter Property="Grid.Column" Value="{Binding YMap}" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>
 
         </ItemsControl>
 

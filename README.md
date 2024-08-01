@@ -124,3 +124,14 @@ The Robot Construction Game is designed to foster teamwork, strategic planning, 
 
 4. **Task Board**
    - List of tasks available on the task board.
+
+## Technical Architecture
+The Robot Construction Game is developed using Windows Presentation Foundation (WPF), leveraging the Model-View-ViewModel (MVVM) pattern and a persistence architecture to ensure a robust and maintainable codebase.
+
+### Key Technical Features:
+1. WPF Framework: Utilizes the WPF framework for building a rich, interactive, and user-friendly graphical interface.
+2. MVVM Pattern: Implements the Model-View-ViewModel pattern to separate the application's logic from the user interface, promoting a clean and modular design.
+   - Model: Represents the application's data and business logic.
+   - View: Defines the user interface, including layout and controls, to display the application's data.
+   - ViewModel: Acts as an intermediary between the Model and View, handling user interactions and updating the View.
+3. Persistence Architecture: Ensures that game state, player progress, and other important data are saved and can be retrieved reliably, enhancing the game's durability and user experience.
